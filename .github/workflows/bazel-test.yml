@@ -1,0 +1,19 @@
+on:
+  push:
+    branches:
+      - '**'
+    paths-ignore:
+      # Ignore documentation changes
+      - '**.md'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🏗 Setup repo
+        uses: actions/checkout@v2
+
+      - name: Install Bazel
+        run: ./install_bazel.sh
+
+      - name: Run Tests
+        run: bazel test ...
