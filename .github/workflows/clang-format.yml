@@ -14,7 +14,7 @@ jobs:
 
       # Source: https://stackoverflow.com/a/36046965/5071723
       - name: Run clang-format
-        run: find . -iname *.h -o -iname *.cpp | xargs clang-format -i
+        run: chmod +x ./scripts/clang_format.sh && ./scripts/clang_format.sh
 
       - name: Make sure there are no diffs
         run: git diff && exit $(git status --porcelain=v1 2>/dev/null | wc -l)

@@ -10,7 +10,8 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"BazelBuild.vscode-bazel"
+				"BazelBuild.vscode-bazel",
+				"xaver.clang-format"
 			]
 		}
 	}
