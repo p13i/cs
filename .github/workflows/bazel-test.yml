@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install Bazel
-        run: ./install_bazel.sh
+        run: chmod +x install_bazel.sh && ./install_bazel.sh
 
       - name: Run Tests
         run: bazel test ...
