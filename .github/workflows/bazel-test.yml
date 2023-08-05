@@ -9,11 +9,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: 🏗 Setup repo
+      - name: Setup repo
         uses: actions/checkout@v2
 
       - name: Install Bazel
         run: chmod +x install_bazel.sh && ./install_bazel.sh
 
-      - name: Run Tests
+      - name: Run tests
         run: bazel test ...
