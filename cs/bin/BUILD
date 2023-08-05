@@ -1,5 +1,5 @@
 cc_binary(
     name = "hello",
     srcs = ["hello.cpp"],
-    deps = ["//cs/MyLib:MyLib"],
+    deps = ["//cs/MyLib:message"],
 )
