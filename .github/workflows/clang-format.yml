@@ -1,0 +1,37 @@
+on:
+  push:
+    branches:
+      - '**'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v2
+
+      - name: Install clang-format
+        run: sudo apt install clang-format
+
+      # Source: https://stackoverflow.com/a/36046965/5071723
+      - name: Run clang-format
+        run: find . -iname *.h -o -iname *.cpp | xargs clang-format -i
+
+      - name: Make sure there are no diffs
+        run: git diff && exit $(git status --porcelain=v1 2>/dev/null | wc -l)
+
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v3
+        if: ${{ failure() }}
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: Apply clang-format to ${{ github.ref_name }}
+          title: Apply clang-format to ${{ github.ref_name }}
+          branch: clang-format-${{ github.run_number }}
+          body: This pull request applies clang-format formatting changes to the codebase at ${{ github.sha }}.
+          labels: auto-generated
+          reviewers: ${{ github.actor }}
+
+      - name: Store pull request number
+        if: ${{ failure() }}
+        run: echo "PR_NUMBER=${{ steps.cpr.outputs.pull-request-number }}" >> $GITHUB_ENV
