@@ -3,7 +3,7 @@
 {
 	"name": "Alpine",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/base:alpine-3.18",
+	"image": "mcr.microsoft.com/devcontainers/base:ubuntu",
 	"features": {
 		"ghcr.io/balazs23/devcontainers-features/bazel:1": {}
 	},
