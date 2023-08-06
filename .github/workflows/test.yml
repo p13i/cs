@@ -1,0 +1,19 @@
+on:
+  push:
+    branches:
+      - '**'
+    paths-ignore:
+      # Ignore documentation changes
+      - '**.md'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v2
+
+      - name: Setup dev environment
+        run: make setup
+
+      - name: Run tests
+        run: make test

@@ -9,14 +9,11 @@ jobs:
       - name: Setup repo
         uses: actions/checkout@v2
 
-      - name: Download Bazel buildifier
-        run: |
-          sudo apt-get update
-          sudo apt-get install golang-go
-          go install github.com/bazelbuild/buildtools/buildifier@latest
+      - name: Setup dev environment
+        run: make setup
 
-      - name: Run Bazel buildifier
-        run: go run github.com/bazelbuild/buildtools/buildifier@latest -r .
+      - name: Run linters
+        run: make lint
 
       - name: Make sure there are no diffs
         run: git diff && exit $(git status --porcelain=v1 2>/dev/null | wc -l)
@@ -27,10 +24,10 @@ jobs:
         if: ${{ failure() }}
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: Apply Buildifier to ${{ github.ref_name }}
-          title: Apply Buildifier to ${{ github.ref_name }}
-          branch: buildifier-${{ github.run_number }}
-          body: This pull request applies Blaze Buildifier formatting changes to the codebase at ${{ github.sha }}.
+          commit-message: Apply lint tools to ${{ github.ref_name }}
+          title: Apply lint tools to ${{ github.ref_name }}
+          branch: lint-${{ github.run_number }}
+          body: This pull request applies Blaze Buildifier and clang-format formatting changes to the codebase at ${{ github.sha }}.
           labels: auto-generated
           reviewers: ${{ github.actor }}
 
