@@ -22,15 +22,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-packages-
 
-      - name: Build buildifier
+      # Source: https://stackoverflow.com/a/36046965/5071723
+      - name: Download, build, and run Bazel buildifier
         if: steps.cache-buildtools.outputs.cache-hit != 'true'
         run: |
           cd ../buildtools/
           bazel build //buildifier
-
-      - name: Run buildifier
-        if: steps.cache-buildtools.outputs.cache-hit != 'true'
-        run: bazel run //buildifier -- -r $(pwd)/../cs
+          bazel run //buildifier -- -r $(pwd)/../cs
 
       - name: Make sure there are no diffs
         run: git diff && exit $(git status --porcelain=v1 2>/dev/null | wc -l)
