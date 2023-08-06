@@ -25,3 +25,16 @@ TEST(Ray3, DirectionVectorIsUnit) {
                       0.57735026918962576450914878050196,
                       0.57735026918962576450914878050196));
 }
+
+TEST(Ray3, OperatorTimeOneComponent) {
+  r3 ray(p3(), p3(1, 0, 0));
+  EXPECT_POINT3_EQ(ray(3), p3(3, 0, 0));
+}
+
+TEST(Ray3, OperatorTimeOnUnitVector) {
+  r3 ray(p3(), p3(1, 1, 1));
+  EXPECT_POINT3_EQ(ray(3),
+                   p3(1.7320508075688772935274463415059,
+                      1.7320508075688772935274463415059,
+                      1.7320508075688772935274463415059));
+}
