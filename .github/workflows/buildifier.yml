@@ -12,10 +12,11 @@ jobs:
       # Source: https://stackoverflow.com/a/36046965/5071723
       - name: Download, build, and run Bazel buildifier
         run: |
+          cd ..
           git clone https://github.com/bazelbuild/buildtools.git
           cd buildtools/
           bazel build //buildifier
-          bazel run //buildifier -- -r ../
+          bazel run //buildifier -- -r $(pwd)/../cs
 
       - name: Make sure there are no diffs
         run: git diff && exit $(git status --porcelain=v1 2>/dev/null | wc -l)
