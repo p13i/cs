@@ -16,7 +16,7 @@ jobs:
           go install github.com/bazelbuild/buildtools/buildifier@latest
 
       - name: Run Bazel buildifier
-        run: buildifier -r .
+        run: go run github.com/bazelbuild/buildtools/buildifier@latest -r .
 
       - name: Make sure there are no diffs
         run: git diff && exit $(git status --porcelain=v1 2>/dev/null | wc -l)
