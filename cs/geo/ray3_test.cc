@@ -8,10 +8,10 @@ using p3 = ::cs::geo::Point3;
 using v3 = ::cs::geo::Vector3;
 using r3 = ::cs::geo::Ray3;
 
-#define EXPECT_POINT3_EQ(a, b)    \
-  EXPECT_NEAR(a.x, b.x, EPSILON); \
-  EXPECT_NEAR(a.y, b.y, EPSILON); \
-  EXPECT_NEAR(a.z, b.z, EPSILON);
+#define EXPECT_POINT3_EQ(a, b)          \
+  EXPECT_NEAR(a.x, b.x, FLOAT_EPSILON); \
+  EXPECT_NEAR(a.y, b.y, FLOAT_EPSILON); \
+  EXPECT_NEAR(a.z, b.z, FLOAT_EPSILON);
 
 #define EXPECT_VECTOR3_EQ(vecA, vecB) \
   EXPECT_POINT3_EQ(vecA.a, vecB.a);   \
@@ -40,8 +40,32 @@ TEST(Ray3, OperatorTimeOnUnitVector) {
                       1.7320508075688772935274463415059));
 }
 
-TEST(Ray3, Angles) {
+TEST(Ray3, ThetaIsPiOver2) {
   r3 ray(p3(), PIf / 2.f, 0);
   v3 expected(p3(), p3(1, 0, 0));
+  EXPECT_VECTOR3_EQ(ray.direction, expected);
+}
+
+TEST(Ray3, ThetaIsPiOver4) {
+  r3 ray(p3(), PIf / 4.f, 0);
+  v3 expected(p3(), p3(sqrtf(2) / 2.f, 0, sqrtf(2) / 2.f));
+  EXPECT_VECTOR3_EQ(ray.direction, expected);
+}
+
+TEST(Ray3, PiOver2PhiStillPointsToZ) {
+  r3 ray(p3(), 0, PIf / 2.f);
+  v3 expected(p3(), p3(0, 0, 1));
+  EXPECT_VECTOR3_EQ(ray.direction, expected);
+}
+
+TEST(Ray3, ThetaAndPhiArePiOver2) {
+  r3 ray(p3(), PIf / 2.f, PIf / 2.f);
+  v3 expected(p3(), p3(0, 1, 0));
+  EXPECT_VECTOR3_EQ(ray.direction, expected);
+}
+
+TEST(Ray3, ThetaAndPhiArePiOver4) {
+  r3 ray(p3(), PIf / 4.f, PIf / 4.f);
+  v3 expected(p3(), p3(1 / 2.f, 1 / 2.f, sqrtf(2) / 2.f));
   EXPECT_VECTOR3_EQ(ray.direction, expected);
 }

@@ -20,21 +20,20 @@ struct Ray3 {
   // Uses physics convention, ISO 80000-2:2019. See:
   // https://en.wikipedia.org/wiki/Spherical_coordinate_system
   Ray3(const Point3& origin, float theta, float phi)
-      : origin(origin),
-        direction(
-            Vector3(cs::math::polar2cart(1, theta, phi))) {}
+      : Ray3(origin, Vector3(origin, cs::math::polar2cart(
+                                         1, theta, phi))) {}
 
   // A ray from an origin in the direction towards a point
-  Ray3(const Point3 origin, const Point3 towards)
+  Ray3(const Point3& origin, const Point3& towards)
       : Ray3(origin, Vector3(towards - origin)) {}
 
   // A ray with a given origin and destination
-  Ray3(const Point3 origin, const Vector3 direction)
+  Ray3(const Point3& origin, const Vector3& direction)
       : origin(origin), direction(direction.unit()) {}
 
   // Converting a vector directly to a ray where the
   // vector's origin is the origin of the ray
-  explicit Ray3(const Vector3 vector)
+  explicit Ray3(const Vector3& vector)
       : Ray3(vector.a, vector.b) {}
 
   // Evaluates a ray at a given time-step multiplied against
