@@ -35,6 +35,7 @@ cc_library(
     deps = [
         ":point3",
         ":vector3",
+        "//cs/math:polar2cart",
     ],
 )
 
@@ -43,6 +44,7 @@ cc_test(
     srcs = ["ray3_test.cc"],
     deps = [
         ":ray3",
+        "//cs/math:constants",
         "@googletest//:gtest_main",
     ],
 )

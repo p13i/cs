@@ -5,17 +5,9 @@
 
 #include "cs/geo/point3.h"
 #include "cs/geo/vector3.h"
+#include "cs/math/polar2cart.h"
 
 namespace cs::geo {
-
-struct Angles {
-  // Radians
-  float azimuth = 0;
-  // Radians
-  float elevation = 0;
-  Angles(float azimuth, float elevation)
-      : azimuth(azimuth), elevation(elevation) {}
-};
 
 // A unbounded vector
 struct Ray3 {
@@ -25,14 +17,12 @@ struct Ray3 {
   // Empty constructor
   Ray3() : Ray3(Point3(), Point3()) {}
 
-  Ray3(const Point3& origin, Angles angles)
+  // Uses physics convention, ISO 80000-2:2019. See:
+  // https://en.wikipedia.org/wiki/Spherical_coordinate_system
+  Ray3(const Point3& origin, float theta, float phi)
       : origin(origin),
-        direction(Vector3(
-            Point3(std::cos(angles.azimuth) *
-                       std::cos(angles.elevation),
-                   std::sin(angles.elevation),
-                   std::sin(angles.azimuth) *
-                       std::cos(angles.elevation)))) {}
+        direction(
+            Vector3(cs::math::polar2cart(1, theta, phi))) {}
 
   // A ray from an origin in the direction towards a point
   Ray3(const Point3 origin, const Point3 towards)
@@ -46,14 +36,6 @@ struct Ray3 {
   // vector's origin is the origin of the ray
   explicit Ray3(const Vector3 vector)
       : Ray3(vector.a, vector.b) {}
-
-  Angles angles() {
-    const Point3 point = direction.b;
-    return Angles(
-        std::atan2(point.y, point.x),
-        std::atan2(point.z, std::sqrt(point.x * point.x +
-                                      point.y * point.y)));
-  };
 
   // Evaluates a ray at a given time-step multiplied against
   // the unit vector direction

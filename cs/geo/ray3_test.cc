@@ -1,17 +1,17 @@
 #include "cs/geo/ray3.h"
 
+#include "cs/math/constants.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
 using p3 = ::cs::geo::Point3;
 using v3 = ::cs::geo::Vector3;
 using r3 = ::cs::geo::Ray3;
-using ::cs::geo::Angles;
 
-#define EXPECT_POINT3_EQ(a, b) \
-  EXPECT_FLOAT_EQ(a.x, b.x);   \
-  EXPECT_FLOAT_EQ(a.y, b.y);   \
-  EXPECT_FLOAT_EQ(a.z, b.z);
+#define EXPECT_POINT3_EQ(a, b)    \
+  EXPECT_NEAR(a.x, b.x, EPSILON); \
+  EXPECT_NEAR(a.y, b.y, EPSILON); \
+  EXPECT_NEAR(a.z, b.z, EPSILON);
 
 #define EXPECT_VECTOR3_EQ(vecA, vecB) \
   EXPECT_POINT3_EQ(vecA.a, vecB.a);   \
@@ -40,4 +40,8 @@ TEST(Ray3, OperatorTimeOnUnitVector) {
                       1.7320508075688772935274463415059));
 }
 
-TEST(Ray3, Angles) { r3 ray(p3(), Angles(0, 0)); }
+TEST(Ray3, Angles) {
+  r3 ray(p3(), PIf / 2.f, 0);
+  v3 expected(p3(), p3(1, 0, 0));
+  EXPECT_VECTOR3_EQ(ray.direction, expected);
+}
