@@ -11,7 +11,9 @@ namespace cs::geometry {
 class Vector3 {
  public:
   Vector3(Point3 b) : a(Point3(0, 0, 0)), b(b) {}
+
   Vector3(Point3 a, Point3 b) : a(a), b(b) {}
+
   float magnitude() const {
     float x_diff = b.x - a.x;
     float y_diff = b.y - a.y;
@@ -19,17 +21,31 @@ class Vector3 {
     return std::sqrt(x_diff * x_diff + y_diff * y_diff +
                      z_diff * z_diff);
   }
+
+  Vector3 direction() const { return {{}, b - a}; }
+
+  Vector3 unit() const {
+    return {{}, direction().b / magnitude()};
+  }
+
   Vector3 operator+(const Vector3& other) const {
     return Vector3(a + other.a, b + other.b);
   }
+
+  Vector3 operator-(Vector3 other) const {
+    return {a - other.a, b - other.b};
+  }
+
   bool operator==(const Vector3& other) const {
     return a == other.a && b == other.b;
   }
+
   friend std::ostream& operator<<(std::ostream& os,
                                   const Vector3& vec) {
     os << "Vector3(" << vec.a << ", " << vec.b << ")";
     return os;
   }
+
   Point3 a, b;
 };
 
