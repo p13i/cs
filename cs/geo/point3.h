@@ -1,9 +1,9 @@
-#ifndef CS_GEOMETRY_POINT3_
-#define CS_GEOMETRY_POINT3_
+#ifndef CS_GEO_POINT3_
+#define CS_GEO_POINT3_
 
 #include <iostream>
 
-namespace cs::geometry {
+namespace cs::geo {
 
 class Point3 {
  public:
@@ -40,6 +40,6 @@ class Point3 {
   float x, y, z;
 };
 
-}  // namespace cs::geometry
+}  // namespace cs::geo
 
-#endif  // CS_GEOMETRY_POINT3_
+#endif  // CS_GEO_POINT3_

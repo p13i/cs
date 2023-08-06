@@ -1,12 +1,12 @@
-#include "cs/geometry/ray3.h"
+#include "cs/geo/ray3.h"
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
-using p3 = ::cs::geometry::Point3;
-using v3 = ::cs::geometry::Vector3;
-using r3 = ::cs::geometry::Ray3;
-using ::cs::geometry::Angles;
+using p3 = ::cs::geo::Point3;
+using v3 = ::cs::geo::Vector3;
+using r3 = ::cs::geo::Ray3;
+using ::cs::geo::Angles;
 
 #define EXPECT_POINT3_EQ(a, b) \
   EXPECT_FLOAT_EQ(a.x, b.x);   \

@@ -1,12 +1,12 @@
-#ifndef CS_GEOMETRY_RAY3_
-#define CS_GEOMETRY_RAY3_
+#ifndef CS_GEO_RAY3_
+#define CS_GEO_RAY3_
 
 #include <utility>
 
-#include "cs/geometry/point3.h"
-#include "cs/geometry/vector3.h"
+#include "cs/geo/point3.h"
+#include "cs/geo/vector3.h"
 
-namespace cs::geometry {
+namespace cs::geo {
 
 struct Angles {
   // Radians
@@ -70,6 +70,6 @@ struct Ray3 {
   }
 };
 
-}  // namespace cs::geometry
+}  // namespace cs::geo
 
-#endif  // CS_GEOMETRY_RAY3_
+#endif  // CS_GEO_RAY3_

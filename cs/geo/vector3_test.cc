@@ -1,10 +1,10 @@
-#include "cs/geometry/vector3.h"
+#include "cs/geo/vector3.h"
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
-using p3 = ::cs::geometry::Point3;
-using v3 = ::cs::geometry::Vector3;
+using p3 = ::cs::geo::Point3;
+using v3 = ::cs::geo::Vector3;
 
 TEST(Vector3, OneArgConstructor) {
   EXPECT_EQ(v3(p3(1, 1, 1)).b, p3(1, 1, 1));

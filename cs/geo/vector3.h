@@ -1,12 +1,12 @@
-#ifndef CS_GEOMETRY_VECTOR3_
-#define CS_GEOMETRY_VECTOR3_
+#ifndef CS_GEO_VECTOR3_
+#define CS_GEO_VECTOR3_
 
 #include <cmath>
 #include <iostream>
 
-#include "cs/geometry/point3.h"
+#include "cs/geo/point3.h"
 
-namespace cs::geometry {
+namespace cs::geo {
 
 class Vector3 {
  public:
@@ -53,6 +53,6 @@ class Vector3 {
   Point3 a, b;
 };
 
-}  // namespace cs::geometry
+}  // namespace cs::geo
 
-#endif  // CS_GEOMETRY_VECTOR3_
+#endif  // CS_GEO_VECTOR3_
