@@ -17,11 +17,9 @@ class Vector3 {
   Vector3(Point3 a, Point3 b) : a(a), b(b) {}
 
   float magnitude() const {
-    float x_diff = b.x - a.x;
-    float y_diff = b.y - a.y;
-    float z_diff = b.z - a.z;
-    return std::sqrt(x_diff * x_diff + y_diff * y_diff +
-                     z_diff * z_diff);
+    Point3 diff = b - a;
+    return std::sqrt(diff.x * diff.x + diff.y * diff.y +
+                     diff.z * diff.z);
   }
 
   Vector3 direction() const {
