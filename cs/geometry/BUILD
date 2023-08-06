@@ -32,7 +32,10 @@ cc_test(
 cc_library(
     name = "ray3",
     hdrs = ["ray3.h"],
-    deps = [":point3", ":vector3"],
+    deps = [
+        ":point3",
+        ":vector3",
+    ],
 )
 
 cc_test(
