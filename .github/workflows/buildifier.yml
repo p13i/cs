@@ -9,24 +9,12 @@ jobs:
       - name: Setup repo
         uses: actions/checkout@v2
 
-      - name: Download Bazel buildifier
+      # Source: https://stackoverflow.com/a/36046965/5071723
+      - name: Download, build, and run Bazel buildifier
         run: |
           cd ..
           git clone https://github.com/bazelbuild/buildtools.git
-
-      - uses: actions/cache@v2
-        id: cache-buildtools
-        with:
-          path: ../buildtools/  # what we cache: the folder
-          key: ${{ runner.os }}-packages-${{ hashFiles('**/*') }}
-          restore-keys: |
-            ${{ runner.os }}-packages-
-
-      # Source: https://stackoverflow.com/a/36046965/5071723
-      - name: Download, build, and run Bazel buildifier
-        if: steps.cache-buildtools.outputs.cache-hit != 'true'
-        run: |
-          cd ../buildtools/
+          cd buildtools/
           bazel build //buildifier
           bazel run //buildifier -- -r $(pwd)/../cs
 
