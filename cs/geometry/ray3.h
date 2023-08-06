@@ -47,13 +47,6 @@ struct Ray3 {
   explicit Ray3(const Vector3 vector)
       : Ray3(vector.a, vector.b) {}
 
-  // Evaluates a ray at a given time-step multiplied against
-  // the unit vector direction
-  Point3 operator()(float time) const {
-    const Vector3 unit = direction.unit();
-    return origin + unit.b * time;
-  };
-
   Angles angles() {
     const Point3 point = direction.b;
     return Angles(
@@ -61,6 +54,20 @@ struct Ray3 {
         std::atan2(point.z, std::sqrt(point.x * point.x +
                                       point.y * point.y)));
   };
+
+  // Evaluates a ray at a given time-step multiplied against
+  // the unit vector direction
+  Point3 operator()(float time) const {
+    const Vector3 unit = direction.unit();
+    return origin + unit.b * time;
+  };
+
+  friend std::ostream& operator<<(std::ostream& os,
+                                  const Ray3& ray) {
+    os << "Ray3(" << ray.origin << ", " << ray.direction
+       << ")";
+    return os;
+  }
 };
 
 }  // namespace cs::geometry
