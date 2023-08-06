@@ -6,6 +6,7 @@
 using p3 = ::cs::geometry::Point3;
 using v3 = ::cs::geometry::Vector3;
 using r3 = ::cs::geometry::Ray3;
+using ::cs::geometry::Angles;
 
 #define EXPECT_POINT3_EQ(a, b) \
   EXPECT_FLOAT_EQ(a.x, b.x);   \
@@ -38,3 +39,5 @@ TEST(Ray3, OperatorTimeOnUnitVector) {
                       1.7320508075688772935274463415059,
                       1.7320508075688772935274463415059));
 }
+
+TEST(Ray3, Angles) { r3 ray(p3(), Angles(0, 0)); }
