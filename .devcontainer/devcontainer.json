@@ -11,7 +11,8 @@
 		"vscode": {
 			"extensions": [
 				"BazelBuild.vscode-bazel",
-				"xaver.clang-format"
+				"xaver.clang-format",
+				"ms-vscode.cpptools-extension-pack"
 			]
 		}
 	}
