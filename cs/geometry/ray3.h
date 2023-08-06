@@ -8,27 +8,35 @@
 
 namespace cs::geometry {
 
+struct Angles {
+  // Radians
+  float azimuth = 0;
+  // Radians
+  float elevation = 0;
+  Angles(float azimuth, float elevation)
+      : azimuth(azimuth), elevation(elevation) {}
+};
+
 // A unbounded vector
 struct Ray3 {
   Point3 origin;
   Vector3 direction;
 
   // Empty constructor
-  Ray3() : Ray3({}, {}) {}
+  Ray3() : Ray3(Point3(), Point3()) {}
 
-  Ray3(const Point3& origin, float azimuth_radians,
-       float elevation_radians)
+  Ray3(const Point3& origin, Angles angles)
       : origin(origin),
         direction(Vector3(
-            Point3(std::cos(azimuth_radians) *
-                       std::cos(elevation_radians),
-                   std::sin(elevation_radians),
-                   std::sin(azimuth_radians) *
-                       std::cos(elevation_radians)))) {}
+            Point3(std::cos(angles.azimuth) *
+                       std::cos(angles.elevation),
+                   std::sin(angles.elevation),
+                   std::sin(angles.azimuth) *
+                       std::cos(angles.elevation)))) {}
 
   // A ray from an origin in the direction towards a point
   Ray3(const Point3 origin, const Point3 towards)
-      : Ray3(origin, Vector3(towards - origin).unit()) {}
+      : Ray3(origin, Vector3(towards - origin)) {}
 
   // A ray with a given origin and destination
   Ray3(const Point3 origin, const Vector3 direction)
@@ -46,13 +54,13 @@ struct Ray3 {
     return origin + unit.b * time;
   };
 
-  std::pair<float, float> angles(const Point3& point) {
-    float azimuth_radians = std::atan2(point.y, point.x);
-    float elevation_radians = std::atan2(
-        point.z,
-        std::sqrt(point.x * point.x + point.y * point.y));
-    return {azimuth_radians, elevation_radians};
-  }
+  Angles angles() {
+    const Point3 point = direction.b;
+    return Angles(
+        std::atan2(point.y, point.x),
+        std::atan2(point.z, std::sqrt(point.x * point.x +
+                                      point.y * point.y)));
+  };
 };
 
 }  // namespace cs::geometry
