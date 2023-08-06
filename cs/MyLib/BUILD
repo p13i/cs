@@ -1,7 +1,7 @@
 cc_library(
     name = "message",
     srcs = ["message.cpp"],
-    hdrs = ["message.hpp"],
+    hdrs = ["message.h"],
     visibility = ["//visibility:public"],
 )
 
