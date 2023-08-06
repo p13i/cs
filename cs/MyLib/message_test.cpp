@@ -1,4 +1,4 @@
-#include "cs/MyLib/message.hpp"
+#include "cs/MyLib/message.h"
 
 #include "gtest/gtest.h"
 
