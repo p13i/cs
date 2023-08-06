@@ -10,7 +10,9 @@ namespace cs::geometry {
 
 class Vector3 {
  public:
-  Vector3(Point3 b) : a(Point3(0, 0, 0)), b(b) {}
+  Vector3() : Vector3(Point3()) {}
+
+  Vector3(Point3 b) : Vector3(Point3(), b) {}
 
   Vector3(Point3 a, Point3 b) : a(a), b(b) {}
 
@@ -22,10 +24,12 @@ class Vector3 {
                      z_diff * z_diff);
   }
 
-  Vector3 direction() const { return {{}, b - a}; }
+  Vector3 direction() const {
+    return Vector3(Point3(), b - a);
+  }
 
   Vector3 unit() const {
-    return {{}, direction().b / magnitude()};
+    return Vector3(Point3(), direction().b / magnitude());
   }
 
   Vector3 operator+(const Vector3& other) const {
