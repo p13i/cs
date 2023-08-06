@@ -2,6 +2,7 @@
 #define CS_GEOMETRY_VECTOR3_
 
 #include <cmath>
+#include <iostream>
 
 #include "cs/geometry/point3.h"
 
@@ -11,7 +12,6 @@ class Vector3 {
  public:
   Vector3(Point3 b) : a(Point3(0, 0, 0)), b(b) {}
   Vector3(Point3 a, Point3 b) : a(a), b(b) {}
-  Point3 a, b;
   float magnitude() const {
     float x_diff = b.x - a.x;
     float y_diff = b.y - a.y;
@@ -25,6 +25,12 @@ class Vector3 {
   bool operator==(const Vector3& other) const {
     return a == other.a && b == other.b;
   }
+  friend std::ostream& operator<<(std::ostream& os,
+                                  const Vector3& vec) {
+    os << "Vector3(" << vec.a << ", " << vec.b << ")";
+    return os;
+  }
+  Point3 a, b;
 };
 
 }  // namespace cs::geometry

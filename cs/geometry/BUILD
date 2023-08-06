@@ -1,3 +1,5 @@
+package(default_visibility = ["//visibility:public"])
+
 cc_library(
     name = "point3",
     hdrs = ["point3.h"],
