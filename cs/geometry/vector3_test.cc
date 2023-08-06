@@ -6,6 +6,10 @@
 using p3 = ::cs::geometry::Point3;
 using v3 = ::cs::geometry::Vector3;
 
+TEST(Vector3, OneArgConstructor) {
+  EXPECT_EQ(v3(p3(1, 1, 1)).b, p3(1, 1, 1));
+}
+
 TEST(Vector3, OperatorAdd) {
   EXPECT_EQ(v3(p3(0, 0, 0), p3(1, 1, 1)).a, p3(0, 0, 0));
 }

@@ -9,6 +9,7 @@ namespace cs::geometry {
 
 class Vector3 {
  public:
+  Vector3(Point3 b) : a(Point3(0, 0, 0)), b(b) {}
   Vector3(Point3 a, Point3 b) : a(a), b(b) {}
   Point3 a, b;
   float magnitude() const {
