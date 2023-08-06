@@ -11,3 +11,18 @@ cc_test(
         "@googletest//:gtest_main",
     ],
 )
+
+cc_library(
+    name = "vector3",
+    hdrs = ["vector3.h"],
+    deps=[":point3"]
+)
+
+cc_test(
+    name = "vector3_test",
+    srcs = ["vector3_test.cc"],
+    deps = [
+        ":vector3",
+        "@googletest//:gtest_main",
+    ],
+)
