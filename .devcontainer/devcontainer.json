@@ -14,8 +14,11 @@
 				"xaver.clang-format",
 				"ms-vscode.cpptools-extension-pack"
 			]
+		},
+		"bazel": {
+			"buildifierExecutable": "~/go/bin/buildifier"
 		}
-	}
+	},
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
@@ -24,7 +27,7 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "uname -a",
+	"postCreateCommand": "make setup"
 
 	// Configure tool-specific properties.
 	// "customizations": {},
