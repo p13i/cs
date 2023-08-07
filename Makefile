@@ -1,6 +1,9 @@
 default:
 	echo ""
 
+build:
+	bazel build ...
+
 test:
 	bazel test --test_output=all ...
 
