@@ -13,9 +13,9 @@ using r3 = ::cs::geo::Ray3;
   EXPECT_NEAR(a.y, b.y, FLOAT_EPSILON); \
   EXPECT_NEAR(a.z, b.z, FLOAT_EPSILON);
 
-#define EXPECT_VECTOR3_EQ(vecA, vecB) \
-  EXPECT_POINT3_EQ(vecA.a, vecB.a);   \
-  EXPECT_POINT3_EQ(vecA.b, vecB.b);
+#define EXPECT_VECTOR3_EQ(A, B) \
+  EXPECT_POINT3_EQ(A.a, B.a);   \
+  EXPECT_POINT3_EQ(A.b, B.b);
 
 TEST(Ray3, DirectionVectorIsUnit) {
   r3 ray(p3(), p3(1, 1, 1));
