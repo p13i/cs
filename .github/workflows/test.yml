@@ -15,5 +15,8 @@ jobs:
       - name: Setup dev environment
         run: make setup
 
+      - name: Build the whole repo
+        run: make build
+
       - name: Run tests
         run: make test
