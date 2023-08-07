@@ -2,7 +2,7 @@ default:
 	echo ""
 
 test:
-	bazel test --test_output=errors ...
+	bazel test --test_output=all ...
 
 setup:
 	# Install Bazel
