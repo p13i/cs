@@ -9,3 +9,9 @@ cc_library(
     name = "polar2cart",
     hdrs = ["polar2cart.h"],
 )
+
+cc_library(
+    name = "random",
+    srcs = ["random.cc"],
+    hdrs = ["random.h"],
+)
