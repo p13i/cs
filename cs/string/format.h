@@ -5,7 +5,7 @@
 
 #include <string>
 
-namespace cs::str {
+namespace cs::string {
 
 // String formatting utility function that abstracts away
 // needing to use snprintf.
@@ -29,8 +29,8 @@ std::string format(const std::string &format,
 // Reference https://stackoverflow.com/a/26221725/5071723
 template <typename... Args>
 std::string format(const char *format, Args... args) {
-  return cs::str::format(std::string(format), args...);
+  return cs::string::format(std::string(format), args...);
 }
-}  // namespace cs::str
+}  // namespace cs::string
 
 #endif  // CS_STRING_FORMAT_H

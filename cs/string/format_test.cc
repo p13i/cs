@@ -3,7 +3,7 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
-using ::cs::str::format;
+using ::cs::string::format;
 
 TEST(Format, Empty) { EXPECT_EQ(format(""), ""); }
 
