@@ -1,22 +1,6 @@
 package(default_visibility = ["//visibility:public"])
 
 cc_library(
-    name = "dot",
-    srcs = ["dot.cc"],
-    hdrs = ["dot.h"],
-    deps = [":point3"],
-)
-
-cc_test(
-    name = "dot_test",
-    srcs = ["dot_test.cc"],
-    deps = [
-        ":dot",
-        "@googletest//:gtest_main",
-    ],
-)
-
-cc_library(
     name = "dist",
     srcs = ["dist.cc"],
     hdrs = ["dist.h"],
@@ -32,6 +16,22 @@ cc_test(
     srcs = ["dist_test.cc"],
     deps = [
         ":dist",
+        "@googletest//:gtest_main",
+    ],
+)
+
+cc_library(
+    name = "dot",
+    srcs = ["dot.cc"],
+    hdrs = ["dot.h"],
+    deps = [":point3"],
+)
+
+cc_test(
+    name = "dot_test",
+    srcs = ["dot_test.cc"],
+    deps = [
+        ":dot",
         "@googletest//:gtest_main",
     ],
 )
