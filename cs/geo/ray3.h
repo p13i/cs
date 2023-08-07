@@ -9,7 +9,7 @@
 
 namespace cs::geo {
 
-// A unbounded vector
+// An unbounded vector
 struct Ray3 {
   Point3 origin;
   Vector3 direction;
