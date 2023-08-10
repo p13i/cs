@@ -28,3 +28,7 @@ lint:
 
 serve:
 	python3 -m http.server --directory bazel-bin/cs/app/hello_world_wasm
+
+sync:
+	git pull --rebase
+	git push
