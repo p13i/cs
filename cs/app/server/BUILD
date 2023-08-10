@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 filegroup(
     name = "index_html",
     srcs = [
@@ -8,8 +9,10 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
+=======
+>>>>>>> 7fc0898 (add working toolchain for emsdk)
 py_binary(
     name = "server",
     srcs = ["server.py"],
-    data = [":index_html"],  # Replace with the path to your HTML file rule
+    data = ["//cs/app:hello_world_wasm"],
 )

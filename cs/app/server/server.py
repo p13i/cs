@@ -3,7 +3,7 @@ import socketserver
 import os
 
 PORT = 8080
-OUTPUT_DIR = "cs/app/server/"
+OUTPUT_DIR = "cs/app/hello_world_wasm/"
 
 os.chdir(OUTPUT_DIR)
 
