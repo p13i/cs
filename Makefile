@@ -21,6 +21,22 @@ setup:
 	# Install clang-format
 	sudo apt install clang-format -y
 
+build-wasm:
+	emcc cs/app/hello_world.cc -o cs/app/server/index.html
+
+setup-wasm:
+	mkdir -p ext
+	# Remove existing ext/emsdk folder
+	sudo rm -rf ext/emsdk
+	# Setup WebAssembly with EMScripten
+	git clone https://github.com/emscripten-core/emsdk.git ext/emsdk
+	sudo ext/emsdk/emsdk install latest
+	sudo ext/emsdk/emsdk activate latest
+	sudo sh ext/emsdk/emsdk_env.sh
+	sudo apt-get install python3 -y
+	sudo apt-get install cmake -y
+	emcc -v
+
 lint:
 	go run github.com/bazelbuild/buildtools/buildifier@latest -r .
 	find . -iname *.h -o -iname *.cc | xargs clang-format -i
