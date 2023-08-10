@@ -1,6 +1,10 @@
 filegroup(
     name = "index_html",
-    srcs = ["index.html", "index.js", "index.wasm"],
+    srcs = [
+        "index.html",
+        "index.js",
+        "index.wasm",
+    ],
     visibility = ["//visibility:public"],
 )
 
