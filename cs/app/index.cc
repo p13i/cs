@@ -10,11 +10,11 @@
 
 #include <sstream>
 
-#include "cs/renderer/rainbow.h"
-
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
 #endif
+
+#include "cs/renderer/rainbow.h"
 
 #define APP_FRAME_RATE_FPS 24
 #define APP_SCREEN_WIDTH 1024
@@ -51,9 +51,8 @@ int main(int argc, char** argv) {
       for (uint32_t j = 0; j < film.height; j++) {
         cs::renderer::Pixel pixel = film.pixels[i][j];
         *((Uint32*)screen->pixels + j * film.width + i) =
-            SDL_MapRGBA(screen->format, pixel.red_,
-                        pixel.blue_, pixel.green_,
-                        pixel.alpha_);
+            SDL_MapRGBA(screen->format, pixel.r, pixel.g,
+                        pixel.b, pixel.a);
       }
     }
     if (SDL_MUSTLOCK(screen)) {

@@ -1,5 +1,8 @@
 #include "cs/renderer/rainbow.h"
 
+#include "cs/renderer/film.hh"
+#include "cs/renderer/pixel.hh"
+
 void cs::renderer::RainbowRenderer::render(Film* film) {
   for (uint32_t i = 0; i < film->width; i++) {
     for (uint32_t j = 0; j < film->height; j++) {

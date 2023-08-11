@@ -25,7 +25,7 @@ setup:
 
 lint:
 	go run github.com/bazelbuild/buildtools/buildifier@latest -r .
-	find . -iname *.h -o -iname *.cc | xargs clang-format -i
+	find . -iname *.h -iname *.hh -o -iname *.cc | xargs clang-format -i
 
 sync:
 	git pull --rebase
