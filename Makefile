@@ -2,11 +2,10 @@ default:
 	echo ""
 
 build:
-	bazel build -- //... -//cs/app:hello_world
-	bazel build -- //cs/app:hello_world_wasm
+	bazel build -- //... -//cs/app:hello_world //cs/app:hello_world_wasm
 
 test:
-	bazel test --test_output=all ...
+	bazel test --test_output=all -- //... -//cs/app:hello_world //cs/app:hello_world_wasm
 
 setup:
 	# Install Bazel
