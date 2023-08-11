@@ -8,8 +8,8 @@ cc_library(
 )
 
 cc_binary(
-    name = "hello_world",
-    srcs = ["hello_world.cc"],
+    name = "index",
+    srcs = ["index.cc"],
     linkopts = [
         "--oformat=html",
         "-s MINIFY_HTML=0",
@@ -17,6 +17,6 @@ cc_binary(
 )
 
 wasm_cc_binary(
-    name = "hello_world_wasm",
-    cc_target = ":hello_world",
+    name = "index.js",
+    cc_target = ":index",
 )

@@ -33,7 +33,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          path: 'bazel-bin/cs/app/hello_world_wasm'
+          path: 'bazel-bin/cs/app/index.js/'
 
       - name: Deploy to GitHub Pages
         id: deployment

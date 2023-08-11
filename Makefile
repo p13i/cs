@@ -2,10 +2,10 @@ default:
 	echo ""
 
 build:
-	bazel build -- //... -//cs/app:hello_world //cs/app:hello_world_wasm
+	bazel build -- //... -//cs/app:index //cs/app:index.js
 
 test:
-	bazel test --test_output=all -- //... -//cs/app:hello_world //cs/app:hello_world_wasm
+	bazel test --test_output=all -- //... -//cs/app:index //cs/app:index.js
 
 setup:
 	# Install Bazel
@@ -26,7 +26,7 @@ lint:
 	find . -iname *.h -o -iname *.cc | xargs clang-format -i
 
 serve:
-	python3 -m http.server --directory bazel-bin/cs/app/hello_world_wasm
+	python3 -m http.server --directory bazel-bin/cs/app/index
 
 sync:
 	git pull --rebase
