@@ -5,20 +5,28 @@
 // can be found in the LICENSE file.
 
 #include <SDL/SDL.h>
+#include <stdint.h>
 #include <stdio.h>
+
+#include <sstream>
+
+#include "cs/renderer/rainbow.h"
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
 #endif
 
 #define APP_FRAME_RATE_FPS 24
+#define APP_SCREEN_WIDTH 1024
+#define APP_SCREEN_HEIGHT 512
 
 int main(int argc, char** argv) {
   printf("hello, world!\n");
 
   SDL_Init(SDL_INIT_VIDEO);
   SDL_Surface* screen =
-      SDL_SetVideoMode(256, 256, 32, SDL_SWSURFACE);
+      SDL_SetVideoMode(APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT,
+                       32, SDL_SWSURFACE);
 
 #ifdef TEST_SDL_LOCK_OPTS
   EM_ASM(
@@ -27,29 +35,25 @@ int main(int argc, char** argv) {
       "SDL.defaults.opaqueFrontBuffer = false;");
 #endif
 
+  cs::renderer::RainbowRenderer renderer;
+  cs::renderer::Film film(APP_SCREEN_WIDTH,
+                          APP_SCREEN_HEIGHT);
+  renderer.render(&film);
+
   size_t iter = 0;
-  const size_t max_iterations = 256;
+  const size_t max_iterations = 1;
   while (iter < max_iterations) {
-    printf("Iter #%zu\n", iter);
+    printf("Iter #%zu\n of %zu", iter, max_iterations);
     if (SDL_MUSTLOCK(screen)) {
       SDL_LockSurface(screen);
     }
-    for (int i = 0; i < 256; i++) {
-      for (int j = 0; j < 256; j++) {
-#ifdef TEST_SDL_LOCK_OPTS
-        // Alpha behaves like in the browser, so write
-        // proper opaque pixels.
-        int alpha = 255;
-#else
-        // To emulate native behavior with blitting to
-        // screen, alpha component is ignored. Test that it
-        // is so by outputting data (and testing that it
-        // does get discarded)
-        int alpha = (i + j) % 255;
-#endif
-        *((Uint32*)screen->pixels + i * 256 + j) =
-            SDL_MapRGBA(screen->format, iter, j, 255 - i,
-                        alpha);
+    for (uint32_t i = 0; i < film.width; i++) {
+      for (uint32_t j = 0; j < film.height; j++) {
+        cs::renderer::Pixel pixel = film.pixels[i][j];
+        *((Uint32*)screen->pixels + j * film.width + i) =
+            SDL_MapRGBA(screen->format, pixel.red_,
+                        pixel.blue_, pixel.green_,
+                        pixel.alpha_);
       }
     }
     if (SDL_MUSTLOCK(screen)) {
@@ -57,14 +61,9 @@ int main(int argc, char** argv) {
     }
     SDL_Flip(screen);
     iter++;
-#if 0
-    for (int t = 0; t < 100000; t++) {
-      // sleep...
-      printf("%d, ", t);
-    }
-#else
+#ifdef __EMSCRIPTEN__
     emscripten_sleep(1000 / APP_FRAME_RATE_FPS);
-#endif
+#endif  // __EMSCRIPTEN
   }
 
   SDL_Quit();

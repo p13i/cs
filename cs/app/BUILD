@@ -15,6 +15,7 @@ cc_binary(
         "-s MINIFY_HTML=0",
         "-sASYNCIFY=1",
     ],
+    deps = ["//cs/renderer:rainbow"],
 )
 
 wasm_cc_binary(
