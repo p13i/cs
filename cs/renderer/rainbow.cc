@@ -6,7 +6,8 @@ void cs::renderer::RainbowRenderer::render(Film* film) {
       float i_ratio = i / (float)film->width,
             j_ratio = j / (float)film->height;
       film->pixels[i][j] =
-          cs::renderer::Pixel(i_ratio * 255, j_ratio * 255, (1 - i_ratio) * 255, 255);
+          cs::renderer::Pixel(i_ratio * 255, j_ratio * 255,
+                              (1 - i_ratio) * 255, 255);
     }
   }
 };
