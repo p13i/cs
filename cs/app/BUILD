@@ -13,6 +13,7 @@ cc_binary(
     linkopts = [
         "--oformat=html",
         "-s MINIFY_HTML=0",
+        "-sASYNCIFY=1",
     ],
 )
 

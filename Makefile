@@ -4,7 +4,7 @@ default:
 	echo ""
 
 build:
-	bazel build -- //... -//cs/app:index //cs/app:index.js
+	bazel build --jobs=1 --local_cpu_resources=1 --local_ram_resources=1 -- //... -//cs/app:index //cs/app:index.js
 
 test:
 	bazel test --test_output=all -- //... -//cs/app:index //cs/app:index.js
@@ -32,10 +32,12 @@ sync:
 	git push
 
 site:
+	rm -rf site
 	mkdir -p site
 	cp bazel-bin/cs/app/index.js/index.{html,js,wasm} site
 
 serve:
+	make site
 	python3 -m http.server --directory site
 
 clean:
