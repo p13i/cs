@@ -27,9 +27,6 @@ lint:
 	go run github.com/bazelbuild/buildtools/buildifier@latest -r .
 	find . -iname *.h -o -iname *.cc | xargs clang-format -i
 
-serve:
-	python3 -m http.server --directory bazel-bin/cs/app/index.js
-
 sync:
 	git pull --rebase
 	git push
@@ -37,6 +34,9 @@ sync:
 site:
 	mkdir -p site
 	cp bazel-bin/cs/app/index.js/index.{html,js,wasm} site
+
+serve:
+	python3 -m http.server --directory site
 
 clean:
 	bazel clean
