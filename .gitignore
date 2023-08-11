@@ -30,3 +30,5 @@
 user.bazelrc
 # Blaze buildifier
 /buildtools/
+# Generated website
+/site/

@@ -1,3 +1,5 @@
+SHELL=/usr/bin/bash
+
 default:
 	echo ""
 
@@ -26,8 +28,16 @@ lint:
 	find . -iname *.h -o -iname *.cc | xargs clang-format -i
 
 serve:
-	python3 -m http.server --directory bazel-bin/cs/app/index
+	python3 -m http.server --directory bazel-bin/cs/app/index.js
 
 sync:
 	git pull --rebase
 	git push
+
+site:
+	mkdir -p site
+	cp bazel-bin/cs/app/index.js/index.{html,js,wasm} site
+
+clean:
+	bazel clean
+	rm -rf site

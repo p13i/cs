@@ -30,6 +30,9 @@ jobs:
       - name: Build the whole repo
         run: make build
 
+      - name: Copy site files
+        run: make site
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
