@@ -19,9 +19,10 @@ cc_library(
 )
 
 cc_test(
-    name="rainbow_test",
-    srcs=["rainbow_test.cc"],
-    deps=[
+    name = "rainbow_test",
+    srcs = ["rainbow_test.cc"],
+    deps = [
+        ":rainbow",
         "@googletest//:gtest_main",
-        ":rainbow",]
+    ],
 )
