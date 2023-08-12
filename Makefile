@@ -1,4 +1,5 @@
 SHELL=/usr/bin/bash
+.PHONY: site
 
 default:
 	echo ""
@@ -37,7 +38,6 @@ site:
 	cp bazel-bin/cs/app/index.js/index.{html,js,wasm} site
 
 serve:
-	make site
 	python3 -m http.server --directory site
 
 clean:
