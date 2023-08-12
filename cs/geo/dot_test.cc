@@ -8,6 +8,7 @@ using p3 = ::cs::geo::Point3;
 using ::cs::geo::dot;
 
 TEST(Dot, Basic) {
-  EXPECT_EQ(dot(p3(1, 2, 3), p3(4, 5, 6)),
-            1 * 4 + 2 * 5 + 3 * 6);
+  EXPECT_EQ(
+      dot(p3(1, 2, 3), p3(4, 5, 6)),
+      1 * 4 + 2 * 5 + 3 * 6);
 }

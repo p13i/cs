@@ -13,7 +13,8 @@ TEST(RainbowRenderer, 1x1) {
   renderer.render(&film);
 
   Pixel** pixels = film.pixels;
-  EXPECT_EQ(pixels[0][0], Pixel(128, 128, 128, 255));
+  EXPECT_EQ(pixels[0][0],
+            Pixel(128, 128, 128, 255));
 }
 
 TEST(RainbowRenderer, 256x256) {
@@ -22,9 +23,14 @@ TEST(RainbowRenderer, 256x256) {
   renderer.render(&film);
 
   Pixel** pixels = film.pixels;
-  EXPECT_EQ(pixels[0][0], Pixel(0, 0, 255, 255));
-  EXPECT_EQ(pixels[0][127], Pixel(0, 127, 255, 255));
-  EXPECT_EQ(pixels[127][0], Pixel(127, 0, 128, 255));
-  EXPECT_EQ(pixels[127][127], Pixel(127, 127, 128, 255));
-  EXPECT_EQ(pixels[255][255], Pixel(255, 255, 0, 255));
+  EXPECT_EQ(pixels[0][0],
+            Pixel(0, 0, 255, 255));
+  EXPECT_EQ(pixels[0][127],
+            Pixel(0, 127, 255, 255));
+  EXPECT_EQ(pixels[127][0],
+            Pixel(127, 0, 128, 255));
+  EXPECT_EQ(pixels[127][127],
+            Pixel(127, 127, 128, 255));
+  EXPECT_EQ(pixels[255][255],
+            Pixel(255, 255, 0, 255));
 }

@@ -7,9 +7,11 @@
 using ::cs::audio::sinusodal;
 
 TEST(Sinusodal, Zero) {
-  EXPECT_NEAR(sinusodal(440, 0), 0, FLOAT_EPSILON);
+  EXPECT_NEAR(sinusodal(440, 0), 0,
+              FLOAT_EPSILON);
 }
 
 TEST(Sinusodal, HalfPhase) {
-  EXPECT_NEAR(sinusodal(440, 0.5), 0, FLOAT_EPSILON);
+  EXPECT_NEAR(sinusodal(440, 0.5), 0,
+              FLOAT_EPSILON);
 }

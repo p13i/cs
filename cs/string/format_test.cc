@@ -5,6 +5,10 @@
 
 using ::cs::string::format;
 
-TEST(Format, Empty) { EXPECT_EQ(format(""), ""); }
+TEST(Format, Empty) {
+  EXPECT_EQ(format(""), "");
+}
 
-TEST(Format, Number) { EXPECT_EQ(format("%d", 1), "1"); }
+TEST(Format, Number) {
+  EXPECT_EQ(format("%d", 1), "1");
+}
