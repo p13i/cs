@@ -15,7 +15,12 @@ cc_binary(
         "-s MINIFY_HTML=0",
         "-sASYNCIFY=1",
     ],
-    deps = ["//cs/renderer:rainbow"],
+    # Exclude this library from the main build since the wasm_cc_binary
+    # below will compile the index.cc file with the emscripten SDK.
+    tags = ["manual"],
+    deps = [
+        "//cs/renderer:rainbow",
+    ],
 )
 
 wasm_cc_binary(
