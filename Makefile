@@ -5,10 +5,10 @@ default:
 	echo ""
 
 build:
-	bazel build --jobs=1 --local_cpu_resources=1 --local_ram_resources=1 -- //... -//cs/app:index //cs/app:index.js
+	bazel build --jobs=1 --local_cpu_resources=1 --local_ram_resources=1 -- //...
 
 test:
-	bazel test --test_output=all -- //... -//cs/app:index //cs/app:index.js
+	bazel test --test_output=all -- //...
 
 setup:
 	# Install Bazel

@@ -17,3 +17,11 @@ cc_library(
     hdrs = ["rainbow.h"],
     deps = [":film"],
 )
+
+cc_test(
+    name="rainbow_test",
+    srcs=["rainbow_test.cc"],
+    deps=[
+        "@googletest//:gtest_main",
+        ":rainbow",]
+)
