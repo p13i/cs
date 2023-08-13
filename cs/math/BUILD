@@ -6,6 +6,22 @@ cc_library(
 )
 
 cc_library(
+    name="map_value",
+    hdrs=["map_value.hh"],
+    srcs=["map_value.cc"],
+)
+
+cc_test(
+    name = "map_value_test",
+    srcs = ["map_value_test.cc"],
+    deps = [
+        ":map_value",
+        ":constants",
+        "@googletest//:gtest_main",
+    ],
+)
+
+cc_library(
     name = "polar2cart",
     hdrs = ["polar2cart.h"],
 )
