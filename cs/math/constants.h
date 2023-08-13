@@ -6,4 +6,6 @@
 
 #define FLOAT_EPSILON 0.0001f
 
+#define FLOAT_NEAR(a, b) (abs(a - b) < FLOAT_EPSILON)
+
 #endif  // CS_MATH_CONSTANTS_

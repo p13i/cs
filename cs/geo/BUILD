@@ -57,6 +57,9 @@ cc_test(
 cc_library(
     name = "point3",
     hdrs = ["point3.h"],
+    deps = [
+        "//cs/math:constants",
+    ],
 )
 
 cc_test(

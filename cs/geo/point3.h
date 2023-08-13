@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+#include "cs/math/constants.h"
+
 namespace cs::geo {
 
 class Point3 {
@@ -16,7 +18,7 @@ class Point3 {
   }
 
   bool operator==(const Point3& other) const {
-    return x == other.x && y == other.y && z == other.z;
+    return FLOAT_NEAR(x, other.x) && FLOAT_NEAR(y, other.y) && FLOAT_NEAR(z, other.z);
   }
 
   Point3 operator-(Point3 other) const {
