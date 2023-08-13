@@ -1,6 +1,24 @@
 package(default_visibility = ["//visibility:public"])
 
 cc_library(
+    name = "cross",
+    hdrs = ["cross.hh"],
+    deps = [
+        ":point3",
+        ":vector3",
+    ],
+)
+
+cc_test(
+    name = "cross_test",
+    srcs = ["cross_test.cc"],
+    deps = [
+        ":cross",
+        "@googletest//:gtest_main",
+    ],
+)
+
+cc_library(
     name = "dist",
     srcs = ["dist.cc"],
     hdrs = ["dist.h"],
