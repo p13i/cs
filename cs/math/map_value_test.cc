@@ -18,9 +18,7 @@ TEST(MapValueTest, TestInRange) {
       map_value(value, value_range_start, value_range_end,
                 new_range_start, new_range_end);
 
-  EXPECT_NEAR(
-      mapped_value, 105.0f,
-      FLOAT_EPSILON);
+  EXPECT_NEAR(mapped_value, 105.0f, FLOAT_EPSILON);
 }
 
 TEST(MapValueTest, TestOutOfRange) {
@@ -34,7 +32,5 @@ TEST(MapValueTest, TestOutOfRange) {
       map_value(value, value_range_start, value_range_end,
                 new_range_start, new_range_end);
 
-  EXPECT_NEAR(
-      mapped_value, 295.f,
-      FLOAT_EPSILON);
+  EXPECT_NEAR(mapped_value, 295.f, FLOAT_EPSILON);
 }

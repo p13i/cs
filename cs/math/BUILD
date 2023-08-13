@@ -6,17 +6,17 @@ cc_library(
 )
 
 cc_library(
-    name="map_value",
-    hdrs=["map_value.hh"],
-    srcs=["map_value.cc"],
+    name = "map_value",
+    srcs = ["map_value.cc"],
+    hdrs = ["map_value.hh"],
 )
 
 cc_test(
     name = "map_value_test",
     srcs = ["map_value_test.cc"],
     deps = [
-        ":map_value",
         ":constants",
+        ":map_value",
         "@googletest//:gtest_main",
     ],
 )
