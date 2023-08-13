@@ -14,6 +14,11 @@ struct Ray3 {
   Point3 origin;
   Vector3 direction;
 
+  // Converting a vector directly to a ray where the
+  // vector's origin is the origin of the ray
+  explicit Ray3(const Vector3& vector)
+      : Ray3(vector.a, vector.b) {}
+
   // Empty constructor
   Ray3() : Ray3(Point3(), Point3()) {}
 
@@ -30,11 +35,6 @@ struct Ray3 {
   // A ray with a given origin and destination
   Ray3(const Point3& origin, const Vector3& direction)
       : origin(origin), direction(direction.unit()) {}
-
-  // Converting a vector directly to a ray where the
-  // vector's origin is the origin of the ray
-  explicit Ray3(const Vector3& vector)
-      : Ray3(vector.a, vector.b) {}
 
   // Evaluates a ray at a given time-step multiplied against
   // the unit vector direction
