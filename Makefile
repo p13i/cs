@@ -1,8 +1,7 @@
 SHELL=/usr/bin/bash
 .PHONY: site
 
-default:
-	echo ""
+default: build test site serve
 
 build:
 	bazel build --jobs=1 --local_cpu_resources=1 --local_ram_resources=1 -- //...
