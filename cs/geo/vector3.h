@@ -35,7 +35,15 @@ class Vector3 {
   }
 
   Vector3 operator-(Vector3 other) const {
-    return {a - other.a, b - other.b};
+    return Vector3(a - other.a, b - other.b);
+  }
+
+  Vector3 operator+(Point3 other) const {
+    return Vector3(a + other, b + other);
+  }
+
+  Vector3 operator-(Point3 other) const {
+    return Vector3(a - other, b - other);
   }
 
   bool operator==(const Vector3& other) const {
