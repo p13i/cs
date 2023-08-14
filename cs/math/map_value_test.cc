@@ -6,7 +6,6 @@
 
 using ::cs::math::map_value;
 
-// Define test cases
 TEST(MapValueTest, TestInRange) {
   float value = 50.0f;
   float value_range_start = 0.0f;
