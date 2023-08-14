@@ -13,15 +13,6 @@ using v3 = ::cs::geo::Vector3;
 using p3 = ::cs::geo::Point3;
 using ::cs::geo::dot;
 
-#if 0
-
-or A*t^2 + B*t + C = 0
-with: A = Xd^2 + Yd^2 + Zd^2
-B = 2 * (Xd * (X0 - Xc) + Yd * (Y0 - Yc) + Zd * (Z0 - Zc))
-C = (X0 - Xc)^2 + (Y0 - Yc)^2 + (Z0 - Zc)^2 - Sr^2
-
-#endif
-
 namespace cs::shapes {
     struct Sphere {
         cs::geo::Point3 center;
