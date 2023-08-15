@@ -4,7 +4,7 @@
 #include <cmath>
 
 #include "cs/geo/ray3.h"
-#include "cs/geo/dot.h"
+#include "cs/geo/dot.hh"
 #include "cs/string/format.h"
 #include "cs/math/constants.h"
 

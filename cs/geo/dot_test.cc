@@ -1,4 +1,4 @@
-#include "cs/geo/dot.h"
+#include "cs/geo/dot.hh"
 
 #include "cs/geo/point3.h"
 #include "gmock/gmock.h"

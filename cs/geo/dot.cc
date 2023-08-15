@@ -1,4 +1,4 @@
-#include "cs/geo/dot.h"
+#include "cs/geo/dot.hh"
 
 namespace cs::geo {
 // Performs a standard dot product.

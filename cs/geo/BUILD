@@ -41,7 +41,7 @@ cc_test(
 cc_library(
     name = "dot",
     srcs = ["dot.cc"],
-    hdrs = ["dot.h"],
+    hdrs = ["dot.hh"],
     deps = [":point3"],
 )
 
