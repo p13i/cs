@@ -35,7 +35,7 @@ site:
 	rm -rf site
 	mkdir -p site
 	cp bazel-bin/cs/app/index.js/index.{js,wasm} site
-	cp cs/app/index.html site
+	cp cs/app/{index.html,wasm.js} site
 
 serve:
 	python3 -m http.server --directory site
