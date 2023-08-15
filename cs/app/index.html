@@ -9,9 +9,9 @@
 </head>
 
 <body>
-  <div class="spinner" id="spinner">
+  <div id="spinner">
   </div>
-  <div class="emscripten" id="status">
+  <div id="status">
     Downloading...</div>
 
   <span id="controls">
@@ -25,14 +25,11 @@
     </span>
   </span>
 
-  <div class="emscripten">
-    <progress value="0" max="100" id="progress" hidden=1></progress>
-  </div>
+  <progress value="0" max="100" id="progress" hidden=1></progress>
 
-  <div class="emscripten_border">
-    <canvas class="emscripten" id="canvas"
-      oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
-  </div>
+  <canvas id="canvas"
+    oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
+
   <textarea id="output" rows="8"></textarea>
 
   <script type="text/javascript" src="wasm.js"></script>
