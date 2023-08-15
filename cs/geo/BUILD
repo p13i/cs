@@ -42,7 +42,12 @@ cc_library(
     name = "dot",
     srcs = ["dot.cc"],
     hdrs = ["dot.hh"],
-    deps = [":point3"],
+    deps = [
+        ":point3",
+        ":vector3",
+        "//cs/math:constants",
+        "//cs/sanity:ensure",
+    ],
 )
 
 cc_test(
