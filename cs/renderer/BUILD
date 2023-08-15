@@ -26,3 +26,29 @@ cc_test(
         "@googletest//:gtest_main",
     ],
 )
+
+cc_library(
+    name = "sphere_renderer",
+    srcs = ["sphere_renderer.cc"],
+    hdrs = ["sphere_renderer.hh"],
+    deps = [
+        ":film",
+        "//cs/geo:point3",
+        "//cs/geo:ray3",
+        "//cs/geo:vector3",
+        "//cs/shapes:sphere",
+        "//cs/math:map_value",
+        "//cs/sanity:ensure",
+        "//cs/math:constants",
+        "//cs/geo:dist",
+    ],
+)
+
+cc_test(
+    name = "sphere_renderer_test",
+    srcs = ["sphere_renderer_test.cc"],
+    deps = [
+        ":sphere_renderer",
+        "@googletest//:gtest_main",
+    ],
+)
