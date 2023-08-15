@@ -1,4 +1,6 @@
-# cs
+# `cs`
+
+*C++ graphics simulators for the browser*
 
 ---
 
@@ -10,3 +12,10 @@
 
 ---
 
+Open a Github Codespace (via the green "Code" button on the homepage of this repo). Your dev environment will automatically be ready-to-go. Run `make` from the terminal and open port 8000 to view the main graphics simulator:
+
+<img width="1844" alt="image" src="https://github.com/p13i/cs/assets/13140065/58a0fe4b-98aa-4dda-af8b-9375f6d3eac1">
+
+This project uses the Bazel build system from Google. Other technologies used include C++ and WebAssembly.
+
+The raytracer implementation is based on Pharr et al.'s [*PBRT*](pbr-book.org).
