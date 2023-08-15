@@ -11,8 +11,8 @@ cc_binary(
     name = "index",
     srcs = ["index.cc"],
     linkopts = [
-        "--oformat=html",
-        "-s MINIFY_HTML=0",
+        # "--oformat=html",
+        # "-s MINIFY_HTML=0",
         "-sASYNCIFY=1",
     ],
     # Exclude this library from the main build since the wasm_cc_binary
