@@ -12,6 +12,7 @@ namespace cs::renderer {
 struct Film {
   uint32_t width, height;
   Pixel** pixels;
+  Film() : Film(0, 0) {}
   Film(uint32_t width, uint32_t height)
       : width(width), height(height) {
     pixels = new Pixel*[width];
