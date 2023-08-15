@@ -3,18 +3,15 @@
 
 #include <cstdlib>
 #include <iostream>
+#include <string>
 
-#define ENSURE(condition) \
-  cs::sanity::ensure(condition, __FILE__, __LINE__)
+#define ENSURE(condition)                             \
+  cs::sanity::ensure(condition, #condition, __FILE__, \
+                     __LINE__)
 
 namespace cs::sanity {
-void ensure(bool condition, char* file, int line) {
-  if (!condition) {
-    std::cerr << "Runtime assertion failed at " << file
-              << ":" << line << "!";
-    std::abort();
-  }
-}
+void ensure(bool condition, std::string condition_literal,
+            std::string file, int line);
 }  // namespace cs::sanity
 
 #endif  // CS_SANITY_ENSURE_HH
