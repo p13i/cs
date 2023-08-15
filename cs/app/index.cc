@@ -15,10 +15,11 @@
 #endif
 
 #include "cs/renderer/rainbow.h"
+#include "cs/renderer/sphere_renderer.hh"
 
 #define APP_FRAME_RATE_FPS 24
-#define APP_SCREEN_WIDTH 1024
-#define APP_SCREEN_HEIGHT 512
+#define APP_SCREEN_WIDTH 256
+#define APP_SCREEN_HEIGHT 256
 
 int main(int argc, char** argv) {
   printf("hello, world!\n");
@@ -35,10 +36,15 @@ int main(int argc, char** argv) {
       "SDL.defaults.opaqueFrontBuffer = false;");
 #endif
 
+#if 0
   cs::renderer::RainbowRenderer renderer;
   cs::renderer::Film film(APP_SCREEN_WIDTH,
                           APP_SCREEN_HEIGHT);
   renderer.render(&film);
+#else
+  cs::renderer::SphereRenderer renderer;
+  cs::renderer::Film film = renderer.render();
+#endif
 
   size_t iter = 0;
   const size_t max_iterations = 1;

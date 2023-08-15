@@ -20,6 +20,7 @@ cc_binary(
     tags = ["manual"],
     deps = [
         "//cs/renderer:rainbow",
+        "//cs/renderer:sphere_renderer",
     ],
 )
 
