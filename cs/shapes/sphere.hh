@@ -23,7 +23,7 @@ namespace cs::shapes {
         }
 
         bool intersectedBy(const r3 ray, p3* atPoint, v3* atNormal) {
-            float a = dot(ray.direction.b, ray.direction.b);
+            float a = dot(ray.direction, ray.direction);
             float b = 2 * dot(ray.direction.b, (ray.origin - center));
             float c = dot((ray.origin - center), (ray.origin - center)) - radius * radius;
 
