@@ -23,7 +23,9 @@ cc_test(
 
 cc_library(
     name = "polar2cart",
-    hdrs = ["polar2cart.h"],
+    srcs = ["polar2cart.cc"],
+    hdrs = ["polar2cart.hh"],
+    deps = ["//cs/geo:point3"],
 )
 
 cc_library(

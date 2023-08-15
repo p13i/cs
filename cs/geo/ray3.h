@@ -5,7 +5,7 @@
 
 #include "cs/geo/point3.h"
 #include "cs/geo/vector3.h"
-#include "cs/math/polar2cart.h"
+#include "cs/math/polar2cart.hh"
 
 namespace cs::geo {
 
