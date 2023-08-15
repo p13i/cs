@@ -15,6 +15,7 @@
 #endif
 
 #include "cs/renderer/rainbow.h"
+#include "cs/renderer/scene_renderer.hh"
 #include "cs/renderer/sphere_renderer.hh"
 
 #define APP_FRAME_RATE_FPS 24
@@ -41,8 +42,11 @@ int main(int argc, char** argv) {
   cs::renderer::Film film(APP_SCREEN_WIDTH,
                           APP_SCREEN_HEIGHT);
   renderer.render(&film);
-#else
+#elif 0
   cs::renderer::SphereRenderer renderer;
+  cs::renderer::Film film = renderer.render();
+#else
+  cs::renderer::SceneRenderer renderer;
   cs::renderer::Film film = renderer.render();
 #endif
 

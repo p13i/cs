@@ -1,5 +1,5 @@
-#ifndef CS_RENDERER_SPHERE_RENDERER_HH
-#define CS_RENDERER_SPHERE_RENDERER_HH
+#ifndef CS_RENDERER_SCENE_RENDERER_HH
+#define CS_RENDERER_SCENE_RENDERER_HH
 
 #include <stdio.h>
 
@@ -11,6 +11,7 @@
 #include "cs/geo/vector3.h"
 #include "cs/math/map_value.hh"
 #include "cs/renderer/film.hh"
+#include "cs/renderer/scene.hh"
 #include "cs/sanity/ensure.hh"
 #include "cs/shapes/sphere.hh"
 
@@ -23,20 +24,21 @@ using ::cs::renderer::Film;
 using ::cs::shapes::Sphere;
 
 namespace cs::renderer {
-class SphereRenderer {
+class SceneRenderer {
  public:
   p3 focal_point_ = p3(0, 0, -2);
   p3 film_center_ = p3(0, 0, 1);
   Film film_ = Film(256, 256);
   float pixels_per_unit_ = 128;
-  Sphere sphere_ =
-      Sphere(/*center=*/p3(0, 0, 5), /*radius=*/1);
+
+  Scene scene_ = Scene({Sphere(/*center=*/p3(0, 0, 5),
+                               /*radius=*/1),
+                        Sphere(/*center=*/p3(1, 1, 4),
+                               /*radius=*/0.5)});
 
   Film render() {
-    float min_distance =
-        dist(focal_point_, sphere_.center) - sphere_.radius;
-    float max_distance =
-        dist(focal_point_, sphere_.center) + sphere_.radius;
+    float min_distance = 3;
+    float max_distance = 7;
 
     float x_units = film_.width / pixels_per_unit_;
     float y_units = film_.height / pixels_per_unit_;
@@ -55,8 +57,8 @@ class SphereRenderer {
 
         p3 intersection_point;
         v3 normal;
-        if (sphere_.intersectedBy(ray, &intersection_point,
-                                  &normal)) {
+        if (scene_.intersectedBy(ray, &intersection_point,
+                                 &normal)) {
           float distance =
               cs::geo::dist(ray.origin, intersection_point);
 #if 0
@@ -70,7 +72,7 @@ class SphereRenderer {
           ENSURE(distance >= min_distance);
           ENSURE(distance <= max_distance);
           float rgb = map_value(distance, min_distance,
-                                max_distance, 255, 0);
+                                max_distance, 255, 255/3);
           ENSURE(0 <= rgb && rgb <= 255.f);
           film_.pixels[fx][fy] = Pixel(rgb, rgb, rgb, 255);
         } else {
