@@ -2,6 +2,6 @@ package(default_visibility = ["//visibility:public"])
 
 cc_library(
     name = "ensure",
-    hdrs = ["ensure.hh"],
     srcs = ["ensure.cc"],
+    hdrs = ["ensure.hh"],
 )

@@ -33,14 +33,14 @@ cc_library(
     hdrs = ["sphere_renderer.hh"],
     deps = [
         ":film",
+        "//cs/geo:dist",
         "//cs/geo:point3",
         "//cs/geo:ray3",
         "//cs/geo:vector3",
-        "//cs/shapes:sphere",
+        "//cs/math:constants",
         "//cs/math:map_value",
         "//cs/sanity:ensure",
-        "//cs/math:constants",
-        "//cs/geo:dist",
+        "//cs/shapes:sphere",
     ],
 )
 
