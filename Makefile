@@ -34,7 +34,8 @@ sync:
 site:
 	rm -rf site
 	mkdir -p site
-	cp bazel-bin/cs/app/index.js/index.{html,js,wasm} site
+	cp bazel-bin/cs/app/index.js/index.{js,wasm} site
+	cp cs/app/index.html site
 
 serve:
 	python3 -m http.server --directory site
