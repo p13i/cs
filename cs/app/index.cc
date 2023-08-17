@@ -51,7 +51,7 @@ int main(int argc, char** argv) {
 #else
 #endif
 
-cs::renderer::Film film;
+  cs::renderer::Film film;
   size_t iter = 0;
   const size_t max_iterations = APP_FRAME_RATE_FPS * 5;
   while (iter < max_iterations) {
@@ -59,8 +59,8 @@ cs::renderer::Film film;
     if (SDL_MUSTLOCK(screen)) {
       SDL_LockSurface(screen);
     }
-    float focal_point_z =
-        map_value<float>(iter, 0, max_iterations, -10, -1.5);
+    float focal_point_z = map_value<float>(
+        iter, 0, max_iterations, -10, -1.5);
     cs::renderer::SceneRenderer renderer(
         p3(0, 0, focal_point_z));
     film = renderer.render();
