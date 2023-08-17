@@ -11,11 +11,6 @@ cc_library(
 )
 
 cc_library(
-    name = "map_value",
-    hdrs = ["map_value.hh"],
-)
-
-cc_library(
     name = "matrix4x4",
     srcs = ["matrix4x4.cc"],
     hdrs = ["matrix4x4.hh"],
@@ -23,16 +18,6 @@ cc_library(
         "//cs/math:in_range",
         "//cs/sanity:ensure",
         "//cs/string:format",
-    ],
-)
-
-cc_test(
-    name = "map_value_test",
-    srcs = ["map_value_test.cc"],
-    deps = [
-        ":constants",
-        ":map_value",
-        "@googletest//:gtest_main",
     ],
 )
 

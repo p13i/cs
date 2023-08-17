@@ -9,7 +9,7 @@
 #include "cs/geo/point3.h"
 #include "cs/geo/ray3.h"
 #include "cs/geo/vector3.h"
-#include "cs/math/map_value.hh"
+#include "cs/numbers/map_value.hh"
 #include "cs/numbers/clamp.hh"
 #include "cs/renderer/film.hh"
 #include "cs/renderer/scene.hh"
@@ -20,7 +20,7 @@ using p3 = ::cs::geo::Point3;
 using v3 = ::cs::geo::Vector3;
 using r3 = ::cs::geo::Ray3;
 using ::cs::geo::dist;
-using ::cs::math::map_value;
+using ::cs::numbers::map_value;
 using ::cs::numbers::clamp;
 using ::cs::renderer::Film;
 using ::cs::shapes::Sphere;

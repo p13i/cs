@@ -1,10 +1,11 @@
-#include "cs/math/map_value.hh"
+#include "cs/numbers/map_value.hh"
 
-#include "cs/math/constants.h"
+#include "cs/precision/floats.hh"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
-using ::cs::math::map_value;
+using ::cs::numbers::map_value;
+using ::cs::precision::FloatsNear;
 
 TEST(MapValueTest, TestInRange) {
   float value = 50.0f;
@@ -17,7 +18,7 @@ TEST(MapValueTest, TestInRange) {
       map_value(value, value_range_start, value_range_end,
                 new_range_start, new_range_end);
 
-  EXPECT_NEAR(mapped_value, 105.0f, FLOAT_EPSILON);
+  EXPECT_TRUE(FloatsNear(mapped_value, 105.0f));
 }
 
 TEST(MapValueTest, TestOutOfRange) {
@@ -31,5 +32,5 @@ TEST(MapValueTest, TestOutOfRange) {
       map_value(value, value_range_start, value_range_end,
                 new_range_start, new_range_end);
 
-  EXPECT_NEAR(mapped_value, 295.f, FLOAT_EPSILON);
+  EXPECT_TRUE(FloatsNear(mapped_value, 295));
 }
