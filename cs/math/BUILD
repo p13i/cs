@@ -12,7 +12,6 @@ cc_library(
 
 cc_library(
     name = "map_value",
-    srcs = ["map_value.cc"],
     hdrs = ["map_value.hh"],
 )
 

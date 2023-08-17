@@ -45,11 +45,11 @@ class SphereRenderer {
     float film_y_start = film_center_.y + y_units / 2.f;
     float film_y_end = film_center_.y - y_units / 2.f;
     for (uint32_t fx = 0; fx < film_.width; fx++) {
-      float real_x = map_value(fx, 0, film_.width,
-                               film_x_start, film_x_end);
+      float real_x = map_value<float>(
+          fx, 0, film_.width, film_x_start, film_x_end);
       for (uint32_t fy = 0; fy < film_.height; fy++) {
-        float real_y = map_value(fy, 0, film_.height,
-                                 film_y_start, film_y_end);
+        float real_y = map_value<float>(
+            fy, 0, film_.height, film_y_start, film_y_end);
         float real_z = film_center_.z;
         r3 ray(focal_point_, p3(real_x, real_y, real_z));
 
@@ -69,8 +69,8 @@ class SphereRenderer {
 #endif
           ENSURE(distance >= min_distance);
           ENSURE(distance <= max_distance);
-          float rgb = map_value(distance, min_distance,
-                                max_distance, 255, 0);
+          float rgb = map_value<float>(
+              distance, min_distance, max_distance, 255, 0);
           ENSURE(0 <= rgb && rgb <= 255.f);
           film_.pixels[fx][fy] = Pixel(rgb, rgb, rgb, 255);
         } else {
