@@ -15,15 +15,17 @@
 #endif
 
 #include "cs/numbers/map_value.hh"
+#include "cs/profiling/time_it.hh"
 #include "cs/renderer/rainbow.h"
 #include "cs/renderer/scene_renderer.hh"
 #include "cs/renderer/sphere_renderer.hh"
 
 #define APP_FRAME_RATE_FPS 24
-#define APP_SCREEN_WIDTH 256
-#define APP_SCREEN_HEIGHT 256
+#define APP_SCREEN_WIDTH 128
+#define APP_SCREEN_HEIGHT APP_SCREEN_WIDTH
 
 using ::cs::numbers::map_value;
+using ::cs::profiling::time_it;
 
 int main(int argc, char** argv) {
   printf("hello, world!\n");
@@ -48,7 +50,6 @@ int main(int argc, char** argv) {
 #elif 0
   cs::renderer::SphereRenderer renderer;
   cs::renderer::Film film = renderer.render();
-#else
 #endif
 
   cs::renderer::Film film;
@@ -61,9 +62,16 @@ int main(int argc, char** argv) {
     }
     float focal_point_z = map_value<float>(
         iter, 0, max_iterations, -10, -1.5);
+    // Render
     cs::renderer::SceneRenderer renderer(
-        p3(0, 0, focal_point_z));
-    film = renderer.render();
+        p3(0, 0, focal_point_z),
+        /*pixels_per_unit=*/APP_SCREEN_WIDTH / 2,
+        APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT);
+    uint32_t render_time_ms = time_it(
+        [&film, &renderer]() { film = renderer.render(); });
+    std::cout << "Render time (ms): " << render_time_ms
+              << std::endl;
+    // Compute each pizel
     for (uint32_t i = 0; i < film.width; i++) {
       for (uint32_t j = 0; j < film.height; j++) {
         cs::renderer::Pixel pixel = film.pixels[i][j];

@@ -20,6 +20,7 @@ cc_binary(
     tags = ["manual"],
     deps = [
         "//cs/numbers:map_value",
+        "//cs/profiling:time_it",
         "//cs/renderer:rainbow",
         "//cs/renderer:scene_renderer",
         "//cs/renderer:sphere_renderer",

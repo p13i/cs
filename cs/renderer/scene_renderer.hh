@@ -9,8 +9,8 @@
 #include "cs/geo/point3.h"
 #include "cs/geo/ray3.h"
 #include "cs/geo/vector3.h"
-#include "cs/numbers/map_value.hh"
 #include "cs/numbers/clamp.hh"
+#include "cs/numbers/map_value.hh"
 #include "cs/renderer/film.hh"
 #include "cs/renderer/scene.hh"
 #include "cs/sanity/ensure.hh"
@@ -20,8 +20,8 @@ using p3 = ::cs::geo::Point3;
 using v3 = ::cs::geo::Vector3;
 using r3 = ::cs::geo::Ray3;
 using ::cs::geo::dist;
-using ::cs::numbers::map_value;
 using ::cs::numbers::clamp;
+using ::cs::numbers::map_value;
 using ::cs::renderer::Film;
 using ::cs::shapes::Sphere;
 
@@ -30,15 +30,18 @@ class SceneRenderer {
  public:
   p3 focal_point_;
   p3 film_center_ = p3(0, 0, 1);
-  Film film_ = Film(256, 256);
-  float pixels_per_unit_ = 128;
+  uint32_t pixels_per_unit_;
+  Film film_;
 
   Scene scene_ = Scene({Sphere(/*center=*/p3(0, 0, 5),
                                /*radius=*/1),
                         Sphere(/*center=*/p3(1, 1, 4),
                                /*radius=*/0.5)});
 
-  SceneRenderer(p3 focal_point): focal_point_(focal_point) {}
+  SceneRenderer(p3 focal_point, uint32_t pixels_per_unit, uint32_t film_width,
+                uint32_t film_height)
+      : focal_point_(focal_point),pixels_per_unit_(pixels_per_unit),
+        film_(Film(film_width, film_height)) {}
 
   Film render() {
     float x_units = film_.width / pixels_per_unit_;
