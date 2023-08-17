@@ -45,8 +45,8 @@ struct Ray3 {
 
   friend std::ostream& operator<<(std::ostream& os,
                                   const Ray3& ray) {
-    os << "Ray3(" << ray.origin << ", " << ray.direction
-       << ")";
+    os << "Ray3(origin=" << ray.origin << ", direction="
+       << ray.direction << ")";
     return os;
   }
 };
