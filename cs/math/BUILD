@@ -16,6 +16,17 @@ cc_library(
     hdrs = ["map_value.hh"],
 )
 
+cc_library(
+    name = "matrix4x4",
+    srcs = ["matrix4x4.cc"],
+    hdrs = ["matrix4x4.hh"],
+    deps = [
+        "//cs/math:in_range",
+        "//cs/sanity:ensure",
+        "//cs/string:format",
+    ],
+)
+
 cc_test(
     name = "map_value_test",
     srcs = ["map_value_test.cc"],
