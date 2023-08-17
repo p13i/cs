@@ -19,10 +19,10 @@ cc_binary(
     # below will compile the index.cc file with the emscripten SDK.
     tags = ["manual"],
     deps = [
+        "//cs/numbers:map_value",
         "//cs/renderer:rainbow",
         "//cs/renderer:scene_renderer",
         "//cs/renderer:sphere_renderer",
-        "//cs/numbers:map_value",
     ],
 )
 
