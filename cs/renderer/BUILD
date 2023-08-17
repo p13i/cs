@@ -49,6 +49,7 @@ cc_library(
         "//cs/math:map_value",
         "//cs/sanity:ensure",
         "//cs/shapes:sphere",
+        "//cs/numbers:clamp",
     ],
 )
 
@@ -73,6 +74,7 @@ cc_library(
         "//cs/geo:vector3",
         "//cs/math:constants",
         "//cs/math:map_value",
+        "//cs/numbers:clamp",
         "//cs/sanity:ensure",
         "//cs/shapes:sphere",
     ],
