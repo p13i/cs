@@ -7,23 +7,35 @@ cc_library(
     hdrs = ["fps_counter.h"],
 )
 
+cc_library(
+    name = "scene_animator",
+    srcs = ["scene_animator.hh"],
+    # Exclude this library from the main build since the wasm_cc_binary
+    # below will compile the index.cc file with the emscripten SDK.
+    tags = ["manual"],
+    deps = [
+        "//cs/geo:point3",
+        "//cs/geo:ray3",
+        "//cs/geo:vector3",
+        "//cs/numbers:map_value",
+        "//cs/profiling:time_it",
+        "//cs/renderer:rainbow",
+        "//cs/renderer:scene_renderer",
+    ],
+)
+
 cc_binary(
     name = "index",
     srcs = ["index.cc"],
     linkopts = [
-        # "--oformat=html",
-        # "-s MINIFY_HTML=0",
         "-sASYNCIFY=1",
+        "-sALLOW_MEMORY_GROWTH",
     ],
     # Exclude this library from the main build since the wasm_cc_binary
     # below will compile the index.cc file with the emscripten SDK.
     tags = ["manual"],
     deps = [
-        "//cs/numbers:map_value",
-        "//cs/profiling:time_it",
-        "//cs/renderer:rainbow",
-        "//cs/renderer:scene_renderer",
-        "//cs/renderer:sphere_renderer",
+        ":scene_animator",
     ],
 )
 

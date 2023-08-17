@@ -14,18 +14,14 @@
 #include <emscripten.h>
 #endif
 
-#include "cs/numbers/map_value.hh"
-#include "cs/profiling/time_it.hh"
-#include "cs/renderer/rainbow.h"
-#include "cs/renderer/scene_renderer.hh"
-#include "cs/renderer/sphere_renderer.hh"
+#include "cs/app/scene_animator.hh"
 
 #define APP_FRAME_RATE_FPS 24
-#define APP_SCREEN_WIDTH 128
-#define APP_SCREEN_HEIGHT APP_SCREEN_WIDTH
+#define APP_ANIMATION_NUM_FRAMES APP_FRAME_RATE_FPS * 3
+#define APP_SCREEN_WIDTH 256
+#define APP_SCREEN_HEIGHT 256
 
-using ::cs::numbers::map_value;
-using ::cs::profiling::time_it;
+using ::cs::app::SceneAnimator;
 
 int main(int argc, char** argv) {
   printf("hello, world!\n");
@@ -42,39 +38,25 @@ int main(int argc, char** argv) {
       "SDL.defaults.opaqueFrontBuffer = false;");
 #endif
 
-#if 0
-  cs::renderer::RainbowRenderer renderer;
-  cs::renderer::Film film(APP_SCREEN_WIDTH,
-                          APP_SCREEN_HEIGHT);
-  renderer.render(&film);
-#elif 0
-  cs::renderer::SphereRenderer renderer;
-  cs::renderer::Film film = renderer.render();
-#endif
+  SceneAnimator animator(
+      APP_ANIMATION_NUM_FRAMES,
+      {APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT});
 
-  cs::renderer::Film film;
+  auto frames = animator.render_all_frames();
+
   size_t iter = 0;
-  const size_t max_iterations = APP_FRAME_RATE_FPS * 5;
-  while (iter < max_iterations) {
+  const size_t max_iterations = APP_ANIMATION_NUM_FRAMES;
+  while (true) {
     printf("Iter #%zu of %zu\n", iter, max_iterations);
     if (SDL_MUSTLOCK(screen)) {
       SDL_LockSurface(screen);
     }
-    float focal_point_z = map_value<float>(
-        iter, 0, max_iterations, -10, -1.5);
-    // Render
-    cs::renderer::SceneRenderer renderer(
-        p3(0, 0, focal_point_z),
-        /*pixels_per_unit=*/APP_SCREEN_WIDTH / 2,
-        APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT);
-    uint32_t render_time_ms = time_it(
-        [&film, &renderer]() { film = renderer.render(); });
-    std::cout << "Render time (ms): " << render_time_ms
-              << std::endl;
-    // Compute each pizel
+
+    auto film = frames[iter];
+    // Copy each pixel
     for (uint32_t i = 0; i < film.width; i++) {
       for (uint32_t j = 0; j < film.height; j++) {
-        cs::renderer::Pixel pixel = film.pixels[i][j];
+        auto pixel = film.pixels[i][j];
         *((Uint32*)screen->pixels + j * film.width + i) =
             SDL_MapRGBA(screen->format, pixel.r, pixel.g,
                         pixel.b, pixel.a);
@@ -84,7 +66,7 @@ int main(int argc, char** argv) {
       SDL_UnlockSurface(screen);
     }
     SDL_Flip(screen);
-    iter++;
+    iter = (iter + 1) % max_iterations;
 #ifdef __EMSCRIPTEN__
     emscripten_sleep(1000 / APP_FRAME_RATE_FPS);
 #endif  // __EMSCRIPTEN__

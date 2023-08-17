@@ -3,7 +3,10 @@ package(default_visibility = ["//visibility:public"])
 cc_library(
     name = "film",
     hdrs = ["film.hh"],
-    deps = [":pixel"],
+    deps = [
+        ":pixel",
+        "//cs/collections:tuple",
+    ],
 )
 
 cc_library(
@@ -31,7 +34,10 @@ cc_library(
     name = "scene",
     srcs = ["scene.cc"],
     hdrs = ["scene.hh"],
-    deps = ["//cs/shapes:sphere"],
+    deps = [
+        "//cs/geo:dist",
+        "//cs/shapes:sphere",
+    ],
 )
 
 cc_library(

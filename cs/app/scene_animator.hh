@@ -1,0 +1,79 @@
+#ifndef CS_APP_SCENE_ANIMATOR_HH
+#define CS_APP_SCENE_ANIMATOR_HH
+
+#include <stdio.h>
+
+#include <functional>
+#include <vector>
+
+#include "cs/collections/tuple.hh"
+#include "cs/profiling/time_it.hh"
+#include "cs/renderer/film.hh"
+#include "cs/renderer/scene.hh"
+#include "cs/renderer/scene_renderer.hh"
+
+using ::cs::collections::Tuple;
+using ::cs::profiling::time_it;
+using ::cs::renderer::Camera;
+using ::cs::renderer::Film;
+using ::cs::renderer::Scene;
+using ::cs::renderer::SceneRenderer;
+using p3 = ::cs::geo::Point3;
+using v3 = ::cs::geo::Vector3;
+using r3 = ::cs::geo::Ray3;
+
+namespace cs::app {
+struct SceneAnimator {
+  size_t num_frames_;
+  Tuple<uint32_t, uint32_t> film_dimensions_;
+  SceneAnimator(size_t num_frames,
+                Tuple<uint32_t, uint32_t> film_dimensions)
+      : num_frames_(num_frames),
+        film_dimensions_(film_dimensions) {}
+  std::vector<Film> render_all_frames() {
+    std::vector<Film> frames(num_frames_);
+
+    for (size_t i = 0; i < num_frames_; i++) {
+      std::cout << "Computing frame #" << i << " of "
+                << num_frames_ << "... ";
+      // Setup camera
+      float focal_point_z =
+          map_value<float>(i, 0, num_frames_, -10, -1.5);
+      p3 dynamic_focal_point(0, 0, focal_point_z);
+      p3 film_center(0, 0, 1);
+      Camera camera(dynamic_focal_point, film_center,
+                    film_dimensions_.first(),
+                    film_dimensions_);
+
+#if 0
+      std::cout << "dynamic_focal_point="
+                << dynamic_focal_point
+                << ", film_center=" << film_center
+                << std::endl;
+#endif
+
+      // Setup scene
+      Scene scene({Sphere(/*center=*/p3(0, 0, 5),
+                          /*radius=*/1),
+                   Sphere(/*center=*/p3(1, 0, 5),
+                          /*radius=*/0.5)});
+      // Setup renderer
+      SceneRenderer renderer(camera, scene);
+
+      Film film;
+      // Measure the render time
+      uint32_t render_time_ms =
+          time_it([&film, &renderer]() {
+            film = renderer.render();
+          });
+      frames[i] = film;
+      std::cout << "Render time (ms): " << render_time_ms
+                << std::endl;
+    }
+
+    return frames;
+  }
+};
+}  // namespace cs::app
+
+#endif  // CS_APP_SCENE_ANIMATOR_HH
