@@ -14,6 +14,7 @@
 #include <emscripten.h>
 #endif
 
+#include "cs/numbers/map_value.hh"
 #include "cs/renderer/rainbow.h"
 #include "cs/renderer/scene_renderer.hh"
 #include "cs/renderer/sphere_renderer.hh"
@@ -21,6 +22,8 @@
 #define APP_FRAME_RATE_FPS 24
 #define APP_SCREEN_WIDTH 256
 #define APP_SCREEN_HEIGHT 256
+
+using ::cs::numbers::map_value;
 
 int main(int argc, char** argv) {
   printf("hello, world!\n");
@@ -46,17 +49,21 @@ int main(int argc, char** argv) {
   cs::renderer::SphereRenderer renderer;
   cs::renderer::Film film = renderer.render();
 #else
-  cs::renderer::SceneRenderer renderer;
-  cs::renderer::Film film = renderer.render();
 #endif
 
+cs::renderer::Film film;
   size_t iter = 0;
-  const size_t max_iterations = 1;
+  const size_t max_iterations = APP_FRAME_RATE_FPS * 5;
   while (iter < max_iterations) {
-    printf("Iter #%zu\n of %zu", iter, max_iterations);
+    printf("Iter #%zu of %zu\n", iter, max_iterations);
     if (SDL_MUSTLOCK(screen)) {
       SDL_LockSurface(screen);
     }
+    float focal_point_z =
+        map_value<float>(iter, 0, max_iterations, -10, -1.5);
+    cs::renderer::SceneRenderer renderer(
+        p3(0, 0, focal_point_z));
+    film = renderer.render();
     for (uint32_t i = 0; i < film.width; i++) {
       for (uint32_t j = 0; j < film.height; j++) {
         cs::renderer::Pixel pixel = film.pixels[i][j];
@@ -72,7 +79,7 @@ int main(int argc, char** argv) {
     iter++;
 #ifdef __EMSCRIPTEN__
     emscripten_sleep(1000 / APP_FRAME_RATE_FPS);
-#endif  // __EMSCRIPTEN
+#endif  // __EMSCRIPTEN__
   }
 
   SDL_Quit();

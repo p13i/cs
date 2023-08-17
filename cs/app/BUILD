@@ -22,6 +22,7 @@ cc_binary(
         "//cs/renderer:rainbow",
         "//cs/renderer:scene_renderer",
         "//cs/renderer:sphere_renderer",
+        "//cs/numbers:map_value",
     ],
 )
 

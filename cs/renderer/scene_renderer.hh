@@ -28,7 +28,7 @@ using ::cs::shapes::Sphere;
 namespace cs::renderer {
 class SceneRenderer {
  public:
-  p3 focal_point_ = p3(0, 0, -2);
+  p3 focal_point_;
   p3 film_center_ = p3(0, 0, 1);
   Film film_ = Film(256, 256);
   float pixels_per_unit_ = 128;
@@ -37,6 +37,8 @@ class SceneRenderer {
                                /*radius=*/1),
                         Sphere(/*center=*/p3(1, 1, 4),
                                /*radius=*/0.5)});
+
+  SceneRenderer(p3 focal_point): focal_point_(focal_point) {}
 
   Film render() {
     float x_units = film_.width / pixels_per_unit_;
