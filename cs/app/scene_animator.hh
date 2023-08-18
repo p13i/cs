@@ -53,7 +53,9 @@ struct SceneAnimator {
 
       // Setup camera
       Camera camera(dynamic_focal_point, film_center,
-                    film_dimensions_.first() / 2,
+                    std::min(film_dimensions_.first(),
+                             film_dimensions_.second()) /
+                        2,
                     film_dimensions_);
 
 #if 0
