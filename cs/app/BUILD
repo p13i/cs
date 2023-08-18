@@ -36,6 +36,10 @@ cc_binary(
     tags = ["manual"],
     deps = [
         ":scene_animator",
+        "//cs/collections:tuple",
+        "//cs/profiling:time_it",
+        "//cs/renderer:film",
+        "//cs/renderer:pixel",
     ],
 )
 

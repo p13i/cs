@@ -9,12 +9,17 @@
 #include <stdio.h>
 
 #include <sstream>
+#include <vector>
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
 #endif
 
 #include "cs/app/scene_animator.hh"
+#include "cs/collections/tuple.hh"
+#include "cs/profiling/time_it.hh"
+#include "cs/renderer/film.hh"
+#include "cs/renderer/pixel.hh"
 
 #define APP_FRAME_RATE_FPS 24
 #define APP_ANIMATION_DURATION_SEC 1
@@ -24,10 +29,11 @@
 #define APP_SCREEN_HEIGHT 256
 
 using ::cs::app::SceneAnimator;
+using ::cs::collections::Tuple;
+using ::cs::renderer::Film;
+using ::cs::renderer::Pixel;
 
 int main(int argc, char** argv) {
-  printf("hello, world!\n");
-
   SDL_Init(SDL_INIT_VIDEO);
   SDL_Surface* screen =
       SDL_SetVideoMode(APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT,
@@ -40,38 +46,55 @@ int main(int argc, char** argv) {
       "SDL.defaults.opaqueFrontBuffer = false;");
 #endif
 
-  SceneAnimator animator(
-      APP_ANIMATION_NUM_FRAMES,
-      {APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT});
+  Tuple<unsigned int, unsigned int> film_dimensions(
+      APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT);
+  SceneAnimator animator(APP_ANIMATION_NUM_FRAMES,
+                         film_dimensions);
 
-  auto frames = animator.render_all_frames();
+  std::vector<Film> frames;
 
-  size_t iter = 0;
-  const size_t max_iterations = APP_ANIMATION_NUM_FRAMES;
+  std::cout << "Rendering " << APP_ANIMATION_NUM_FRAMES
+            << " frames with resolution " << film_dimensions
+            << "... ";
+
+  unsigned int render_time_ms =
+      time_it([&frames, &animator]() {
+        frames = animator.render_all_frames();
+      });
+
+  std::cout << "done in " << render_time_ms << " ms!"
+            << std::endl;
+
+  size_t frame_i = 0;
   while (true) {
-    printf("Iter #%zu of %zu\n", iter, max_iterations);
     if (SDL_MUSTLOCK(screen)) {
       SDL_LockSurface(screen);
     }
 
-    auto film = frames[iter];
-    // Copy each pixel
+    // Copy each pixel from the current animation frame
+    Film film = frames[frame_i];
     for (uint32_t i = 0; i < film.width; i++) {
       for (uint32_t j = 0; j < film.height; j++) {
-        auto pixel = film.pixels[i][j];
+        Pixel pixel = film.pixels[i][j];
         *((Uint32*)screen->pixels + j * film.width + i) =
             SDL_MapRGBA(screen->format, pixel.r, pixel.g,
                         pixel.b, pixel.a);
       }
     }
+
     if (SDL_MUSTLOCK(screen)) {
       SDL_UnlockSurface(screen);
     }
+
+    // Display the screen
     SDL_Flip(screen);
-    iter = (iter + 1) % max_iterations;
+
 #ifdef __EMSCRIPTEN__
     emscripten_sleep(1000 / APP_FRAME_RATE_FPS);
 #endif  // __EMSCRIPTEN__
+
+    // Loop the animation
+    frame_i = (frame_i + 1) % APP_ANIMATION_NUM_FRAMES;
   }
 
   SDL_Quit();
