@@ -9,7 +9,9 @@ namespace cs::geo {
 
 class Point3 {
  public:
-  Point3() : x(0), y(0), z(0) {}
+  Point3() : Point3(0, 0, 0) {}
+
+  Point3(float xyz) : Point3(xyz, xyz, xyz) {}
 
   Point3(float x, float y, float z) : x(x), y(y), z(z) {}
 
@@ -18,7 +20,8 @@ class Point3 {
   }
 
   bool operator==(const Point3& other) const {
-    return FLOAT_NEAR(x, other.x) && FLOAT_NEAR(y, other.y) && FLOAT_NEAR(z, other.z);
+    return FLOAT_NEAR(x, other.x) &&
+           FLOAT_NEAR(y, other.y) && FLOAT_NEAR(z, other.z);
   }
 
   Point3 operator-(Point3 other) const {
@@ -29,8 +32,16 @@ class Point3 {
     return {x * scalar, y * scalar, z * scalar};
   }
 
+  Point3 operator*(Point3 other) const {
+    return {x * other.x, y * other.y, z * other.z};
+  }
+
   Point3 operator/(float scalar) const {
     return {x / scalar, y / scalar, z / scalar};
+  }
+
+  Point3 operator/(Point3 other) const {
+    return {x / other.x, y / other.y, z / other.z};
   }
 
   friend std::ostream& operator<<(std::ostream& os,
