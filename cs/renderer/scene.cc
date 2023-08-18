@@ -2,7 +2,7 @@
 
 #include <limits>
 
-#include "cs/geo/dist.h"
+#include "cs/geo/dist.hh"
 
 bool cs::renderer::Scene::intersectedBy(const r3 ray,
                                         p3* atPoint,

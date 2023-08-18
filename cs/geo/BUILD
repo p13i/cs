@@ -21,7 +21,7 @@ cc_test(
 cc_library(
     name = "dist",
     srcs = ["dist.cc"],
-    hdrs = ["dist.h"],
+    hdrs = ["dist.hh"],
     deps = [
         ":point3",
         ":vector3",

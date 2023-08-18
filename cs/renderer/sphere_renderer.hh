@@ -5,7 +5,7 @@
 
 #include <vector>
 
-#include "cs/geo/dist.h"
+#include "cs/geo/dist.hh"
 #include "cs/geo/point3.h"
 #include "cs/geo/ray3.h"
 #include "cs/geo/vector3.h"

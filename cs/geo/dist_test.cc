@@ -1,4 +1,4 @@
-#include "cs/geo/dist.h"
+#include "cs/geo/dist.hh"
 
 #include "cs/geo/point3.h"
 #include "cs/math/constants.h"
