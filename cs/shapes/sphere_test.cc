@@ -58,8 +58,8 @@ TEST(Sphere, IntersectionOnXYPlane) {
 
   EXPECT_EQ(intersection,
             p3(5 - sqrtf(2) / 2, 5 - sqrtf(2) / 2, 0));
-  EXPECT_EQ(normal, v3(p3(-sqrtf(2) / 2,
-                                       -sqrtf(2) / 2, 0)));
+  EXPECT_EQ(normal,
+            v3(p3(-sqrtf(2) / 2, -sqrtf(2) / 2, 0)));
 }
 
 TEST(Sphere, IntersectionInQuadrantOne) {
@@ -74,7 +74,6 @@ TEST(Sphere, IntersectionInQuadrantOne) {
   EXPECT_EQ(intersection,
             p3(5 - sqrtf(3) / 3, 5 - sqrtf(3) / 3,
                5 - sqrtf(3) / 3));
-  EXPECT_EQ(normal,
-            v3(p3(-sqrtf(3) / 3, -sqrtf(3) / 3,
-                               -sqrtf(3) / 3)));
+  EXPECT_EQ(normal, v3(p3(-sqrtf(3) / 3, -sqrtf(3) / 3,
+                          -sqrtf(3) / 3)));
 }
