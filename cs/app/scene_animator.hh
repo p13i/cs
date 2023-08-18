@@ -68,16 +68,16 @@ struct SceneAnimator {
 #endif
 
       // Setup scene
-      Scene scene({Sphere(/*center=*/p3(0, 0, 0),
-                          /*radius=*/1),
-                   Sphere(/*center=*/p3(2, 0, 0),
-                          /*radius=*/0.5),
-                   Sphere(/*center=*/p3(0, 2, 0),
-                          /*radius=*/0.25),
-                   Sphere(/*center=*/p3(0, -1, 0),
-                          /*radius=*/0.25),
-                   Sphere(/*center=*/p3(0, 0, -1),
-                          /*radius=*/0.25)});
+      Scene scene({new Sphere(/*center=*/p3(0, 0, 0),
+                              /*radius=*/1),
+                   new Sphere(/*center=*/p3(2, 0, 0),
+                              /*radius=*/0.5),
+                   new Sphere(/*center=*/p3(0, 2, 0),
+                              /*radius=*/0.25),
+                   new Sphere(/*center=*/p3(0, -1, 0),
+                              /*radius=*/0.25),
+                   new Sphere(/*center=*/p3(0, 0, -1),
+                              /*radius=*/0.25)});
       // Setup renderer
       SceneRenderer renderer(camera, scene);
 

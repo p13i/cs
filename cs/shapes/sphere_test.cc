@@ -15,7 +15,7 @@ TEST(Sphere, IntersectionOnXAxis) {
   p3 intersection;
   v3 normal;
   EXPECT_TRUE(
-      sphere.intersectedBy(ray, &intersection, &normal));
+      sphere.intersected_by(ray, &intersection, &normal));
 
   EXPECT_EQ(intersection, p3(4.5, 0, 0));
   EXPECT_EQ(normal, v3(p3(-1, 0, 0)));
@@ -28,7 +28,7 @@ TEST(Sphere, IntersectionOnYAxis) {
   p3 intersection;
   v3 normal;
   EXPECT_TRUE(
-      sphere.intersectedBy(ray, &intersection, &normal));
+      sphere.intersected_by(ray, &intersection, &normal));
 
   EXPECT_EQ(intersection, p3(0, 4, 0));
   EXPECT_EQ(normal, v3(p3(0, -1, 0)));
@@ -41,7 +41,7 @@ TEST(Sphere, IntersectionOnZAxis) {
   p3 intersection;
   v3 normal;
   EXPECT_TRUE(
-      sphere.intersectedBy(ray, &intersection, &normal));
+      sphere.intersected_by(ray, &intersection, &normal));
 
   EXPECT_EQ(intersection, p3(0, 0, 4));
   EXPECT_EQ(normal, v3(p3(0, 0, -1)));
@@ -54,7 +54,7 @@ TEST(Sphere, IntersectionOnXYPlane) {
   p3 intersection;
   v3 normal;
   EXPECT_TRUE(
-      sphere.intersectedBy(ray, &intersection, &normal));
+      sphere.intersected_by(ray, &intersection, &normal));
 
   EXPECT_EQ(intersection,
             p3(5 - sqrtf(2) / 2, 5 - sqrtf(2) / 2, 0));
@@ -69,7 +69,7 @@ TEST(Sphere, IntersectionInQuadrantOne) {
   p3 intersection;
   v3 normal;
   EXPECT_TRUE(
-      sphere.intersectedBy(ray, &intersection, &normal));
+      sphere.intersected_by(ray, &intersection, &normal));
 
   EXPECT_EQ(intersection,
             p3(5 - sqrtf(3) / 3, 5 - sqrtf(3) / 3,

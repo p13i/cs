@@ -3,17 +3,17 @@
 
 #include <vector>
 
-#include "cs/shapes/sphere.hh"
+#include "cs/shapes/shape.hh"
 
-using ::cs::shapes::Sphere;
+using ::cs::shapes::Shape;
 
 namespace cs::renderer {
 class Scene {
  public:
-  std::vector<Sphere> shapes_;
-  Scene() : Scene(std::vector<Sphere>()) {}
-  Scene(std::vector<Sphere> shapes) : shapes_(shapes) {}
-  bool intersectedBy(const r3 ray, p3* atPoint,
+  std::vector<Shape*> shapes_;
+  Scene() : Scene(std::vector<Shape*>()) {}
+  Scene(std::vector<Shape*> shapes) : shapes_(shapes) {}
+  bool intersected_by(const r3 ray, p3* atPoint,
                      v3* atNormal);
 };
 }  // namespace cs::renderer

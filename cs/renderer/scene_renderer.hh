@@ -86,7 +86,7 @@ class SceneRenderer {
 
         p3 intersection_point;
         v3 normal;
-        if (scene_.intersectedBy(ray, &intersection_point,
+        if (scene_.intersected_by(ray, &intersection_point,
                                  &normal)) {
           float unit_dot_prod = dot(
               v3(intersection_point, camera_.film_center_)

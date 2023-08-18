@@ -36,7 +36,7 @@ cc_library(
     hdrs = ["scene.hh"],
     deps = [
         "//cs/geo:dist",
-        "//cs/shapes:sphere",
+        "//cs/shapes:shape",
     ],
 )
 
