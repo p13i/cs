@@ -4,7 +4,7 @@ load("@emsdk//emscripten_toolchain:wasm_rules.bzl", "wasm_cc_binary")
 
 cc_library(
     name = "fps_counter",
-    hdrs = ["fps_counter.h"],
+    hdrs = ["fps_counter.hh"],
 )
 
 cc_library(
