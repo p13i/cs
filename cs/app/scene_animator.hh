@@ -49,7 +49,7 @@ struct SceneAnimator {
 #else
       p3 film_center(
           map_value<p3>(p3(i), p3(0), p3(num_frames_),
-                        p3(0, 0, 3), p3(0, 0, -10)));
+                        p3(0, 0, -1), p3(0, 0, -10)));
       p3 dynamic_focal_point = film_center - p3(0, 0, 2);
 #endif
 
@@ -68,11 +68,15 @@ struct SceneAnimator {
 #endif
 
       // Setup scene
-      Scene scene({Sphere(/*center=*/p3(0, 0, 5),
+      Scene scene({Sphere(/*center=*/p3(0, 0, 0),
                           /*radius=*/1),
-                   Sphere(/*center=*/p3(2, 0, 5),
+                   Sphere(/*center=*/p3(2, 0, 0),
                           /*radius=*/0.5),
-                   Sphere(/*center=*/p3(0, 2, 5),
+                   Sphere(/*center=*/p3(0, 2, 0),
+                          /*radius=*/0.25),
+                   Sphere(/*center=*/p3(0, -1, 0),
+                          /*radius=*/0.25),
+                   Sphere(/*center=*/p3(0, 0, -1),
                           /*radius=*/0.25)});
       // Setup renderer
       SceneRenderer renderer(camera, scene);
