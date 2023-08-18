@@ -30,19 +30,30 @@ struct SceneAnimator {
                 Tuple<uint32_t, uint32_t> film_dimensions)
       : num_frames_(num_frames),
         film_dimensions_(film_dimensions) {}
+
   std::vector<Film> render_all_frames() {
     std::vector<Film> frames(num_frames_);
 
     for (size_t i = 0; i < num_frames_; i++) {
       std::cout << "Computing frame #" << i << " of "
                 << num_frames_ << "... ";
-      // Setup camera
+
+      // Animate focal point or film center
+#if 0
       float focal_point_z =
-          map_value<float>(i, 0, num_frames_, -10, -1.5);
+          map_value<float>(i, 0, num_frames_, -40, 1);
       p3 dynamic_focal_point(0, 0, focal_point_z);
-      p3 film_center(0, 0, 1);
+      p3 film_center(0, 0, 0);
+#else
+      p3 film_center(
+          map_value<p3>(p3(i), p3(0), p3(num_frames_),
+                        p3(0, 0, 3), p3(0, 0, -10)));
+      p3 dynamic_focal_point = film_center - p3(0, 0, 2);
+#endif
+
+      // Setup camera
       Camera camera(dynamic_focal_point, film_center,
-                    film_dimensions_.first(),
+                    film_dimensions_.first() / 2,
                     film_dimensions_);
 
 #if 0
@@ -55,8 +66,10 @@ struct SceneAnimator {
       // Setup scene
       Scene scene({Sphere(/*center=*/p3(0, 0, 5),
                           /*radius=*/1),
-                   Sphere(/*center=*/p3(1, 0, 5),
-                          /*radius=*/0.5)});
+                   Sphere(/*center=*/p3(2, 0, 5),
+                          /*radius=*/0.5),
+                   Sphere(/*center=*/p3(0, 2, 5),
+                          /*radius=*/0.25)});
       // Setup renderer
       SceneRenderer renderer(camera, scene);
 
