@@ -11,6 +11,9 @@
 #include "cs/renderer/film.hh"
 #include "cs/renderer/scene.hh"
 #include "cs/renderer/scene_renderer.hh"
+#include "cs/shapes/plane.hh"
+#include "cs/shapes/shape.hh"
+#include "cs/shapes/sphere.hh"
 
 using ::cs::collections::Tuple;
 using ::cs::profiling::time_it;
@@ -18,6 +21,9 @@ using ::cs::renderer::Camera;
 using ::cs::renderer::Film;
 using ::cs::renderer::Scene;
 using ::cs::renderer::SceneRenderer;
+using ::cs::shapes::Plane;
+using ::cs::shapes::Shape;
+using ::cs::shapes::Sphere;
 using p3 = ::cs::geo::Point3;
 using v3 = ::cs::geo::Vector3;
 using r3 = ::cs::geo::Ray3;
@@ -40,12 +46,14 @@ struct SceneAnimator {
 #if 0
       std::cout << "Computing frame #" << i << " of "
                 << num_frames_ << "... ";
+#endif
 
+#if 1
       // Animate focal point or film center
       float focal_point_z =
-          map_value<float>(i, 0, num_frames_, -40, 1);
+          map_value<float>(i, 0, num_frames_, -5, -1.001);
       p3 dynamic_focal_point(0, 0, focal_point_z);
-      p3 film_center(0, 0, 0);
+      p3 film_center(0, 0, -1);
 #else
       p3 film_center(
           map_value<p3>(p3(i), p3(0), p3(num_frames_),
@@ -54,11 +62,12 @@ struct SceneAnimator {
 #endif
 
       // Setup camera
+      unsigned int pixels_per_unit =
+          std::min(film_dimensions_.first(),
+                   film_dimensions_.second()) /
+          2;
       Camera camera(dynamic_focal_point, film_center,
-                    std::min(film_dimensions_.first(),
-                             film_dimensions_.second()) /
-                        2,
-                    film_dimensions_);
+                    pixels_per_unit, film_dimensions_);
 
 #if 0
       std::cout << "dynamic_focal_point="
@@ -68,16 +77,37 @@ struct SceneAnimator {
 #endif
 
       // Setup scene
-      Scene scene({new Sphere(/*center=*/p3(0, 0, 0),
-                              /*radius=*/1),
-                   new Sphere(/*center=*/p3(2, 0, 0),
-                              /*radius=*/0.5),
-                   new Sphere(/*center=*/p3(0, 2, 0),
-                              /*radius=*/0.25),
-                   new Sphere(/*center=*/p3(0, -1, 0),
-                              /*radius=*/0.25),
-                   new Sphere(/*center=*/p3(0, 0, -1),
-                              /*radius=*/0.25)});
+      std::vector<Shape*> shapes;
+#if 1
+      shapes.push_back(new Sphere(/*center=*/p3(0, 0, 0),
+                                  /*radius=*/0.5));
+      shapes.push_back(new Sphere(/*center=*/p3(2, 0, 0),
+                                  /*radius=*/0.5));
+      shapes.push_back(new Sphere(/*center=*/p3(0, 2, 0),
+                                  /*radius=*/0.25));
+      shapes.push_back(new Sphere(/*center=*/p3(0, -1, 0),
+                                  /*radius=*/0.25));
+      shapes.push_back(new Plane(p3(0, 0, 1).unit(), -10));
+#elif 0
+      shapes.push_back(new Sphere(/*center=*/p3(1, 0, 1),
+                                  /*radius=*/0.1));
+      shapes.push_back(
+          new Sphere(/*center=*/p3(0.25, 0, -1),
+                     /*radius=*/0.1));
+      shapes.push_back(new Sphere(/*center=*/p3(0, 0, -1),
+                                  /*radius=*/0.1));
+      shapes.push_back(new Plane(p3(0, 0, 1).unit(), -10));
+#else
+      shapes.push_back(new Sphere(p3(0, 0, 1), 0.5));
+      // Sphere right at origin
+      shapes.push_back(new Sphere(/*center=*/p3(),
+                                  /*radius=*/0.1));
+      // Plane on z-axis +10 units away from origin
+      shapes.push_back(new Plane(p3(0, 0, 1).unit(), -10));
+#endif
+
+      Scene scene(shapes);
+
       // Setup renderer
       SceneRenderer renderer(camera, scene);
 

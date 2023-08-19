@@ -7,11 +7,11 @@ cc_library(
     hdrs = ["fps_counter.hh"],
 )
 
+# Exclude this library from the main build since the wasm_cc_binary
+# below will compile the index.cc file with the emscripten SDK.
 cc_library(
     name = "scene_animator",
     srcs = ["scene_animator.hh"],
-    # Exclude this library from the main build since the wasm_cc_binary
-    # below will compile the index.cc file with the emscripten SDK.
     tags = ["manual"],
     deps = [
         "//cs/geo:point3",
@@ -21,6 +21,9 @@ cc_library(
         "//cs/profiling:time_it",
         "//cs/renderer:rainbow",
         "//cs/renderer:scene_renderer",
+        "//cs/shapes:plane",
+        "//cs/shapes:sphere",
+        "//cs/shapes:shape",
     ],
 )
 

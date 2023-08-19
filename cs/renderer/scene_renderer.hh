@@ -33,16 +33,27 @@ namespace cs::renderer {
 struct Camera {
   p3 focal_point_;
   p3 film_center_;
-  uint32_t pixels_per_unit_;
+  unsigned int pixels_per_unit_;
   Film film_;
 
   Camera(p3 focal_point, p3 film_center,
-         uint32_t pixels_per_unit,
-         Tuple<uint32_t, uint32_t> film_dimensions)
+         unsigned int pixels_per_unit,
+         Tuple<unsigned int, unsigned int> film_dimensions)
       : focal_point_(focal_point),
         film_center_(film_center),
         pixels_per_unit_(pixels_per_unit),
         film_(Film(film_dimensions)) {}
+
+  friend std::ostream& operator<<(std::ostream& os,
+                                  const Camera& camera) {
+    return os << "Camera(focal_point="
+              << camera.focal_point_
+              << ", film_center=" << camera.film_center_
+              << ", pixels_per_unit="
+              << camera.pixels_per_unit_
+              << ", film dimensions: "
+              << camera.film_.dimensions() << ")";
+  }
 };
 
 class SceneRenderer {
@@ -66,11 +77,12 @@ class SceneRenderer {
         camera_.film_center_.y + y_units / 2.f;
     float film_y_end =
         camera_.film_center_.y - y_units / 2.f;
-    for (uint32_t fx = 0; fx < camera_.film_.width; fx++) {
+    for (unsigned int fx = 0; fx < camera_.film_.width;
+         fx++) {
       float real_x =
           map_value<float>(fx, 0, camera_.film_.width,
                            film_x_start, film_x_end);
-      for (uint32_t fy = 0; fy < camera_.film_.height;
+      for (unsigned int fy = 0; fy < camera_.film_.height;
            fy++) {
         float real_y =
             map_value<float>(fy, 0, camera_.film_.height,
@@ -87,7 +99,7 @@ class SceneRenderer {
         p3 intersection_point;
         v3 normal;
         if (scene_.intersected_by(ray, &intersection_point,
-                                 &normal)) {
+                                  &normal)) {
           float unit_dot_prod = dot(
               v3(intersection_point, camera_.film_center_)
                   .unit(),
