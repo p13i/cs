@@ -5,6 +5,9 @@
 #include <iostream>
 
 #include "cs/geo/point3.h"
+#include "cs/precision/floats.hh"
+
+using ::cs::precision::FloatsNear;
 
 namespace cs::geo {
 
@@ -26,6 +29,10 @@ class Vector3 {
     return Vector3(Point3(), b - a);
   }
 
+  bool is_unit() const {
+    return FloatsNear(magnitude(), 1.f);
+  }
+
   Vector3 unit() const {
     return Vector3(Point3(), direction().b / magnitude());
   }
@@ -44,6 +51,10 @@ class Vector3 {
 
   Vector3 operator-(Point3 other) const {
     return Vector3(a - other, b - other);
+  }
+
+  Vector3 operator*(float scalar) const {
+    return Vector3(a * scalar, b * scalar);
   }
 
   bool operator==(const Vector3& other) const {

@@ -79,7 +79,10 @@ cc_test(
 cc_library(
     name = "vector3",
     hdrs = ["vector3.h"],
-    deps = [":point3"],
+    deps = [
+        ":point3",
+        "//cs/precision:floats",
+    ],
 )
 
 cc_test(
