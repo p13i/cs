@@ -1,6 +1,8 @@
 #ifndef CS_COLLECTIONS_TUPLE_HH
 #define CS_COLLECTIONS_TUPLE_HH
 
+#include <ostream>
+
 namespace cs::collections {
 
 template <class T1, class T2>
