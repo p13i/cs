@@ -2,6 +2,7 @@
 #define CS_GEO_POINT3_
 
 #include <iostream>
+#include <cmath>
 
 #include "cs/math/constants.h"
 
@@ -14,6 +15,13 @@ class Point3 {
   Point3(float xyz) : Point3(xyz, xyz, xyz) {}
 
   Point3(float x, float y, float z) : x(x), y(y), z(z) {}
+
+  Point3 unit() const {
+    Point3 this_ = *this;
+    return this_ /
+           sqrtf(this_.x * this_.x + this_.y * this_.y +
+                 this_.z * this_.z);
+  }
 
   Point3 operator+(const Point3& other) const {
     return Point3(x + other.x, y + other.y, z + other.z);
