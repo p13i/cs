@@ -1,9 +1,9 @@
 #include "cs/math/matrix4x4.hh"
 
-#include "cs/math/in_range.hh"
+#include "cs/numbers/in_range.hh"
 #include "cs/sanity/ensure.hh"
 
-using ::cs::math::in_range;
+using ::cs::numbers::in_range;
 using ::cs::math::Matrix4x4;
 
 #include <memory.h>
