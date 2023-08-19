@@ -22,8 +22,8 @@ cc_library(
         "//cs/renderer:rainbow",
         "//cs/renderer:scene_renderer",
         "//cs/shapes:plane",
-        "//cs/shapes:sphere",
         "//cs/shapes:shape",
+        "//cs/shapes:sphere",
     ],
 )
 
