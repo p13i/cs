@@ -10,8 +10,8 @@ cc_library(
         "//cs/geo:point3",
         "//cs/geo:ray3",
         "//cs/geo:vector3",
-        "//cs/sanity:ensure",
         "//cs/precision:floats",
+        "//cs/sanity:ensure",
     ],
 )
 

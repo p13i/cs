@@ -65,13 +65,13 @@ cc_test(
     deps = [
         ":film",
         ":scene",
+        ":scene_renderer",
+        "//cs/collections:tuple",
         "//cs/geo:point3",
         "//cs/geo:ray3",
         "//cs/geo:vector3",
-        "//cs/shapes:sphere",
         "//cs/shapes:plane",
-        "//cs/collections:tuple",
-        ":scene_renderer",
+        "//cs/shapes:sphere",
         "@googletest//:gtest_main",
     ],
 )
