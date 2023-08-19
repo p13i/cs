@@ -1,6 +1,33 @@
 package(default_visibility = ["//visibility:public"])
 
 cc_library(
+    name = "plane",
+    srcs = ["plane.cc"],
+    hdrs = ["plane.hh"],
+    deps = [
+        ":shape",
+        "//cs/geo:dot",
+        "//cs/geo:point3",
+        "//cs/geo:ray3",
+        "//cs/geo:vector3",
+        "//cs/sanity:ensure",
+        "//cs/precision:floats",
+    ],
+)
+
+cc_test(
+    name = "plane_test",
+    srcs = ["plane_test.cc"],
+    deps = [
+        ":plane",
+        "//cs/math:constants",
+        "//cs/renderer:film",
+        "//cs/renderer:pixel",
+        "@googletest//:gtest_main",
+    ],
+)
+
+cc_library(
     name = "shape",
     hdrs = ["shape.hh"],
     deps = [
