@@ -14,7 +14,7 @@ cc_test(
     srcs = ["sinusodal_test.cc"],
     deps = [
         ":sinusodal",
-        "//cs/math:constants",
+        "//cs/precision:floats",
         "@googletest//:gtest_main",
     ],
 )

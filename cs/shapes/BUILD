@@ -45,7 +45,7 @@ cc_library(
         ":shape",
         "//cs/geo:dot",
         "//cs/geo:ray3",
-        "//cs/math:constants",
+        "//cs/precision:floats",
         "//cs/string:format",
     ],
 )

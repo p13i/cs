@@ -1,15 +1,16 @@
 #include "cs/audio/sinusodal.h"
 
-#include "cs/math/constants.h"
+#include "cs/precision/floats.hh"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
 using ::cs::audio::sinusodal;
+using ::cs::precision::FloatsNear;
 
 TEST(Sinusodal, Zero) {
-  EXPECT_NEAR(sinusodal(440, 0), 0, FLOAT_EPSILON);
+  EXPECT_TRUE(FloatsNear(sinusodal(440, 0), 0));
 }
 
 TEST(Sinusodal, HalfPhase) {
-  EXPECT_NEAR(sinusodal(440, 0.5), 0, FLOAT_EPSILON);
+  EXPECT_TRUE(FloatsNear(sinusodal(440, 0.5), 0));
 }

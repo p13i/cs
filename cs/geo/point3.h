@@ -4,7 +4,9 @@
 #include <iostream>
 #include <cmath>
 
-#include "cs/math/constants.h"
+#include "cs/precision/floats.hh"
+
+using ::cs::precision::FloatsNear;
 
 namespace cs::geo {
 
@@ -28,8 +30,8 @@ class Point3 {
   }
 
   bool operator==(const Point3& other) const {
-    return FLOAT_NEAR(x, other.x) &&
-           FLOAT_NEAR(y, other.y) && FLOAT_NEAR(z, other.z);
+    return FloatsNear(x, other.x) &&
+           FloatsNear(y, other.y) && FloatsNear(z, other.z);
   }
 
   Point3 operator-(Point3 other) const {

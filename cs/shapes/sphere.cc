@@ -4,7 +4,7 @@
 
 #include "cs/geo/dot.hh"
 #include "cs/geo/ray3.h"
-#include "cs/math/constants.h"
+#include "cs/precision/floats.hh"
 #include "cs/shapes/shape.hh"
 #include "cs/string/format.h"
 
@@ -12,6 +12,7 @@ using r3 = ::cs::geo::Ray3;
 using v3 = ::cs::geo::Vector3;
 using p3 = ::cs::geo::Point3;
 using ::cs::geo::dot;
+using ::cs::precision::FloatsNear;
 
 bool cs::shapes::Sphere::intersected_by(r3 ray, p3* atPoint,
                                         v3* atNormal) {
@@ -24,7 +25,7 @@ bool cs::shapes::Sphere::intersected_by(r3 ray, p3* atPoint,
   // std::cout << cs::string::format("a = %6.4lf", a) <<
   // std::endl;
 
-  if (!FLOAT_NEAR(a, 1.f)) {
+  if (!FloatsNear(a, 1.f)) {
     std::cout << "a != 1.0" << std::endl;
     return false;
   }
