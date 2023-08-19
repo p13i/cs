@@ -1,1 +1,3 @@
+build:debug -c dbg
+build:debug --features=oso_prefix_is_pwd
 build --incompatible_enable_cc_toolchain_resolution

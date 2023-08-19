@@ -4,7 +4,7 @@ SHELL=/usr/bin/bash
 default: build test site serve
 
 build:
-	bazel build --jobs=1 --local_cpu_resources=1 --local_ram_resources=1 -- //...
+	bazel build --config=debug --jobs=1 --local_cpu_resources=1 --local_ram_resources=1 -- //...
 
 test:
 	bazel test --test_output=all -- //...
@@ -22,6 +22,8 @@ setup:
 	go install github.com/bazelbuild/buildtools/buildifier@latest
 	# Install clang-format
 	sudo apt install clang-format -y
+	# Install GDB
+	sudo apt-get install libc6-dbg gdb valgrind -y
 
 lint:
 	go run github.com/bazelbuild/buildtools/buildifier@latest -r .
