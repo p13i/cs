@@ -13,15 +13,15 @@ using ::cs::collections::Tuple;
 namespace cs::renderer {
 
 struct Film {
-  uint32_t width, height;
+  unsigned int width, height;
   Pixel** pixels;
   Film() : Film(0, 0) {}
-  Film(Tuple<uint32_t, uint32_t> dimensions)
+  Film(Tuple<unsigned int, unsigned int> dimensions)
       : Film(dimensions.first(), dimensions.second()) {}
-  Film(uint32_t width, uint32_t height)
+  Film(unsigned int width, unsigned int height)
       : width(width), height(height) {
     pixels = new Pixel*[width];
-    for (uint32_t w = 0; w < width; w++) {
+    for (unsigned int w = 0; w < width; w++) {
       pixels[w] = new Pixel[height];
     }
   }
