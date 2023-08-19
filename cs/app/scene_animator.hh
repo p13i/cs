@@ -87,7 +87,9 @@ struct SceneAnimator {
                                   /*radius=*/0.25));
       shapes.push_back(new Sphere(/*center=*/p3(0, -1, 0),
                                   /*radius=*/0.25));
-      shapes.push_back(new Plane(p3(0, 0, 1).unit(), -10));
+      shapes.push_back(new Plane(p3(0, 0, 1).unit(), -15));
+      shapes.push_back(new Plane(p3(1, 1, 1).unit(), -5));
+      shapes.push_back(new Plane(p3(-1, 1, 1).unit(), -7));
 #elif 0
       shapes.push_back(new Sphere(/*center=*/p3(1, 0, 1),
                                   /*radius=*/0.1));
