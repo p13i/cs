@@ -25,6 +25,9 @@ struct Film {
       pixels[w] = new Pixel[height];
     }
   }
+  Tuple<unsigned int, unsigned int> dimensions() const {
+    return {width, height};
+  }
 };
 
 }  // namespace cs::renderer
