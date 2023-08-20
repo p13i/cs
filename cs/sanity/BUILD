@@ -5,3 +5,9 @@ cc_library(
     srcs = ["ensure.cc"],
     hdrs = ["ensure.hh"],
 )
+
+cc_library(
+    name = "error",
+    srcs = ["error.cc"],
+    hdrs = ["error.hh"],
+)
