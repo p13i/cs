@@ -26,29 +26,20 @@ using ::cs::renderer::Film;
 using ::cs::shapes::Sphere;
 
 Film cs::renderer::SceneRenderer::render() {
-  float x_units =
-      camera_.film_.width / camera_.pixels_per_unit_;
-  float y_units =
-      camera_.film_.height / camera_.pixels_per_unit_;
-  float film_x_start =
-      camera_.film_center_.x - x_units / 2.f;
-  float film_x_end = camera_.film_center_.x + x_units / 2.f;
-  float film_y_start =
-      camera_.film_center_.y + y_units / 2.f;
-  float film_y_end = camera_.film_center_.y - y_units / 2.f;
-  for (unsigned int fx = 0; fx < camera_.film_.width;
-       fx++) {
-    float real_x =
-        map_value<float>(fx, 0, camera_.film_.width,
-                         film_x_start, film_x_end);
-    for (unsigned int fy = 0; fy < camera_.film_.height;
-         fy++) {
-      float real_y =
-          map_value<float>(fy, 0, camera_.film_.height,
-                           film_y_start, film_y_end);
-      float real_z = camera_.film_center_.z;
-      r3 ray(camera_.focal_point_,
-             p3(real_x, real_y, real_z));
+  auto [width, height] = camera_.film_.dimensions();
+  float x_units = width / camera_.pixels_per_unit_;
+  float y_units = height / camera_.pixels_per_unit_;
+  p3 film_start = camera_.film_center_ +
+                  p3(-1 * x_units / 2.f, y_units / 2.f, 0);
+  p3 film_end = camera_.film_center_ +
+                p3(x_units / 2.f, -1 * y_units / 2.f, 0);
+  for (unsigned int fx = 0; fx < width; fx++) {
+    for (unsigned int fy = 0; fy < height; fy++) {
+      p3 real_p = map_value<p3>(p3(fx, fy, 0), p3(0, 0, 0),
+                                p3(width, height, 0),
+                                film_start, film_end);
+      real_p.z = camera_.film_center_.z;
+      r3 ray(camera_.focal_point_, real_p);
 
 #if 0
         std::cout << "Ray at " << Tuple(fx, fy) << " is "
@@ -59,6 +50,7 @@ Film cs::renderer::SceneRenderer::render() {
       v3 normal;
       if (scene_.intersected_by(ray, &intersection_point,
                                 &normal)) {
+        // Compute the luminance of a pixel with an intersection
         float unit_dot_prod =
             dot(v3(intersection_point, camera_.film_center_)
                     .unit(),
@@ -68,6 +60,7 @@ Film cs::renderer::SceneRenderer::render() {
         camera_.film_.pixels[fx][fy] =
             Pixel(luminance, luminance, luminance, 255);
       } else {
+        // A non-intersected point is black
         camera_.film_.pixels[fx][fy] = Pixel(0, 0, 0, 0);
       }
     }
