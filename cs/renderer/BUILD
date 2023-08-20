@@ -5,7 +5,6 @@ cc_library(
     hdrs = ["film.hh"],
     deps = [
         ":pixel",
-        "//cs/collections:tuple",
     ],
 )
 
@@ -66,7 +65,6 @@ cc_test(
         ":film",
         ":scene",
         ":scene_renderer",
-        "//cs/collections:tuple",
         "//cs/geo:point3",
         "//cs/geo:ray3",
         "//cs/geo:vector3",

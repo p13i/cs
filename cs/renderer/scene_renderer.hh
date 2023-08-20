@@ -6,7 +6,6 @@
 #include <tuple>
 #include <vector>
 
-#include "cs/collections/tuple.hh"
 #include "cs/geo/dist.hh"
 #include "cs/geo/point3.h"
 #include "cs/geo/ray3.h"
@@ -21,7 +20,6 @@
 using p3 = ::cs::geo::Point3;
 using v3 = ::cs::geo::Vector3;
 using r3 = ::cs::geo::Ray3;
-using ::cs::collections::Tuple;
 using ::cs::geo::dist;
 using ::cs::numbers::clamp;
 using ::cs::numbers::map_value;
@@ -38,7 +36,7 @@ struct Camera {
 
   Camera(p3 focal_point, p3 film_center,
          unsigned int pixels_per_unit,
-         Tuple<unsigned int, unsigned int> film_dimensions)
+         std::tuple<unsigned int, unsigned int> film_dimensions)
       : focal_point_(focal_point),
         film_center_(film_center),
         pixels_per_unit_(pixels_per_unit),
@@ -51,8 +49,8 @@ struct Camera {
               << ", film_center=" << camera.film_center_
               << ", pixels_per_unit="
               << camera.pixels_per_unit_
-              << ", film dimensions: "
-              << camera.film_.dimensions() << ")";
+              << ", film dimensions: <"
+              << std::get<0>(camera.film_.dimensions()) << ", " << std::get<1>(camera.film_.dimensions()) << ">)";
   }
 };
 

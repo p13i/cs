@@ -1,6 +1,5 @@
 #include "cs/renderer/scene_renderer.hh"
 
-#include "cs/collections/tuple.hh"
 #include "cs/renderer/film.hh"
 #include "cs/renderer/scene.hh"
 #include "cs/shapes/plane.hh"
@@ -8,7 +7,6 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
-using ::cs::collections::Tuple;
 using ::cs::renderer::Camera;
 using ::cs::renderer::Film;
 using ::cs::renderer::Pixel;

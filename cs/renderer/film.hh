@@ -5,10 +5,8 @@
 
 #include <iostream>
 
-#include "cs/collections/tuple.hh"
 #include "cs/renderer/pixel.hh"
-
-using ::cs::collections::Tuple;
+#include <tuple>
 
 namespace cs::renderer {
 
@@ -16,8 +14,8 @@ struct Film {
   unsigned int width, height;
   Pixel** pixels;
   Film() : Film(0, 0) {}
-  Film(Tuple<unsigned int, unsigned int> dimensions)
-      : Film(dimensions.first(), dimensions.second()) {}
+  Film(std::tuple<unsigned int, unsigned int> dimensions)
+      : Film(std::get<0>(dimensions), std::get<1>(dimensions)) {}
   Film(unsigned int width, unsigned int height)
       : width(width), height(height) {
     pixels = new Pixel*[width];
@@ -25,7 +23,8 @@ struct Film {
       pixels[w] = new Pixel[height];
     }
   }
-  Tuple<unsigned int, unsigned int> dimensions() const {
+
+  std::tuple<unsigned int, unsigned int> dimensions() const {
     return {width, height};
   }
 };

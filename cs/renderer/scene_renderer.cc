@@ -5,7 +5,6 @@
 #include <tuple>
 #include <vector>
 
-#include "cs/collections/tuple.hh"
 #include "cs/geo/dist.hh"
 #include "cs/geo/point3.h"
 #include "cs/geo/ray3.h"
@@ -20,7 +19,6 @@
 using p3 = ::cs::geo::Point3;
 using v3 = ::cs::geo::Vector3;
 using r3 = ::cs::geo::Ray3;
-using ::cs::collections::Tuple;
 using ::cs::geo::dist;
 using ::cs::numbers::clamp;
 using ::cs::numbers::map_value;

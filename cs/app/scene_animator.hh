@@ -5,8 +5,8 @@
 
 #include <functional>
 #include <vector>
+#include <tuple>
 
-#include "cs/collections/tuple.hh"
 #include "cs/profiling/time_it.hh"
 #include "cs/renderer/film.hh"
 #include "cs/renderer/scene.hh"
@@ -15,7 +15,6 @@
 #include "cs/shapes/shape.hh"
 #include "cs/shapes/sphere.hh"
 
-using ::cs::collections::Tuple;
 using ::cs::profiling::time_it;
 using ::cs::renderer::Camera;
 using ::cs::renderer::Film;
@@ -32,10 +31,10 @@ namespace cs::app {
 
 struct SceneAnimator {
   size_t num_frames_;
-  Tuple<unsigned int, unsigned int> film_dimensions_;
+  std::tuple<unsigned int, unsigned int> film_dimensions_;
   SceneAnimator(
       size_t num_frames,
-      Tuple<unsigned int, unsigned int> film_dimensions)
+      std::tuple<unsigned int, unsigned int> film_dimensions)
       : num_frames_(num_frames),
         film_dimensions_(film_dimensions) {}
 
@@ -63,8 +62,8 @@ struct SceneAnimator {
 
       // Setup camera
       unsigned int pixels_per_unit =
-          std::min(film_dimensions_.first(),
-                   film_dimensions_.second()) /
+          std::min(std::get<0>(film_dimensions_),
+                   std::get<1>(film_dimensions_)) /
           2;
       Camera camera(dynamic_focal_point, film_center,
                     pixels_per_unit, film_dimensions_);

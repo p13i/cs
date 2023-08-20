@@ -9,6 +9,7 @@
 #include <stdio.h>
 
 #include <sstream>
+#include <tuple>
 #include <vector>
 
 #ifdef __EMSCRIPTEN__
@@ -16,7 +17,6 @@
 #endif
 
 #include "cs/app/scene_animator.hh"
-#include "cs/collections/tuple.hh"
 #include "cs/profiling/time_it.hh"
 #include "cs/renderer/film.hh"
 #include "cs/renderer/pixel.hh"
@@ -29,7 +29,6 @@
 #define APP_SCREEN_HEIGHT 256
 
 using ::cs::app::SceneAnimator;
-using ::cs::collections::Tuple;
 using ::cs::renderer::Film;
 using ::cs::renderer::Pixel;
 
@@ -46,7 +45,7 @@ int main(int argc, char** argv) {
       "SDL.defaults.opaqueFrontBuffer = false;");
 #endif
 
-  Tuple<unsigned int, unsigned int> film_dimensions(
+  std::tuple<unsigned int, unsigned int> film_dimensions(
       APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT);
   SceneAnimator animator(APP_ANIMATION_NUM_FRAMES,
                          film_dimensions);
@@ -54,8 +53,9 @@ int main(int argc, char** argv) {
   std::vector<Film> frames;
 
   std::cout << "Rendering " << APP_ANIMATION_NUM_FRAMES
-            << " frames with resolution " << film_dimensions
-            << "... ";
+            << " frames with resolution <"
+            << std::get<0>(film_dimensions) << ", "
+            << std::get<1>(film_dimensions) << ">... ";
 
   unsigned int render_time_ms =
       time_it([&frames, &animator]() {
