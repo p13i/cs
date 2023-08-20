@@ -1,4 +1,4 @@
-#include "cs/math/matrix4x4.hh"
+#include "cs/linalg/matrix4x4.hh"
 
 #include "cs/numbers/in_range.hh"
 #include "cs/sanity/ensure.hh"
