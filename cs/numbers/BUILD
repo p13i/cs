@@ -28,5 +28,5 @@ cc_test(
 cc_library(
     name = "random",
     srcs = ["random.cc"],
-    hdrs = ["random.h"],
+    hdrs = ["random.hh"],
 )
