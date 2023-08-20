@@ -7,6 +7,7 @@ cc_library(
     deps = [
         "//cs/numbers:in_range",
         "//cs/sanity:ensure",
+        "//cs/sanity:error",
         "//cs/string:format",
     ],
 )

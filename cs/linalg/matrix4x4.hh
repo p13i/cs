@@ -45,6 +45,9 @@ struct Matrix4x4 {
   // Sets the value at x, y.
   void set(uint8_t x, uint8_t y, float datum);
 
+  // Inverse of matrix
+  Matrix4x4 inverse() const;
+
   // inline Point3<T> operator()(const Point3<T> &p) const;
 
   friend std::ostream &operator<<(std::ostream &os,
