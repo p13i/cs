@@ -22,9 +22,3 @@ cc_library(
     hdrs = ["polar2cart.hh"],
     deps = ["//cs/geo:point3"],
 )
-
-cc_library(
-    name = "random",
-    srcs = ["random.cc"],
-    hdrs = ["random.h"],
-)
