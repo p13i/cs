@@ -3,7 +3,7 @@
 #include "cs/numbers/in_range.hh"
 #include "cs/sanity/ensure.hh"
 
-using ::cs::math::Matrix4x4;
+using ::cs::linalg::Matrix4x4;
 using ::cs::numbers::in_range;
 
 #include <memory.h>
@@ -18,12 +18,12 @@ void EnsureIndexArgs(uint8_t x, uint8_t y) {
 
 }  // namespace
 
-float cs::math::Matrix4x4::get(uint8_t x, uint8_t y) const {
+float cs::linalg::Matrix4x4::get(uint8_t x, uint8_t y) const {
   EnsureIndexArgs(x, y);
   return data_[x][y];
 }
 
-void cs::math::Matrix4x4::set(uint8_t x, uint8_t y,
+void cs::linalg::Matrix4x4::set(uint8_t x, uint8_t y,
                               float datum) {
   EnsureIndexArgs(x, y);
   data_[x][y] = datum;

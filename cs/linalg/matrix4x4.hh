@@ -7,7 +7,7 @@
 
 using ::cs::string::format;
 
-namespace cs::math {
+namespace cs::linalg {
 struct Matrix4x4 {
  private:
   float data_[4][4];
@@ -61,6 +61,6 @@ struct Matrix4x4 {
     // clang-format on
   }
 };
-}  // namespace cs::math
+}  // namespace cs::linalg
 
 #endif  // CS_LINALG_MATRIX4X4_HH
