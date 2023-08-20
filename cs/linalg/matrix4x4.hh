@@ -1,5 +1,5 @@
-#ifndef CS_MATH_MATRIX4X4_HH
-#define CS_MATH_MATRIX4X4_HH
+#ifndef CS_LINALG_MATRIX4X4_HH
+#define CS_LINALG_MATRIX4X4_HH
 
 #include <stdint.h>
 
@@ -63,4 +63,4 @@ struct Matrix4x4 {
 };
 }  // namespace cs::math
 
-#endif  // CS_MATH_MATRIX4X4_HH
+#endif  // CS_LINALG_MATRIX4X4_HH
