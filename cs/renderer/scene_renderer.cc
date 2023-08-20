@@ -56,7 +56,7 @@ Film cs::renderer::SceneRenderer::render() {
         // Compute the luminance of a pixel with an
         // intersection
         float unit_dot_prod =
-            dot(v3(intersection_point, film_center).unit(),
+            dot((film_center - intersection_point).unit(),
                 normal.unit());
         float luminance =
             map_value<float>(unit_dot_prod, 0, 1, 0, 255);

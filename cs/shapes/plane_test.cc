@@ -19,5 +19,5 @@ TEST(Plane, IntersectionOnXAxis) {
       plane.intersected_by(ray, &intersection, &normal));
 
   EXPECT_EQ(intersection, p3(2, 0, 0));
-  EXPECT_EQ(normal, v3(p3(), p3(-1, 0, 0)));
+  EXPECT_EQ(normal, v3(p3(-1, 0, 0)));
 }

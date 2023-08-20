@@ -17,7 +17,7 @@ using ::cs::precision::FloatsNear;
 bool cs::shapes::Sphere::intersected_by(r3 ray, p3* atPoint,
                                         v3* atNormal) {
   float a = dot(ray.direction, ray.direction);
-  float b = 2 * dot(ray.direction.b, (ray.origin - center));
+  float b = 2 * dot(ray.direction, (ray.origin - center));
   float c =
       dot((ray.origin - center), (ray.origin - center)) -
       radius * radius;

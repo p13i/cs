@@ -5,7 +5,9 @@
 
 namespace cs::geo {
 
-float dist(Point3 a, Point3 b);
+using p3 = ::cs::geo::Point3;
+
+float dist(p3 a, p3 b);
 
 }  // namespace cs::geo
 

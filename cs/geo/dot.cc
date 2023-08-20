@@ -15,12 +15,6 @@ float dot(const p3& a, const p3& b) {
 }
 
 float dot(const v3& a, const v3& b) {
-  // Move both vectors to origin
-  v3 vec_a = a - a.a;
-  v3 vec_b = b - b.a;
-  ENSURE(vec_a.a == p3());
-  ENSURE(vec_b.a == p3());
-  // Call the point implementation above
-  return dot(vec_a.b, vec_b.b);
+  return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 }  // namespace cs::geo

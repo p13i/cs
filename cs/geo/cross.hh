@@ -9,16 +9,9 @@ using v3 = ::cs::geo::Vector3;
 
 namespace cs::geo {
 v3 cross(v3 uno, v3 dos) {
-  // Each vector must just be a direction vector
-  // Start the point at the origin
-  uno = uno - uno.a;
-  dos = dos - dos.a;
   // Make the vector have unit magnitude
-  uno = uno.unit();
-  dos = dos.unit();
-
-  p3 a = uno.b;
-  p3 b = dos.b;
+  const v3 a = uno.unit();
+  const v3 b = dos.unit();
 
   float cx = a.y * b.z - a.z * b.y;
   float cy = a.z * b.x - a.x * b.z;

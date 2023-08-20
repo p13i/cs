@@ -3,8 +3,10 @@
 
 namespace cs::geo {
 
-float dist(Point3 a, Point3 b) {
-  return Vector3(a, b).magnitude();
+float dist(p3 a, p3 b) {
+  p3 diff = b - a;
+  return sqrtf(diff.x * diff.x + diff.y * diff.y +
+               diff.z * diff.z);
 }
 
 }  // namespace cs::geo

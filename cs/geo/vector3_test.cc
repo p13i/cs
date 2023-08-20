@@ -7,7 +7,7 @@ using p3 = ::cs::geo::Point3;
 using v3 = ::cs::geo::Vector3;
 
 TEST(Vector3, OneArgConstructor) {
-  EXPECT_EQ(v3(p3(1, 1, 1)).b, p3(1, 1, 1));
+  EXPECT_EQ(v3(p3(1, 1, 1)), v3(1, 1, 1));
 }
 
 TEST(Vector3, OperatorAdd) {
@@ -24,20 +24,11 @@ TEST(Vector3, MagnitudeTest) {
   // Inline the variables for the test case
   p3 a(1.0f, 2.0f, 3.0f);
   p3 b(4.0f, 5.0f, 6.0f);
-  v3 vec(a, b);
+  v3 vec(b - a);
 
   // Calculate the magnitude manually (sqrt((4-1)^2 +
   // (5-2)^2 + (6-3)^2) = sqrt(27) ≈ 5.196152)
   EXPECT_FLOAT_EQ(vec.magnitude(), 5.196152f);
-}
-
-TEST(Vector3, Direction) {
-  // Inline the variables for the test case
-  p3 a(1.0f, 2.0f, 3.0f);
-  p3 b(4.0f, 5.0f, 6.0f);
-  v3 vec(a, b);
-
-  EXPECT_EQ(vec.direction(), v3(p3(3.f, 3.f, 3.f)));
 }
 
 TEST(Vector3, Unit) {

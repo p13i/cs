@@ -26,7 +26,7 @@ bool cs::shapes::Plane::intersected_by(r3 ray, p3* atPoint,
     // Parallel
     return false;
   }
-  float v_0 = -1 * (dot(unit_normal.b, ray.origin) + d);
+  float v_0 = -1 * (dot(unit_normal, ray.origin) + d);
   float t = v_0 / v_d;
 #if 0
   std::cout << "v_0 = " << v_0 << std::endl;
