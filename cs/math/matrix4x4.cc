@@ -3,8 +3,8 @@
 #include "cs/numbers/in_range.hh"
 #include "cs/sanity/ensure.hh"
 
-using ::cs::numbers::in_range;
 using ::cs::math::Matrix4x4;
+using ::cs::numbers::in_range;
 
 #include <memory.h>
 #include <stdint.h>
