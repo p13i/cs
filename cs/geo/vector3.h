@@ -28,6 +28,8 @@ class Vector3 {
     return FloatsNear(magnitude(), 1.f);
   }
 
+  Vector3 normalized() const { return *this / magnitude(); }
+
   Vector3 unit() const { return *this / magnitude(); }
 
   Vector3 operator+(const Vector3& other) const {
