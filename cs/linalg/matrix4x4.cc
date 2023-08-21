@@ -97,3 +97,13 @@ Matrix4x4 cs::linalg::Matrix4x4::inverse() const {
   }
   return Matrix4x4(minv);
 }
+
+Matrix4x4 cs::linalg::Matrix4x4::T() const {
+  // clang-format off
+  return Matrix4x4(
+      data_[0][0], data_[1][0], data_[2][0], data_[3][0],
+      data_[0][1], data_[1][1], data_[2][1], data_[3][1],
+      data_[0][2], data_[1][2], data_[2][2], data_[3][2],
+      data_[0][3], data_[1][3], data_[2][3], data_[3][3]);
+  // clang-format on
+}

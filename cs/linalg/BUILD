@@ -11,3 +11,15 @@ cc_library(
         "//cs/string:format",
     ],
 )
+
+cc_library(
+    name = "transform",
+    srcs = ["transform.cc"],
+    hdrs = ["transform.hh"],
+    deps = [
+        "//cs/linalg:matrix4x4",
+        "//cs/geo:vector3",
+        "//cs/geo:cross",
+        "//cs/sanity:ensure",
+    ],
+)

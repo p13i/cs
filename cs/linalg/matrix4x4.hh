@@ -9,10 +9,8 @@ using ::cs::string::format;
 
 namespace cs::linalg {
 struct Matrix4x4 {
- private:
-  float data_[4][4];
-
  public:
+  float data_[4][4];
 
   // Default matrix is identity matrix
   // clang-format off
@@ -47,6 +45,9 @@ struct Matrix4x4 {
 
   // Inverse of matrix
   Matrix4x4 inverse() const;
+
+  // Transpose of matrix
+  Matrix4x4 T() const;
 
   // inline Point3<T> operator()(const Point3<T> &p) const;
 
