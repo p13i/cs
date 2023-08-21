@@ -17,9 +17,9 @@ cc_library(
     srcs = ["transform.cc"],
     hdrs = ["transform.hh"],
     deps = [
-        "//cs/linalg:matrix4x4",
-        "//cs/geo:vector3",
         "//cs/geo:cross",
+        "//cs/geo:vector3",
+        "//cs/linalg:matrix4x4",
         "//cs/sanity:ensure",
     ],
 )
