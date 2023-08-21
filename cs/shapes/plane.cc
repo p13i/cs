@@ -19,19 +19,12 @@ bool cs::shapes::Plane::intersected_by(r3 ray, p3* atPoint,
   ENSURE(unit_normal.is_unit());
   ENSURE(ray.direction.is_unit());
   float v_d = dot(unit_normal, ray.direction);
-#if 0
-  std::cout << "v_d " << v_d << std::endl;
-#endif
   if (FloatsNear(v_d, 0)) {
     // Parallel
     return false;
   }
   float v_0 = -1 * (dot(unit_normal, ray.origin) + d);
   float t = v_0 / v_d;
-#if 0
-  std::cout << "v_0 = " << v_0 << std::endl;
-  std::cout << "t = " << t << std::endl;
-#endif
   if (t < 0) {
     // Intersection behind ray origin
     return false;
