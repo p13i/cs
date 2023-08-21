@@ -43,7 +43,7 @@ TEST(Ray3, ThetaIsPiOver4) {
 
 TEST(Ray3, PiOver2PhiStillPointsToZ) {
   r3 ray(p3(), 0, PIf / 2.f);
-  v3 expected( p3(0, 0, 1));
+  v3 expected(p3(0, 0, 1));
   EXPECT_EQ(ray.direction, expected);
 }
 
