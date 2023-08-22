@@ -33,11 +33,7 @@ struct Transform {
     float wp = m_.data_[3][0] * x + m_.data_[3][1] * y + m_.data_[3][2] * z + m_.data_[3][3];
     // clang-format on
     ENSURE(wp != 0);
-    if (wp == 1) {
-      return p3(xp, yp, zp);
-    } else {
-      return p3(xp, yp, zp) / wp;
-    }
+    return p3(xp, yp, zp) / wp;
   }
 };
 
