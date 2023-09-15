@@ -22,17 +22,12 @@ bool cs::shapes::Sphere::intersected_by(r3 ray, p3* atPoint,
       dot((ray.origin - center), (ray.origin - center)) -
       radius * radius;
 
-  // std::cout << cs::string::format("a = %6.4lf", a) <<
-  // std::endl;
-
   if (!FloatsNear(a, 1.f)) {
     std::cout << "a != 1.0" << std::endl;
     return false;
   }
 
   float discriminant = b * b - 4 * c;
-  // std::cout << cs::string::format("discriminant =
-  // %6.4lf", discriminant) << std::endl;
   if (discriminant < 0.f) {
     return false;
   }
