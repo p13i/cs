@@ -23,7 +23,6 @@ bool cs::shapes::Sphere::intersected_by(r3 ray, p3* atPoint,
       radius * radius;
 
   if (!FloatsNear(a, 1.f)) {
-    std::cout << "a != 1.0" << std::endl;
     return false;
   }
 
