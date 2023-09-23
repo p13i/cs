@@ -50,12 +50,12 @@ cc_library(
         "//cs/geo:point3",
         "//cs/geo:ray3",
         "//cs/geo:vector3",
+        "//cs/linalg:transform",
         "//cs/math:constants",
         "//cs/numbers:clamp",
         "//cs/numbers:map_value",
         "//cs/sanity:ensure",
         "//cs/shapes:sphere",
-        "//cs/linalg:transform",
     ],
 )
 

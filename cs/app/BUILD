@@ -17,6 +17,7 @@ cc_library(
         "//cs/geo:point3",
         "//cs/geo:ray3",
         "//cs/geo:vector3",
+        "//cs/linalg:transform",
         "//cs/numbers:map_value",
         "//cs/profiling:time_it",
         "//cs/renderer:rainbow",
@@ -24,7 +25,6 @@ cc_library(
         "//cs/shapes:plane",
         "//cs/shapes:shape",
         "//cs/shapes:sphere",
-        "//cs/linalg:transform",
     ],
 )
 
