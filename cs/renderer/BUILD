@@ -55,6 +55,7 @@ cc_library(
         "//cs/numbers:map_value",
         "//cs/sanity:ensure",
         "//cs/shapes:sphere",
+        "//cs/linalg:transform",
     ],
 )
 

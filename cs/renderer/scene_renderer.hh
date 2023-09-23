@@ -10,6 +10,7 @@
 #include "cs/geo/point3.h"
 #include "cs/geo/ray3.h"
 #include "cs/geo/vector3.h"
+#include "cs/linalg/transform.hh"
 #include "cs/numbers/clamp.hh"
 #include "cs/numbers/map_value.hh"
 #include "cs/renderer/film.hh"
@@ -21,6 +22,7 @@ using p3 = ::cs::geo::Point3;
 using v3 = ::cs::geo::Vector3;
 using r3 = ::cs::geo::Ray3;
 using ::cs::geo::dist;
+using ::cs::linalg::Transform;
 using ::cs::numbers::clamp;
 using ::cs::numbers::map_value;
 using ::cs::renderer::Film;
@@ -33,14 +35,18 @@ struct Camera {
   p3 film_center_;
   unsigned int pixels_per_unit_;
   Film film_;
+  Transform w2c_;
 
   Camera(p3 focal_point, p3 film_center,
          unsigned int pixels_per_unit,
-         std::tuple<unsigned int, unsigned int> film_dimensions)
+         std::tuple<unsigned int, unsigned int>
+             film_dimensions,
+         Transform w2c)
       : focal_point_(focal_point),
         film_center_(film_center),
         pixels_per_unit_(pixels_per_unit),
-        film_(Film(film_dimensions)) {}
+        film_(Film(film_dimensions)),
+        w2c_(w2c) {}
 
   friend std::ostream& operator<<(std::ostream& os,
                                   const Camera& camera) {
@@ -50,7 +56,10 @@ struct Camera {
               << ", pixels_per_unit="
               << camera.pixels_per_unit_
               << ", film dimensions: <"
-              << std::get<0>(camera.film_.dimensions()) << ", " << std::get<1>(camera.film_.dimensions()) << ">)";
+              << std::get<0>(camera.film_.dimensions())
+              << ", "
+              << std::get<1>(camera.film_.dimensions())
+              << ">)";
   }
 };
 

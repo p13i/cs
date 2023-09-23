@@ -4,9 +4,10 @@
 #include <stdio.h>
 
 #include <functional>
-#include <vector>
 #include <tuple>
+#include <vector>
 
+#include "cs/linalg/transform.hh"
 #include "cs/profiling/time_it.hh"
 #include "cs/renderer/film.hh"
 #include "cs/renderer/scene.hh"
@@ -26,15 +27,18 @@ using ::cs::shapes::Sphere;
 using p3 = ::cs::geo::Point3;
 using v3 = ::cs::geo::Vector3;
 using r3 = ::cs::geo::Ray3;
+using ::cs::linalg::Transform;
+using ::cs::linalg::transforms::LookAt;
+using ::cs::linalg::transforms::Translate;
 
 namespace cs::app {
 
 struct SceneAnimator {
   size_t num_frames_;
   std::tuple<unsigned int, unsigned int> film_dimensions_;
-  SceneAnimator(
-      size_t num_frames,
-      std::tuple<unsigned int, unsigned int> film_dimensions)
+  SceneAnimator(size_t num_frames,
+                std::tuple<unsigned int, unsigned int>
+                    film_dimensions)
       : num_frames_(num_frames),
         film_dimensions_(film_dimensions) {}
 
@@ -65,8 +69,11 @@ struct SceneAnimator {
           std::min(std::get<0>(film_dimensions_),
                    std::get<1>(film_dimensions_)) /
           2;
+      Transform world2camera;
+      world2camera = Translate(v3(film_center));
       Camera camera(dynamic_focal_point, film_center,
-                    pixels_per_unit, film_dimensions_);
+                    pixels_per_unit, film_dimensions_,
+                    world2camera);
 
 #if 0
       std::cout << "dynamic_focal_point="

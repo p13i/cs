@@ -24,6 +24,7 @@ cc_library(
         "//cs/shapes:plane",
         "//cs/shapes:shape",
         "//cs/shapes:sphere",
+        "//cs/linalg:transform",
     ],
 )
 
