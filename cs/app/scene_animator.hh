@@ -69,8 +69,8 @@ struct SceneAnimator {
           std::min(std::get<0>(film_dimensions_),
                    std::get<1>(film_dimensions_)) /
           2;
-      Transform world2camera;
-      world2camera = Translate(v3(film_center));
+      Transform world2camera =
+          LookAt(p3(-1, 0, 0), p3(0, 0, 0), p3(0, 1, 0));
       Camera camera(dynamic_focal_point, film_center,
                     pixels_per_unit, film_dimensions_,
                     world2camera);
