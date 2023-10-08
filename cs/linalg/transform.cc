@@ -12,7 +12,7 @@ using m4x4 = ::cs::linalg::Matrix4x4;
 using v3 = ::cs::geo::Vector3;
 using ::cs::geo::cross;
 
-namespace cs::linalg {
+namespace cs::linalg::transforms {
 
 Transform Translate(v3 delta) {
   // clang-format off
@@ -111,4 +111,4 @@ Transform LookAt(p3 pos, p3 look, v3 up) {
   return Transform(cameraToWorld.inverse(), cameraToWorld);
 }
 
-}  // namespace cs::linalg
+}  // namespace cs::linalg::transforms

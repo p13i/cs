@@ -3,6 +3,7 @@ package(default_visibility = ["//visibility:public"])
 cc_library(
     name = "cross",
     hdrs = ["cross.hh"],
+    srcs=["cross.cc"],
     deps = [
         ":point3",
         ":vector3",

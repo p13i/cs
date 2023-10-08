@@ -9,11 +9,11 @@
 #include "cs/linalg/matrix4x4.hh"
 #include "cs/sanity/ensure.hh"
 
+namespace cs::linalg {
+
 using m4x4 = ::cs::linalg::Matrix4x4;
 using v3 = ::cs::geo::Vector3;
 using ::cs::geo::cross;
-
-namespace cs::linalg {
 
 struct Transform {
  private:
