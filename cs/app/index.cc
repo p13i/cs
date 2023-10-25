@@ -21,11 +21,11 @@
 #include "cs/renderer/film.hh"
 #include "cs/renderer/pixel.hh"
 
-#define APP_FRAME_RATE_FPS 24
+#define APP_FRAME_RATE_FPS 1
 #define APP_ANIMATION_DURATION_SEC 1
 #define APP_ANIMATION_NUM_FRAMES \
   (APP_FRAME_RATE_FPS * APP_ANIMATION_DURATION_SEC)
-#define APP_SCREEN_WIDTH 512
+#define APP_SCREEN_WIDTH 256
 #define APP_SCREEN_HEIGHT 256
 
 using ::cs::app::SceneAnimator;

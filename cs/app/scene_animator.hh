@@ -16,6 +16,7 @@
 #include "cs/shapes/shape.hh"
 #include "cs/shapes/sphere.hh"
 #include "cs/app/text/fonts/mono.hh"
+#include "cs/sanity/ensure.hh"
 
 using ::cs::profiling::time_it;
 using ::cs::renderer::Camera;
@@ -129,13 +130,11 @@ struct SceneAnimator {
           });
 
       // Draw some text on the film
-      for (int x = 0; x < 8; x++) {
-            for (int y = 0; y < 8; y++) {
-                  int value = mono[0][y][x];
-                  char rgba = value ? 255 : 0;
-                  film.pixels[x][y] = renderer::Pixel(rgba,rgba,rgba,rgba);
-            }
-      }
+      [[maybe_unused]] unsigned int width = std::get<0>(film_dimensions_);
+      [[maybe_unused]] unsigned int height = std::get<1>(film_dimensions_);
+      int xStart = 16;
+      int yStart = 16;
+      DrawString(&film, &xStart, yStart, "ABDEFGHIJKLMNOPQRSTUVWXYZ", 2);
       
       frames[i] = film;
 
@@ -146,6 +145,22 @@ struct SceneAnimator {
     }
 
     return frames;
+  }
+
+  void DrawString(Film* film, int* xStart, int yStart, std::string str, int scale = 1) {
+      for (char ch : str) {
+            for (int x = 0; x < 8; x++) {
+                  for (int y = 0; y < 8; y++) {
+                        bool value = cs::app::text::fonts::SampleCharacterPixel(ch, x, y);
+                        char rgba = value ? 255 : 0;
+                        int film_x = *xStart + x;
+                        int film_y = yStart + y;
+                        film->pixels[film_x][film_y] = renderer::Pixel(rgba, rgba, rgba, rgba);
+                  }
+            }
+            // Move the x start position
+            *xStart += 8;
+      }
   }
 };
 

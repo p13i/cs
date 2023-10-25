@@ -14,6 +14,7 @@ cc_library(
     srcs = ["scene_animator.hh"],
     tags = ["manual"],
     deps = [
+        "//cs/app/text/fonts:mono",
         "//cs/geo:point3",
         "//cs/geo:ray3",
         "//cs/geo:vector3",
@@ -25,6 +26,7 @@ cc_library(
         "//cs/shapes:plane",
         "//cs/shapes:shape",
         "//cs/shapes:sphere",
+        "//cs/sanity:ensure",
     ],
 )
 
