@@ -23,10 +23,10 @@ cc_library(
         "//cs/profiling:time_it",
         "//cs/renderer:rainbow",
         "//cs/renderer:scene_renderer",
+        "//cs/sanity:ensure",
         "//cs/shapes:plane",
         "//cs/shapes:shape",
         "//cs/shapes:sphere",
-        "//cs/sanity:ensure",
     ],
 )
 
