@@ -7,8 +7,8 @@ using ::cs::app::text::fonts::mono;
 int main() {
   // Print each character and it's associated mono font
   // drawn from an array
-  for (int i = 0; i < 1; i++) {
-    std::cout << (char)(i + 97) << " (index=" << i
+  for (int i = 0; i < 2; i++) {
+    std::cout << (char)(i + 'A') << " (index=" << i
               << "):" << std::endl;
     for (int y = 0; y < 8; y++) {
       for (int x = 0; x < 8; x++) {
