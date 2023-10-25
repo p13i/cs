@@ -15,6 +15,7 @@
 #include "cs/shapes/plane.hh"
 #include "cs/shapes/shape.hh"
 #include "cs/shapes/sphere.hh"
+#include "cs/app/text/fonts/mono.hh"
 
 using ::cs::profiling::time_it;
 using ::cs::renderer::Camera;
@@ -30,6 +31,7 @@ using r3 = ::cs::geo::Ray3;
 using ::cs::linalg::Transform;
 using ::cs::linalg::transforms::LookAt;
 using ::cs::linalg::transforms::Translate;
+using ::cs::app::text::fonts::mono;
 
 namespace cs::app {
 
@@ -125,6 +127,16 @@ struct SceneAnimator {
           time_it([&film, &renderer]() {
             film = renderer.render();
           });
+
+      // Draw some text on the film
+      for (int x = 0; x < 8; x++) {
+            for (int y = 0; y < 8; y++) {
+                  int value = mono[0][y][x];
+                  char rgba = value ? 255 : 0;
+                  film.pixels[x][y] = renderer::Pixel(rgba,rgba,rgba,rgba);
+            }
+      }
+      
       frames[i] = film;
 
 #if 0
