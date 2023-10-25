@@ -2,7 +2,9 @@
 #define CS_APP_TEXT_FONTS_MONO_HH
 
 namespace cs::app::text::fonts {
-        static int mono[26][8][8] = {
+    typedef int Font[26][8][8];
+
+        static Font mono = {
         {   // 'a'
             {0, 0, 0, 1, 1, 0, 0, 0},
             {0, 0, 1, 0, 0, 1, 0, 0},
