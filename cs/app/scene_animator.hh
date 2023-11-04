@@ -74,9 +74,9 @@ struct SceneAnimator {
           2;
       Transform world2camera =
           LookAt(p3(-1, 0, 0), p3(0, 0, 0), p3(0, 1, 0));
-      Camera camera(dynamic_focal_point, film_center,
-                    pixels_per_unit, film_dimensions_,
-                    world2camera);
+          float focal_length = map_value<float>(i, 0, num_frames_, -5, -1.001);
+      Camera camera(world2camera, pixels_per_unit, focal_length,
+                    Film(film_dimensions_));
 
 #if 0
       std::cout << "dynamic_focal_point="
