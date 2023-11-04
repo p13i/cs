@@ -19,13 +19,13 @@ using ::cs::shapes::Sphere;
 TEST(SceneRenderer, 2x2) {
   // Setup camera
   p3 film_center(0, 0, -1);
-  p3 focal_point = film_center - p3(0, 0, 2);
+  int pixels_per_unit = 1;
   Transform w2c =
       LookAt(p3(-1, 0, 0), p3(0, 0, 0), p3(0, 1, 0));
-  Camera camera(
-      focal_point, film_center, 1,
-      std::tuple<unsigned int, unsigned int>(256, 256),
-      w2c);
+  float focal_length = -2;
+  Camera camera(w2c, pixels_per_unit, focal_length,
+                Film(std::tuple<unsigned int, unsigned int>(
+                    256, 256)));
 
   // Setup scene
   std::vector<Shape*> shapes;

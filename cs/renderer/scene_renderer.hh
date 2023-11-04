@@ -31,30 +31,25 @@ using ::cs::shapes::Sphere;
 namespace cs::renderer {
 
 struct Camera {
-  p3 focal_point_;
-  p3 film_center_;
-  unsigned int pixels_per_unit_;
-  Film film_;
   Transform w2c_;
+  unsigned int pixels_per_unit_;
+  float focal_length_;
+  Film film_;
 
-  Camera(p3 focal_point, p3 film_center,
-         unsigned int pixels_per_unit,
-         std::tuple<unsigned int, unsigned int>
-             film_dimensions,
-         Transform w2c)
-      : focal_point_(focal_point),
-        film_center_(film_center),
-        pixels_per_unit_(pixels_per_unit),
-        film_(Film(film_dimensions)),
-        w2c_(w2c) {}
+  Camera(Transform w2c,
+  unsigned int pixels_per_unit,
+  float focal_length,
+  Film film)
+      :  w2c_(w2c),
+  pixels_per_unit_(pixels_per_unit),
+  focal_length_(focal_length),
+  film_(film) {}
 
   friend std::ostream& operator<<(std::ostream& os,
                                   const Camera& camera) {
-    return os << "Camera(focal_point="
-              << camera.focal_point_
-              << ", film_center=" << camera.film_center_
-              << ", pixels_per_unit="
+    return os << "Camera(pixels_per_unit="
               << camera.pixels_per_unit_
+              << ", focal_length=" << camera.focal_length_
               << ", film dimensions: <"
               << std::get<0>(camera.film_.dimensions())
               << ", "

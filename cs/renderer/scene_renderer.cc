@@ -28,8 +28,11 @@ using ::cs::shapes::Sphere;
 Film cs::renderer::SceneRenderer::render() {
   // Unpack dimensions
   auto [width, height] = camera_.film_.dimensions();
-  float x_units = width / camera_.pixels_per_unit_;
-  float y_units = height / camera_.pixels_per_unit_;
+  [[maybe_unused]] float x_units =
+      width / camera_.pixels_per_unit_;
+  [[maybe_unused]] float y_units =
+      height / camera_.pixels_per_unit_;
+#if 0
   // Unpack freqently-used variables
   p3 film_center = camera_.film_center_;
   // Compute bounds of film plane to sample
@@ -68,5 +71,13 @@ Film cs::renderer::SceneRenderer::render() {
       }
     }
   }
+#endif
+
+  for (unsigned int film_x = 0; film_x < width; film_x++) {
+    for (unsigned int film_y = 0; film_y < height;
+         film_y++) {
+    }
+  }
+
   return camera_.film_;
 }
