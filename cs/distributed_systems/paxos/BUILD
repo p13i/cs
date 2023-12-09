@@ -1,1 +1,0 @@
-# Paxos distributed systems simulator.
