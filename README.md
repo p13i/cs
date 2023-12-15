@@ -19,3 +19,29 @@ Open a Github Codespace (via the green "Code" button on the homepage of this rep
 This project uses the Bazel build system from Google. Other technologies used include C++ and WebAssembly.
 
 The raytracer implementation is based on Pharr et al.'s [*PBRT*](pbr-book.org).
+
+---
+
+# Future projects:
+
+ai:
+* csp
+* gpt
+* stats
+* nnet
+* minimax
+
+optimization:
+* gradient descent
+* dual primal solver
+
+games
+* uno
+* chess
+
+controls: 
+* pid 
+
+net:
+* p2p
+* tcp
