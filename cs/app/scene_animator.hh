@@ -7,16 +7,16 @@
 #include <tuple>
 #include <vector>
 
+#include "cs/app/text/fonts/mono.hh"
 #include "cs/linalg/transform.hh"
 #include "cs/profiling/time_it.hh"
 #include "cs/renderer/film.hh"
 #include "cs/renderer/scene.hh"
 #include "cs/renderer/scene_renderer.hh"
+#include "cs/sanity/ensure.hh"
 #include "cs/shapes/plane.hh"
 #include "cs/shapes/shape.hh"
 #include "cs/shapes/sphere.hh"
-#include "cs/app/text/fonts/mono.hh"
-#include "cs/sanity/ensure.hh"
 
 using ::cs::profiling::time_it;
 using ::cs::renderer::Camera;
@@ -29,10 +29,10 @@ using ::cs::shapes::Sphere;
 using p3 = ::cs::geo::Point3;
 using v3 = ::cs::geo::Vector3;
 using r3 = ::cs::geo::Ray3;
+using ::cs::app::text::fonts::mono;
 using ::cs::linalg::Transform;
 using ::cs::linalg::transforms::LookAt;
 using ::cs::linalg::transforms::Translate;
-using ::cs::app::text::fonts::mono;
 
 namespace cs::app {
 
@@ -73,10 +73,10 @@ struct SceneAnimator {
                    std::get<1>(film_dimensions_)) /
           2;
       Transform world2camera =
-          LookAt(p3(-1, 0, 0), p3(0, 0, 0), p3(0, 1, 0));
-          float focal_length = map_value<float>(i, 0, num_frames_, -5, -1.001);
-      Camera camera(world2camera, pixels_per_unit, focal_length,
-                    Film(film_dimensions_));
+          LookAt(p3(-5, 0, 0), p3(0, 0, 0), p3(0, 0, 1));
+      float focal_length = 5;
+      Camera camera(world2camera, pixels_per_unit,
+                    focal_length, Film(film_dimensions_));
 
 #if 0
       std::cout << "dynamic_focal_point="
@@ -96,9 +96,9 @@ struct SceneAnimator {
                                   /*radius=*/0.25));
       shapes.push_back(new Sphere(/*center=*/p3(0, -1, 0),
                                   /*radius=*/0.25));
-      shapes.push_back(new Plane(p3(0, 0, 1).unit(), -15));
-      shapes.push_back(new Plane(p3(1, 1, 1).unit(), -5));
-      shapes.push_back(new Plane(p3(-1, 1, 1).unit(), -7));
+      // shapes.push_back(new Plane(p3(0, 0, 1).unit(), -15));
+      // shapes.push_back(new Plane(p3(1, 1, 1).unit(), -5));
+      // shapes.push_back(new Plane(p3(-1, 1, 1).unit(), -7));
 #elif 0
       shapes.push_back(new Sphere(/*center=*/p3(1, 0, 1),
                                   /*radius=*/0.1));
@@ -130,12 +130,15 @@ struct SceneAnimator {
           });
 
       // Draw some text on the film
-      [[maybe_unused]] unsigned int width = std::get<0>(film_dimensions_);
-      [[maybe_unused]] unsigned int height = std::get<1>(film_dimensions_);
+      [[maybe_unused]] unsigned int width =
+          std::get<0>(film_dimensions_);
+      [[maybe_unused]] unsigned int height =
+          std::get<1>(film_dimensions_);
       int xStart = 16;
       int yStart = 16;
-      DrawString(&film, &xStart, yStart, "ABDEFGHIJKLMNOPQRSTUVWXYZ", 2);
-      
+      DrawString(&film, &xStart, yStart,
+                 "ABDEFGHIJKLMNOPQRSTUVWXYZ", 2);
+
       frames[i] = film;
 
 #if 0
@@ -147,20 +150,24 @@ struct SceneAnimator {
     return frames;
   }
 
-  void DrawString(Film* film, int* xStart, int yStart, std::string str, int scale = 1) {
-      for (char ch : str) {
-            for (int x = 0; x < 8; x++) {
-                  for (int y = 0; y < 8; y++) {
-                        bool value = cs::app::text::fonts::SampleCharacterPixel(ch, x, y);
-                        char rgba = value ? 255 : 0;
-                        int film_x = *xStart + x;
-                        int film_y = yStart + y;
-                        film->pixels[film_x][film_y] = renderer::Pixel(rgba, rgba, rgba, rgba);
-                  }
-            }
-            // Move the x start position
-            *xStart += 8;
+  void DrawString(Film* film, int* xStart, int yStart,
+                  std::string str, int scale = 1) {
+    for (char ch : str) {
+      for (int x = 0; x < 8; x++) {
+        for (int y = 0; y < 8; y++) {
+          bool value =
+              cs::app::text::fonts::SampleCharacterPixel(
+                  ch, x, y);
+          char rgba = value ? 255 : 0;
+          int film_x = *xStart + x;
+          int film_y = yStart + y;
+          film->pixels[film_x][film_y] =
+              renderer::Pixel(rgba, rgba, rgba, rgba);
+        }
       }
+      // Move the x start position
+      *xStart += 8;
+    }
   }
 };
 

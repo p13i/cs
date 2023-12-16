@@ -22,7 +22,7 @@ TEST(SceneRenderer, 2x2) {
   int pixels_per_unit = 1;
   Transform w2c =
       LookAt(p3(-1, 0, 0), p3(0, 0, 0), p3(0, 1, 0));
-  float focal_length = -2;
+  float focal_length = 2;
   Camera camera(w2c, pixels_per_unit, focal_length,
                 Film(std::tuple<unsigned int, unsigned int>(
                     256, 256)));

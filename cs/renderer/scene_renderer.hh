@@ -36,14 +36,15 @@ struct Camera {
   float focal_length_;
   Film film_;
 
-  Camera(Transform w2c,
-  unsigned int pixels_per_unit,
-  float focal_length,
-  Film film)
-      :  w2c_(w2c),
-  pixels_per_unit_(pixels_per_unit),
-  focal_length_(focal_length),
-  film_(film) {}
+  Camera(Transform w2c, unsigned int pixels_per_unit,
+         float focal_length, Film film)
+      : w2c_(w2c),
+        pixels_per_unit_(pixels_per_unit),
+        focal_length_(focal_length),
+        film_(film) {
+    ENSURE(pixels_per_unit_ > 0);
+    ENSURE(focal_length_ > 0);
+  }
 
   friend std::ostream& operator<<(std::ostream& os,
                                   const Camera& camera) {
