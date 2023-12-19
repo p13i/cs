@@ -21,12 +21,12 @@
 #include "cs/renderer/film.hh"
 #include "cs/renderer/pixel.hh"
 
-#define APP_FRAME_RATE_FPS 1
-#define APP_ANIMATION_DURATION_SEC 1
+#define APP_FRAME_RATE_FPS 24
+#define APP_ANIMATION_DURATION_SEC 4
 #define APP_ANIMATION_NUM_FRAMES \
   (APP_FRAME_RATE_FPS * APP_ANIMATION_DURATION_SEC)
-#define APP_SCREEN_WIDTH 256
-#define APP_SCREEN_HEIGHT 256
+#define APP_SCREEN_WIDTH 512
+#define APP_SCREEN_HEIGHT 512
 
 using ::cs::app::SceneAnimator;
 using ::cs::renderer::Film;
@@ -55,11 +55,23 @@ int main(int argc, char** argv) {
   std::cout << "Rendering " << APP_ANIMATION_NUM_FRAMES
             << " frames with resolution <"
             << std::get<0>(film_dimensions) << ", "
-            << std::get<1>(film_dimensions) << ">... ";
+            << std::get<1>(film_dimensions) << ">... "
+            << std::flush;
 
   unsigned int render_time_ms =
       time_it([&frames, &animator]() {
-        frames = animator.render_all_frames();
+        frames = animator.render_all_frames(
+            [](unsigned int render_time_ms) {
+              std::cout
+                  << "Render time (ms): " << render_time_ms
+                  << std::endl;
+
+              // printf("%d\n", render_time_ms);
+              fflush(stdout);
+#ifdef __EMSCRIPTEN__
+              emscripten_sleep(1);
+#endif  // __EMSCRIPTEN__
+            });
       });
 
   std::cout << "done in " << render_time_ms << " ms!"

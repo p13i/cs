@@ -9,6 +9,7 @@
 
 #include "cs/app/text/fonts/mono.hh"
 #include "cs/linalg/transform.hh"
+#include "cs/numbers/map_value.hh"
 #include "cs/profiling/time_it.hh"
 #include "cs/renderer/film.hh"
 #include "cs/renderer/scene.hh"
@@ -33,6 +34,7 @@ using ::cs::app::text::fonts::mono;
 using ::cs::linalg::Transform;
 using ::cs::linalg::transforms::LookAt;
 using ::cs::linalg::transforms::Translate;
+using ::cs::numbers::map_value;
 
 namespace cs::app {
 
@@ -45,79 +47,43 @@ struct SceneAnimator {
       : num_frames_(num_frames),
         film_dimensions_(film_dimensions) {}
 
-  std::vector<Film> render_all_frames() {
+  std::vector<Film> render_all_frames(
+      std::function<void(unsigned int)>
+          on_frame_rendered_cb = nullptr) {
     std::vector<Film> frames(num_frames_);
 
+    // Setup scene
+    std::vector<Shape*> shapes{
+        // Unit sphere at the origin
+        new Sphere(p3(0, 0, 0), 0.5),
+        // One smaller sphere at x=-1 closer to the camera
+        new Sphere(p3(-1, 0, 0), 0.25),
+        // One even smaller sphere at y=1 left of the camera
+        new Sphere(p3(0, 1, 0), 0.125),
+        // One even smaller sphere at z=1 top of the camera
+        new Sphere(p3(0, 0, 1), 0.0625),
+        // new Sphere(p3(2, 0, 0), 0.5),
+        // new Sphere(p3(0, 2, 0), 0.25),
+        // new Sphere(p3(0, -1, 0), 0.25),
+        new Plane(p3(1, 1, 1).unit(), -5),
+    };
+
+    Scene scene(shapes);
+
     for (size_t i = 0; i < num_frames_; i++) {
-#if 0
-      std::cout << "Computing frame #" << i << " of "
-                << num_frames_ << "... ";
-#endif
-
-#if 1
-      // Animate focal point or film center
-      float focal_point_z =
-          map_value<float>(i, 0, num_frames_, -5, -1.001);
-      p3 dynamic_focal_point(0, 0, focal_point_z);
-      p3 film_center(0, 0, -1);
-#else
-      p3 film_center(
-          map_value<p3>(p3(i), p3(0), p3(num_frames_),
-                        p3(0, 0, -1), p3(0, 0, -10)));
-      p3 dynamic_focal_point = film_center - p3(0, 0, 2);
-#endif
-
       // Setup camera
       unsigned int pixels_per_unit =
           std::min(std::get<0>(film_dimensions_),
                    std::get<1>(film_dimensions_)) /
           2;
-      Transform world2camera =
-          LookAt(p3(-5, 0, 0), p3(0, 0, 0), p3(0, 0, 1));
+      p3 pos(map_value<float>(i, 0, num_frames_, -5, 5), 0,
+             0);
+      p3 look(1, 1, 1);
+      p3 up(0, 0, 1);
+      Transform w2c = LookAt(pos, look, up);
       float focal_length = 5;
-      Camera camera(world2camera, pixels_per_unit,
-                    focal_length, Film(film_dimensions_));
-
-#if 0
-      std::cout << "dynamic_focal_point="
-                << dynamic_focal_point
-                << ", film_center=" << film_center
-                << std::endl;
-#endif
-
-      // Setup scene
-      std::vector<Shape*> shapes;
-#if 1
-      shapes.push_back(new Sphere(/*center=*/p3(0, 0, 0),
-                                  /*radius=*/0.5));
-      shapes.push_back(new Sphere(/*center=*/p3(2, 0, 0),
-                                  /*radius=*/0.5));
-      shapes.push_back(new Sphere(/*center=*/p3(0, 2, 0),
-                                  /*radius=*/0.25));
-      shapes.push_back(new Sphere(/*center=*/p3(0, -1, 0),
-                                  /*radius=*/0.25));
-      // shapes.push_back(new Plane(p3(0, 0, 1).unit(), -15));
-      // shapes.push_back(new Plane(p3(1, 1, 1).unit(), -5));
-      // shapes.push_back(new Plane(p3(-1, 1, 1).unit(), -7));
-#elif 0
-      shapes.push_back(new Sphere(/*center=*/p3(1, 0, 1),
-                                  /*radius=*/0.1));
-      shapes.push_back(
-          new Sphere(/*center=*/p3(0.25, 0, -1),
-                     /*radius=*/0.1));
-      shapes.push_back(new Sphere(/*center=*/p3(0, 0, -1),
-                                  /*radius=*/0.1));
-      shapes.push_back(new Plane(p3(0, 0, 1).unit(), -10));
-#else
-      shapes.push_back(new Sphere(p3(0, 0, 1), 0.5));
-      // Sphere right at origin
-      shapes.push_back(new Sphere(/*center=*/p3(),
-                                  /*radius=*/0.1));
-      // Plane on z-axis +10 units away from origin
-      shapes.push_back(new Plane(p3(0, 0, 1).unit(), -10));
-#endif
-
-      Scene scene(shapes);
+      Camera camera(w2c, pixels_per_unit, focal_length,
+                    Film(film_dimensions_));
 
       // Setup renderer
       SceneRenderer renderer(camera, scene);
@@ -137,14 +103,18 @@ struct SceneAnimator {
       int xStart = 16;
       int yStart = 16;
       DrawString(&film, &xStart, yStart,
-                 "ABDEFGHIJKLMNOPQRSTUVWXYZ", 2);
+                 "ABCDEFGHIJKLMNOPQRSTUVWXYZ", 2);
 
       frames[i] = film;
 
-#if 0
-      std::cout << "Render time (ms): " << render_time_ms
-                << std::endl;
-#endif
+      if (on_frame_rendered_cb) {
+        on_frame_rendered_cb(render_time_ms);
+      }
+    }
+
+    // De-allocate shapes
+    for (Shape* shape : shapes) {
+      delete shape;
     }
 
     return frames;
