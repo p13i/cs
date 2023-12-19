@@ -56,20 +56,24 @@ int main(int argc, char** argv) {
             << " frames with resolution <"
             << std::get<0>(film_dimensions) << ", "
             << std::get<1>(film_dimensions) << ">... "
-            << std::flush;
+            << std::endl;
+
+#ifdef __EMSCRIPTEN__
+  emscripten_sleep(0);
+#endif  // __EMSCRIPTEN__
 
   unsigned int render_time_ms =
       time_it([&frames, &animator]() {
         frames = animator.render_all_frames(
-            [](unsigned int render_time_ms) {
-              std::cout
-                  << "Render time (ms): " << render_time_ms
-                  << std::endl;
-
-              // printf("%d\n", render_time_ms);
-              fflush(stdout);
+            [](unsigned int render_time_ms,
+               unsigned int frame_num,
+               unsigned int num_frames) {
+              std::cout << "Rendered frame " << frame_num
+                        << " of " << num_frames << " in "
+                        << render_time_ms << " ms."
+                        << std::endl;
 #ifdef __EMSCRIPTEN__
-              emscripten_sleep(1);
+              emscripten_sleep(0);
 #endif  // __EMSCRIPTEN__
             });
       });

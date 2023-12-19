@@ -48,7 +48,8 @@ struct SceneAnimator {
         film_dimensions_(film_dimensions) {}
 
   std::vector<Film> render_all_frames(
-      std::function<void(unsigned int)>
+      std::function<void(unsigned int, unsigned int,
+                         unsigned int)>
           on_frame_rendered_cb = nullptr) {
     std::vector<Film> frames(num_frames_);
 
@@ -108,7 +109,8 @@ struct SceneAnimator {
       frames[i] = film;
 
       if (on_frame_rendered_cb) {
-        on_frame_rendered_cb(render_time_ms);
+        on_frame_rendered_cb(render_time_ms, i + 1,
+                             num_frames_);
       }
     }
 
