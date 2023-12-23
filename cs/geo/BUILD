@@ -61,6 +61,23 @@ cc_test(
 )
 
 cc_library(
+    name = "point2",
+    hdrs = ["point2.hh"],
+    deps = [
+        "//cs/precision:floats",
+    ],
+)
+
+cc_test(
+    name = "point2_test",
+    srcs = ["point2_test.cc"],
+    deps = [
+        ":point2",
+        "@googletest//:gtest_main",
+    ],
+)
+
+cc_library(
     name = "point3",
     hdrs = ["point3.h"],
     deps = [
