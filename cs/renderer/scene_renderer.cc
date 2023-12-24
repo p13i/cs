@@ -6,6 +6,8 @@
 #include <vector>
 
 #include "cs/geo/dist.hh"
+#include "cs/geo/dot.hh"
+#include "cs/geo/point2.hh"
 #include "cs/geo/point3.h"
 #include "cs/geo/ray3.h"
 #include "cs/geo/vector3.h"
@@ -15,17 +17,19 @@
 #include "cs/renderer/film.hh"
 #include "cs/renderer/scene.hh"
 #include "cs/sanity/ensure.hh"
-#include "cs/shapes/sphere.hh"
+#include "cs/shapes/shape.hh"
 
+using p2 = ::cs::geo::Point2;
 using p3 = ::cs::geo::Point3;
 using v3 = ::cs::geo::Vector3;
 using r3 = ::cs::geo::Ray3;
 using ::cs::geo::dist;
+using ::cs::geo::dot;
 using ::cs::linalg::Transform;
 using ::cs::numbers::clamp;
 using ::cs::numbers::map_value;
 using ::cs::renderer::Film;
-using ::cs::shapes::Sphere;
+using ::cs::shapes::Shape;
 
 Film cs::renderer::SceneRenderer::render() {
   // Unpack dimensions
@@ -39,27 +43,24 @@ Film cs::renderer::SceneRenderer::render() {
   for (unsigned int film_x = 0; film_x < width; film_x++) {
     for (unsigned int film_y = 0; film_y < height;
          film_y++) {
-      // Set z to 1 to avoid division by zero, which
-      // produces NaNs.
-      p3 film_point = map_value(
-          p3(film_x, film_y, 1), p3(0, 0, 1),
-          p3(width, height, 1),
-          p3(-1 * x_units / 2.f, y_units / 2.f, 1),
-          p3(x_units / 2.f, -1 * y_units / 2.f, 1));
-      film_point.z = 0;
-      p3 film_point_in_world = c2w(film_point);
+      p2 film_point = map_value(
+          p2(film_x, film_y), p2(0, 0), p2(width, height),
+          p2(-1 * x_units / 2.f, y_units / 2.f),
+          p2(x_units / 2.f, -1 * y_units / 2.f));
+      p3 film_point_in_world =
+          c2w(p3(film_point.x, film_point.y, 0));
       r3 ray(focal_point_in_world, film_point_in_world);
       p3 intersection_point;
       v3 normal;
       if (scene_.intersected_by(ray, &intersection_point,
                                 &normal)) {
-        // Compute the luminance of a pixel with an
-        // intersection HACK
-        float unit_dot_prod = dot(
-            (c2w(p3(0, 0, 0)) - intersection_point).unit(),
-            normal.unit());
-        float luminance =
-            map_value<float>(unit_dot_prod, 0, 1, 0, 255);
+        // Compute the luminance HACK
+        float dist_to_ixn =
+            dist(intersection_point, focal_point_in_world);
+        float luminance = 1.f / (dist_to_ixn * dist_to_ixn);
+        luminance *= 255;
+        luminance *= 10;
+        luminance = clamp<float>(luminance, 0.f, 255.f);
         camera_.film_.pixels[film_x][film_y] =
             Pixel(luminance, luminance, luminance, 255);
       } else {

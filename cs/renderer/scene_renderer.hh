@@ -16,7 +16,6 @@
 #include "cs/renderer/film.hh"
 #include "cs/renderer/scene.hh"
 #include "cs/sanity/ensure.hh"
-#include "cs/shapes/sphere.hh"
 
 using p3 = ::cs::geo::Point3;
 using v3 = ::cs::geo::Vector3;
@@ -26,7 +25,6 @@ using ::cs::linalg::Transform;
 using ::cs::numbers::clamp;
 using ::cs::numbers::map_value;
 using ::cs::renderer::Film;
-using ::cs::shapes::Sphere;
 
 namespace cs::renderer {
 
@@ -71,4 +69,4 @@ class SceneRenderer {
 };
 }  // namespace cs::renderer
 
-#endif  // CS_RENDERER_SPHERE_RENDERER_HH
+#endif  // CS_RENDERER_SCENE_RENDERER_HH
