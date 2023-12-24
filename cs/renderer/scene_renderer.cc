@@ -55,12 +55,11 @@ Film cs::renderer::SceneRenderer::render() {
       if (scene_.intersected_by(ray, &intersection_point,
                                 &normal)) {
         // Compute the luminance HACK
-        float dist_to_ixn =
-            dist(intersection_point, focal_point_in_world);
-        float luminance = 1.f / (dist_to_ixn * dist_to_ixn);
-        luminance *= 255;
-        luminance *= 10;
-        luminance = clamp<float>(luminance, 0.f, 255.f);
+        float unit_dot_prod = dot(
+            (c2w(p3(0, 0, 0)) - intersection_point).unit(),
+            normal.unit());
+        float luminance =
+            map_value<float>(unit_dot_prod, 0, 1, 0, 255);
         camera_.film_.pixels[film_x][film_y] =
             Pixel(luminance, luminance, luminance, 255);
       } else {

@@ -13,7 +13,6 @@ cc_library(
 cc_library(
     name = "map_value",
     hdrs = ["map_value.hh"],
-    deps = ["//cs/sanity:ensure"],
 )
 
 cc_test(

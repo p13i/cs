@@ -57,16 +57,16 @@ struct SceneAnimator {
     std::vector<Shape*> shapes{
         // Unit sphere at the origin
         new Sphere(p3(0, 0, 0), 0.5),
-        // One smaller sphere at x=-1 closer to the camera
+        // One smaller sphere at x=-1
         new Sphere(p3(-1, 0, 0), 0.25),
-        // One even smaller sphere at y=1 left of the camera
+        // One even smaller sphere at y=1
         new Sphere(p3(0, 1, 0), 0.125),
-        // One even smaller sphere at z=1 top of the camera
-        new Sphere(p3(0, 0, 1), 0.0625),
+        // One even smaller sphere at z=-1
+        new Sphere(p3(0, 0, -1), 0.0625),
         // new Sphere(p3(2, 0, 0), 0.5),
         // new Sphere(p3(0, 2, 0), 0.25),
         // new Sphere(p3(0, -1, 0), 0.25),
-        new Plane(p3(1, 1, 1).unit(), -5),
+        // new Plane(p3(1, 1, 1).unit(), -5),
     };
 
     Scene scene(shapes);
@@ -77,10 +77,9 @@ struct SceneAnimator {
           std::min(std::get<0>(film_dimensions_),
                    std::get<1>(film_dimensions_)) /
           2;
-      p3 pos(map_value<float>(i, 0, num_frames_, -5, 5), 0,
-             0);
-      p3 look(1, 1, 1);
-      p3 up(0, 0, 1);
+      p3 pos(0, 0, -5);
+      p3 look(0, 0, 0);
+      p3 up(0, 1, 0);
       Transform w2c = LookAt(pos, look, up);
       float focal_length = 5;
       Camera camera(w2c, pixels_per_unit, focal_length,
