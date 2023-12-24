@@ -2,8 +2,9 @@
 #define CS_RENDERER_PIXEL_HH
 
 #include <stdint.h>
-
 #include <iostream>
+
+#include "cs/sanity/ensure.hh"
 
 namespace cs::renderer {
 
@@ -12,7 +13,12 @@ struct Pixel {
   Pixel() : Pixel(0, 0, 0, 0) {}
   Pixel(uint8_t red, uint8_t green, uint8_t blue,
         uint8_t alpha)
-      : r(red), g(green), b(blue), a(alpha) {}
+      : r(red), g(green), b(blue), a(alpha) {
+        ENSURE(0 <= r && r <= 255);
+        ENSURE(0 <= g && g <= 255);
+        ENSURE(0 <= b && b <= 255);
+        ENSURE(0 <= a && a <= 255);
+      }
 
   bool operator==(const Pixel& other) const {
     return r == other.r && g == other.g && b == other.b &&

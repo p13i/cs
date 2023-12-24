@@ -11,6 +11,9 @@ cc_library(
 cc_library(
     name = "pixel",
     hdrs = ["pixel.hh"],
+    deps = [
+        "//cs/sanity:ensure",
+    ],
 )
 
 cc_library(
