@@ -1,8 +1,8 @@
 #ifndef CS_GEO_POINT2_
 #define CS_GEO_POINT2_
 
-#include <iostream>
 #include <cmath>
+#include <iostream>
 
 #include "cs/precision/floats.hh"
 
@@ -29,8 +29,7 @@ class Point2 {
   }
 
   bool operator==(const Point2& other) const {
-    return FloatsNear(x, other.x) &&
-           FloatsNear(y, other.y);
+    return FloatsNear(x, other.x) && FloatsNear(y, other.y);
   }
 
   bool operator<(const Point2& other) const {

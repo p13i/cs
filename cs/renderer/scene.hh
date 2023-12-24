@@ -14,7 +14,7 @@ class Scene {
   Scene() : Scene(std::vector<Shape*>()) {}
   Scene(std::vector<Shape*> shapes) : shapes_(shapes) {}
   bool intersected_by(const r3 ray, p3* atPoint,
-                     v3* atNormal);
+                      v3* atNormal);
 };
 }  // namespace cs::renderer
 

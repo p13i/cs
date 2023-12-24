@@ -1,8 +1,8 @@
 #ifndef CS_GEO_POINT3_
 #define CS_GEO_POINT3_
 
-#include <iostream>
 #include <cmath>
+#include <iostream>
 
 #include "cs/precision/floats.hh"
 

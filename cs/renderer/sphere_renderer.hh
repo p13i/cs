@@ -56,7 +56,7 @@ class SphereRenderer {
         p3 intersection_point;
         v3 normal;
         if (sphere_.intersected_by(ray, &intersection_point,
-                                  &normal)) {
+                                   &normal)) {
           float distance =
               cs::geo::dist(ray.origin, intersection_point);
 #if 0

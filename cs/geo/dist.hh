@@ -11,4 +11,4 @@ float dist(p3 a, p3 b);
 
 }  // namespace cs::geo
 
-#endif // CS_GEO_DIST_HH
+#endif  // CS_GEO_DIST_HH

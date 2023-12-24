@@ -4,9 +4,9 @@
 #include <stdint.h>
 
 #include <iostream>
+#include <tuple>
 
 #include "cs/renderer/pixel.hh"
-#include <tuple>
 
 namespace cs::renderer {
 
@@ -15,7 +15,8 @@ struct Film {
   Pixel** pixels;
   Film() : Film(0, 0) {}
   Film(std::tuple<unsigned int, unsigned int> dimensions)
-      : Film(std::get<0>(dimensions), std::get<1>(dimensions)) {}
+      : Film(std::get<0>(dimensions),
+             std::get<1>(dimensions)) {}
   Film(unsigned int width, unsigned int height)
       : width(width), height(height) {
     pixels = new Pixel*[width];
@@ -24,7 +25,8 @@ struct Film {
     }
   }
 
-  std::tuple<unsigned int, unsigned int> dimensions() const {
+  std::tuple<unsigned int, unsigned int> dimensions()
+      const {
     return {width, height};
   }
 };

@@ -22,7 +22,8 @@ struct Transform {
 
  public:
   // Default transform is identity matrix
-  explicit Transform() : Transform(Matrix4x4(), Matrix4x4()) {}
+  explicit Transform()
+      : Transform(Matrix4x4(), Matrix4x4()) {}
   Transform(const m4x4& m) : Transform(m, m.inverse()) {}
   Transform(m4x4 m, m4x4 m_inv) : m_(m), m_inv_(m_inv) {}
   Transform inverse() { return Transform(m_inv_, m_); }

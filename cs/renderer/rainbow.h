@@ -2,6 +2,7 @@
 #define CS_RENDERER_RAINBOW_H
 
 #include <stdint.h>
+
 #include <iostream>
 
 #include "cs/renderer/film.hh"

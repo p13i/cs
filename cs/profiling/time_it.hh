@@ -1,9 +1,10 @@
 #ifndef CS_PROFILING_TIME_IT
 #define CS_PROFILING_TIME_IT
 
-#include <time.h>
-#include <functional>
 #include <stdint.h>
+#include <time.h>
+
+#include <functional>
 
 namespace cs::profiling {
 
