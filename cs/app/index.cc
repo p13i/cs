@@ -21,7 +21,7 @@
 #include "cs/renderer/film.hh"
 #include "cs/renderer/pixel.hh"
 
-#define APP_FRAME_RATE_FPS 24
+#define APP_FRAME_RATE_FPS 1
 #define APP_ANIMATION_DURATION_SEC 4
 #define APP_ANIMATION_NUM_FRAMES \
   (APP_FRAME_RATE_FPS * APP_ANIMATION_DURATION_SEC)
