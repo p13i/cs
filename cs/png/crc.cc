@@ -1,6 +1,7 @@
 #include "cs/png/crc.hh"
 
-// From http://www.libpng.org/pub/png/spec/1.2/PNG-Structure.html#CRC-algorithm
+// From
+// http://www.libpng.org/pub/png/spec/1.2/PNG-Structure.html#CRC-algorithm
 uint64_t cs::crc::ComputeCRC(uint8_t* buffer,
                              uint64_t length) {
   uint64_t crc_table[256];
