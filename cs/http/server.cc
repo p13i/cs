@@ -22,7 +22,7 @@ void exitWithError(const std::string &errorMessage) {
 
 namespace cs::http {
 
-TcpServer::TcpServer(std::string ip_address, int port)
+HttpServer::HttpServer(std::string ip_address, int port)
     : _ip_address(ip_address),
       _port(port),
       _socket(),
@@ -44,9 +44,9 @@ TcpServer::TcpServer(std::string ip_address, int port)
   }
 }
 
-TcpServer::~TcpServer() { closeServer(); }
+HttpServer::~HttpServer() { closeServer(); }
 
-int TcpServer::startServer() {
+int HttpServer::startServer() {
   _socket = socket(AF_INET, SOCK_STREAM, 0);
   if (_socket < 0) {
     exitWithError("Cannot create socket");
@@ -62,13 +62,13 @@ int TcpServer::startServer() {
   return 0;
 }
 
-void TcpServer::closeServer() {
+void HttpServer::closeServer() {
   close(_socket);
   close(_new_socket);
   exit(0);
 }
 
-int TcpServer::startListening() {
+int HttpServer::startListening() {
   if (listen(_socket, 20) < 0) {
     exitWithError("Socket listen failed");
   }
@@ -106,7 +106,7 @@ int TcpServer::startListening() {
   return 0;
 }
 
-void TcpServer::acceptConnection(int &new_socket) {
+void HttpServer::acceptConnection(int &new_socket) {
   new_socket = accept(_socket, (sockaddr *)&_socketAddress,
                       &_socketAddress_len);
   if (new_socket < 0) {
@@ -119,7 +119,7 @@ void TcpServer::acceptConnection(int &new_socket) {
   }
 }
 
-std::string TcpServer::buildResponse() {
+std::string HttpServer::buildResponse() {
   std::string htmlFile =
       "<!DOCTYPE html><html lang=\"en\"><body><h1> HOME "
       "</h1><p> Hello from your Server :) "
@@ -133,7 +133,7 @@ std::string TcpServer::buildResponse() {
   return ss.str();
 }
 
-void TcpServer::sendResponse() {
+void HttpServer::sendResponse() {
   long bytesSent;
 
   bytesSent = write(_new_socket, _serverMessage.c_str(),
