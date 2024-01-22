@@ -68,7 +68,8 @@ void HttpServer::closeServer() {
   exit(0);
 }
 
-int HttpServer::startListening(std::function<void()> request_handler) {
+int HttpServer::startListening(
+    std::function<void()> request_handler) {
   if (listen(_socket, 20) < 0) {
     exitWithError("Socket listen failed");
   }

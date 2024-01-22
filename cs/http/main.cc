@@ -1,9 +1,9 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#include <functional>
 #include <sstream>
 #include <tuple>
-#include <functional>
 #include <vector>
 
 #include "cs/app/scene_animator.hh"
@@ -44,7 +44,8 @@ void render() {
             });
       });
 
-  std::cout << "Total render time is " << render_time_ms << " ms." << std::endl;
+  std::cout << "Total render time is " << render_time_ms
+            << " ms." << std::endl;
 }
 
 int main() {
