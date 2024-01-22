@@ -16,7 +16,8 @@ class HttpServer {
  public:
   HttpServer(std::string ip_address, int port);
   ~HttpServer();
-  int startListening(std::function<void()> request_handler);
+  int startListening(std::function<std::string(std::string)>
+                         request_handler);
 
  private:
   std::string _ip_address;
@@ -31,8 +32,6 @@ class HttpServer {
   int startServer();
   void closeServer();
   void acceptConnection(int &new_socket);
-  std::string buildResponse();
-  void sendResponse();
 };
 
 }  // namespace cs::http

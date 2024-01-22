@@ -18,6 +18,17 @@ void exitWithError(const std::string &errorMessage) {
   log("ERROR: " + errorMessage);
   exit(1);
 }
+
+std::string buildResponse(std::string html) {
+  std::ostringstream ss;
+  ss << "HTTP/1.1 200 OK\nContent-Type: "
+        "text/html\nContent-Length: "
+     << html.size() << "\n\n"
+     << html;
+
+  return ss.str();
+}
+
 }  // namespace
 
 namespace cs::http {
@@ -29,8 +40,7 @@ HttpServer::HttpServer(std::string ip_address, int port)
       _new_socket(),
       _incomingMessage(),
       _socketAddress(),
-      _socketAddress_len(sizeof(_socketAddress)),
-      _serverMessage(buildResponse()) {
+      _socketAddress_len(sizeof(_socketAddress)) {
   _socketAddress.sin_family = AF_INET;
   _socketAddress.sin_port = htons(_port);
   _socketAddress.sin_addr.s_addr =
@@ -69,7 +79,8 @@ void HttpServer::closeServer() {
 }
 
 int HttpServer::startListening(
-    std::function<void()> request_handler) {
+    std::function<std::string(std::string)>
+        request_handler) {
   if (listen(_socket, 20) < 0) {
     exitWithError("Socket listen failed");
   }
@@ -97,10 +108,22 @@ int HttpServer::startListening(
 
     std::ostringstream ss;
     ss << "------ Received Request from client ------\n\n";
+    ss << buffer;
     log(ss.str());
 
-    request_handler();
-    sendResponse();
+    std::string response =
+        buildResponse(request_handler(std::string(buffer)));
+    long bytesSent;
+
+    bytesSent = write(_new_socket, response.c_str(),
+                      response.size());
+
+    if (bytesSent == response.size()) {
+      log("------ Server Response sent to client "
+          "------\n\n");
+    } else {
+      log("Error sending response to client");
+    }
 
     close(_new_socket);
   }
@@ -118,33 +141,6 @@ void HttpServer::acceptConnection(int &new_socket) {
        << inet_ntoa(_socketAddress.sin_addr)
        << "; PORT: " << ntohs(_socketAddress.sin_port);
     exitWithError(ss.str());
-  }
-}
-
-std::string HttpServer::buildResponse() {
-  std::string htmlFile =
-      "<!DOCTYPE html><html lang=\"en\"><body><h1> HOME "
-      "</h1><p> Hello from your Server :) "
-      "</p></body></html>";
-  std::ostringstream ss;
-  ss << "HTTP/1.1 200 OK\nContent-Type: "
-        "text/html\nContent-Length: "
-     << htmlFile.size() << "\n\n"
-     << htmlFile;
-
-  return ss.str();
-}
-
-void HttpServer::sendResponse() {
-  long bytesSent;
-
-  bytesSent = write(_new_socket, _serverMessage.c_str(),
-                    _serverMessage.size());
-
-  if (bytesSent == _serverMessage.size()) {
-    log("------ Server Response sent to client ------\n\n");
-  } else {
-    log("Error sending response to client");
   }
 }
 
