@@ -3,7 +3,13 @@ cc_binary(
     srcs = [
         "main.cc",
     ],
-    deps = [":server"],
+    deps = [
+        ":server",
+        "//cs/app:scene_animator",
+        "//cs/profiling:time_it",
+        "//cs/renderer:film",
+        "//cs/renderer:pixel",
+    ],
 )
 
 cc_library(

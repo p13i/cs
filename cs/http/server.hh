@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <sys/socket.h>
 
+#include <functional>
 #include <string>
 
 namespace cs::http {
@@ -15,7 +16,7 @@ class HttpServer {
  public:
   HttpServer(std::string ip_address, int port);
   ~HttpServer();
-  int startListening();
+  int startListening(std::function<void()> request_handler);
 
  private:
   std::string _ip_address;
