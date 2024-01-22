@@ -46,3 +46,7 @@ serve:
 clean:
 	bazel clean
 	rm -rf site
+
+http:
+	bazel run //cs/http:main
+	
