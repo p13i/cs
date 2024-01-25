@@ -32,7 +32,7 @@ HttpServer::HttpServer(std::string ip_address, int port)
     : _ip_address(ip_address),
       _port(port),
       _socket(),
-      _new_socket(),
+      _response_socket(),
       _incomingMessage(),
       _socketAddress(),
       _socketAddress_len(sizeof(_socketAddress)) {
@@ -57,7 +57,7 @@ int HttpServer::startServer() {
 
 void HttpServer::closeServer() {
   close(_socket);
-  close(_new_socket);
+  close(_response_socket);
   exit(0);
 }
 
@@ -71,15 +71,15 @@ int HttpServer::startListening(
             << ntohs(_socketAddress.sin_port) << std::endl;
 
   while (true) {
-    _new_socket =
+    _response_socket =
         accept(_socket, (sockaddr *)&_socketAddress,
                &_socketAddress_len);
 
-    ENSURE(_new_socket >= 0);
+    ENSURE(_response_socket >= 0);
 
     char buffer[BUFFER_SIZE] = {0};
     int bytesReceived =
-        read(_new_socket, buffer, BUFFER_SIZE);
+        read(_response_socket, buffer, BUFFER_SIZE);
 
     ENSURE(bytesReceived >= 0);
 
@@ -93,7 +93,7 @@ int HttpServer::startListening(
         request_handler(std::string(buffer)));
 
     long unsigned int bytesSent = write(
-        _new_socket, response.c_str(), response.size());
+        _response_socket, response.c_str(), response.size());
 
     std::cout << ">>> SENDING RESPONSE >>>>>>>>>>>"
               << std::endl
@@ -103,7 +103,7 @@ int HttpServer::startListening(
 
     ENSURE(bytesSent == response.size());
 
-    close(_new_socket);
+    close(_response_socket);
   }
 
   return 0;
