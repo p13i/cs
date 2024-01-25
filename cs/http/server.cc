@@ -92,8 +92,9 @@ int HttpServer::startListening(
     std::string response = WrapHttpResponse(
         request_handler(std::string(buffer)));
 
-    long unsigned int bytesSent = write(
-        _response_socket, response.c_str(), response.size());
+    long unsigned int bytesSent =
+        write(_response_socket, response.c_str(),
+              response.size());
 
     std::cout << ">>> SENDING RESPONSE >>>>>>>>>>>"
               << std::endl
