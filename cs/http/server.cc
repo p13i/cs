@@ -10,22 +10,18 @@
 namespace {
 const int BUFFER_SIZE = 30720;
 
-void log(const std::string &message) {
-  std::cout << message << std::endl;
-}
-
 void exitWithError(const std::string &errorMessage) {
-  log("ERROR: " + errorMessage);
+  std::cout << "ERROR: " + errorMessage << std::endl;
   exit(1);
 }
 
-std::string buildResponse(std::string html) {
+std::string WrapHttpResponse(std::string html) {
   std::ostringstream ss;
-  ss << "HTTP/1.1 200 OK\nContent-Type: "
-        "text/html\nContent-Length: "
-     << html.size() << "\n\n"
+  ss << "HTTP/1.1 200 OK" << std::endl
+     << "Content-Type: text/html" << std::endl
+     << "Content-Length: " << html.size() << std::endl
+     << std::endl
      << html;
-
   return ss.str();
 }
 
@@ -50,7 +46,7 @@ HttpServer::HttpServer(std::string ip_address, int port)
     std::ostringstream ss;
     ss << "Failed to start server with PORT: "
        << ntohs(_socketAddress.sin_port);
-    log(ss.str());
+    std::cout << ss.str() << std::endl;
   }
 }
 
@@ -85,63 +81,55 @@ int HttpServer::startListening(
     exitWithError("Socket listen failed");
   }
 
-  std::ostringstream ss;
-  ss << "\n*** Listening on ADDRESS: "
-     << inet_ntoa(_socketAddress.sin_addr)
-     << " PORT: " << ntohs(_socketAddress.sin_port)
-     << " ***\n\n";
-  log(ss.str());
-
-  int bytesReceived;
+  std::cout << "Listening on "
+            << inet_ntoa(_socketAddress.sin_addr) << ":"
+            << ntohs(_socketAddress.sin_port) << "."
+            << std::endl;
 
   while (true) {
-    log("====== Waiting for a new connection ======\n\n\n");
-    acceptConnection(_new_socket);
+    _new_socket =
+        accept(_socket, (sockaddr *)&_socketAddress,
+               &_socketAddress_len);
+
+    if (_new_socket < 0) {
+      std::ostringstream ss;
+      ss << "Server failed to accept incoming connection "
+            "from ADDRESS: "
+         << inet_ntoa(_socketAddress.sin_addr)
+         << "; PORT: " << ntohs(_socketAddress.sin_port);
+      exitWithError(ss.str());
+    }
 
     char buffer[BUFFER_SIZE] = {0};
-    bytesReceived = read(_new_socket, buffer, BUFFER_SIZE);
+    int bytesReceived =
+        read(_new_socket, buffer, BUFFER_SIZE);
     if (bytesReceived < 0) {
       exitWithError(
           "Failed to read bytes from client socket "
           "connection");
     }
 
-    std::ostringstream ss;
-    ss << "------ Received Request from client ------\n\n";
-    ss << buffer;
-    log(ss.str());
+    std::cout << buffer << std::endl;
 
-    std::string response =
-        buildResponse(request_handler(std::string(buffer)));
-    long bytesSent;
+    std::string response = WrapHttpResponse(
+        request_handler(std::string(buffer)));
 
-    bytesSent = write(_new_socket, response.c_str(),
-                      response.size());
+    long bytesSent = write(_new_socket, response.c_str(),
+                           response.size());
+
+    std::cout << response << std::endl;
 
     if (bytesSent == response.size()) {
-      log("------ Server Response sent to client "
-          "------\n\n");
+      std::cout << "Sent " << bytesSent
+                << " bytes to client." << std::endl;
     } else {
-      log("Error sending response to client");
+      exitWithError("Error sending response to client");
     }
 
     close(_new_socket);
   }
 
   return 0;
-}
-
-void HttpServer::acceptConnection(int &new_socket) {
-  new_socket = accept(_socket, (sockaddr *)&_socketAddress,
-                      &_socketAddress_len);
-  if (new_socket < 0) {
-    std::ostringstream ss;
-    ss << "Server failed to accept incoming connection "
-          "from ADDRESS: "
-       << inet_ntoa(_socketAddress.sin_addr)
-       << "; PORT: " << ntohs(_socketAddress.sin_port);
-    exitWithError(ss.str());
-  }
 }
 
 }  // namespace cs::http

@@ -12,7 +12,7 @@
 #include "cs/renderer/pixel.hh"
 #include "server.hh"
 
-#define APP_FRAME_RATE_FPS 60
+#define APP_FRAME_RATE_FPS 1
 #define APP_ANIMATION_DURATION_SEC 1
 #define APP_ANIMATION_NUM_FRAMES \
   (APP_FRAME_RATE_FPS * APP_ANIMATION_DURATION_SEC)

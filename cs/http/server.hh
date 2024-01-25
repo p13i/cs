@@ -31,7 +31,6 @@ class HttpServer {
 
   int startServer();
   void closeServer();
-  void acceptConnection(int &new_socket);
 };
 
 }  // namespace cs::http
