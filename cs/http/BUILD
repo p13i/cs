@@ -16,4 +16,8 @@ cc_library(
     name = "server",
     srcs = ["server.cc"],
     hdrs = ["server.hh"],
+    deps = [
+        "//cs/sanity:ensure",
+        "//cs/sanity:error",
+    ],
 )
