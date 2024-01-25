@@ -51,6 +51,6 @@ std::string request_handler(std::string request) {
 }
 
 int main() {
-  auto server = cs::http::HttpServer("0.0.0.0", 8080);
+  auto server = cs::http::Server("0.0.0.0", 8080);
   return server.startListening(request_handler);
 }

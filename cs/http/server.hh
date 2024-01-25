@@ -12,10 +12,10 @@
 namespace cs::http {
 
 // Based on: https://github.com/OsasAzamegbe/http-server
-class HttpServer {
+class Server {
  public:
-  HttpServer(std::string ip_address, int port);
-  ~HttpServer();
+  Server(std::string ip_address, int port);
+  ~Server();
   int startListening(std::function<std::string(std::string)>
                          request_handler);
 

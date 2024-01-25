@@ -28,7 +28,7 @@ std::string WrapHttpResponse(std::string html) {
 
 namespace cs::http {
 
-HttpServer::HttpServer(std::string ip_address, int port)
+Server::Server(std::string ip_address, int port)
     : _ip_address(ip_address),
       _port(port),
       _socket(),
@@ -43,9 +43,9 @@ HttpServer::HttpServer(std::string ip_address, int port)
   ENSURE(startServer() == 0);
 }
 
-HttpServer::~HttpServer() { closeServer(); }
+Server::~Server() { closeServer(); }
 
-int HttpServer::startServer() {
+int Server::startServer() {
   _socket = socket(AF_INET, SOCK_STREAM, 0);
   ENSURE(_socket >= 0);
 
@@ -55,13 +55,13 @@ int HttpServer::startServer() {
   return 0;
 }
 
-void HttpServer::closeServer() {
+void Server::closeServer() {
   close(_socket);
   close(_response_socket);
   exit(0);
 }
 
-int HttpServer::startListening(
+int Server::startListening(
     std::function<std::string(std::string)>
         request_handler) {
   ENSURE(listen(_socket, 20) >= 0);
