@@ -14,21 +14,19 @@ namespace cs::http {
 
 class Request {
  public:
-  Request(std::string str) {
-    ENSURE(Parse(str));
-  };
+  Request(std::string str) { ENSURE(Parse(str)); };
 
   friend std::ostream& operator<<(std::ostream& os,
                                   const Request& request) {
     os << "Request(method=" << request._method
        << ", path=" << request._path << ", headers=";
-
+    // Print headers
     for (auto it = request._headers.begin();
          it != request._headers.end(); it++) {
       os << "<name=" << it->first
-         << ", value=" << it->second << ">,";
+         << ", value=" << it->second << ">, ";
     }
-    os << ")";
+    os << "body=" << request._body << ")";
     return os;
   }
 
