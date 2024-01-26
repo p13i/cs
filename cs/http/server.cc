@@ -17,16 +17,6 @@ namespace {
 const unsigned int BUFFER_SIZE = 2 << 16;
 const bool VERBOSE_LOG = false;
 
-std::string WrapHttpResponse(std::string html) {
-  std::ostringstream ss;
-  ss << "HTTP/1.1 200 OK" << std::endl
-     << "Content-Type: text/html" << std::endl
-     << "Content-Length: " << html.size() << std::endl
-     << std::endl
-     << html;
-  return ss.str();
-}
-
 }  // namespace
 
 namespace cs::http {
@@ -65,7 +55,7 @@ void Server::closeServer() {
 }
 
 int Server::startListening(
-    std::function<std::string(Request)> request_handler) {
+    std::function<Response(Request)> request_handler) {
   ENSURE(listen(_socket, 20) >= 0);
 
   std::cout << "Listening on "
@@ -77,7 +67,7 @@ int Server::startListening(
         accept(_socket, (sockaddr *)&_socketAddress,
                &_socketAddress_len);
 
-    std::string response;
+    Response response;
     unsigned int render_time_ms = cs::profiling::time_it(
         [&response, request_handler, this]() {
           ENSURE(_response_socket >= 0);
@@ -101,13 +91,13 @@ int Server::startListening(
         });
 
     std::stringstream ss;
-    ss << response << std::endl
+    ss << response.body() << std::endl
        << "<hr/>Processed in " << render_time_ms << " ms.";
-    response = WrapHttpResponse(ss.str());
+    std::string response_str = response.to_string();
 
     long unsigned int bytesSent =
-        write(_response_socket, response.c_str(),
-              response.size());
+        write(_response_socket, response_str.c_str(),
+              response_str.size());
 
     if (VERBOSE_LOG) {
       std::cout << ">>> SENDING RESPONSE >>>>>>>>>>>"
@@ -117,7 +107,7 @@ int Server::startListening(
                 << std::endl;
     }
 
-    ENSURE(bytesSent == response.size());
+    ENSURE(bytesSent == response_str.size());
 
     close(_response_socket);
   }

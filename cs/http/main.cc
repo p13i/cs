@@ -8,6 +8,7 @@
 
 #include "cs/app/scene_animator.hh"
 #include "cs/http/request.hh"
+#include "cs/http/response.hh"
 #include "cs/http/server.hh"
 #include "cs/profiling/time_it.hh"
 #include "cs/renderer/film.hh"
@@ -22,10 +23,11 @@
 
 using ::cs::app::SceneAnimator;
 using ::cs::http::Request;
+using ::cs::http::Response;
 using ::cs::renderer::Film;
 using ::cs::renderer::Pixel;
 
-std::string request_handler(Request request) {
+Response request_handler(Request request) {
   std::cout << "request_handler(request=" << request << ")"
             << std::endl;
 
@@ -53,7 +55,7 @@ std::string request_handler(Request request) {
   ss << "Total render time is " << render_time_ms << " ms."
      << std::endl;
 
-  return ss.str();
+  return Response(200, ss.str());
 }
 
 int main() {

@@ -10,6 +10,7 @@
 #include <string>
 
 #include "cs/http/request.hh"
+#include "cs/http/response.hh"
 
 namespace cs::http {
 
@@ -19,7 +20,7 @@ class Server {
   Server(std::string ip_address, int port);
   ~Server();
   int startListening(
-      std::function<std::string(Request)> request_handler);
+      std::function<Response(Request)> request_handler);
 
  private:
   std::string _ip_address;

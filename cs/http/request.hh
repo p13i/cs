@@ -39,15 +39,6 @@ class Request {
   std::string _body;
 };
 
-class Response {
- public:
-  std::string to_string() { return ""; }
-
- private:
-  uint8_t _status;
-  std::string _html;
-};
-
 }  // namespace cs::http
 
 #endif  // CS_HTTP_REQUEST_HH
