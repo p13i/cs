@@ -14,6 +14,7 @@
 namespace {
 
 const unsigned int BUFFER_SIZE = 2 << 16;
+const bool VERBOSE_LOG = false;
 
 std::string WrapHttpResponse(std::string html) {
   std::ostringstream ss;
@@ -83,11 +84,13 @@ int Server::startListening(
 
     ENSURE(bytesReceived >= 0);
 
-    std::cout << "<<< NEW REQUEST <<<<<<<<<<<<<<<<"
-              << std::endl
-              << buffer << std::endl
-              << "================================"
-              << std::endl;
+    if (VERBOSE_LOG) {
+      std::cout << "<<< NEW REQUEST <<<<<<<<<<<<<<<<"
+                << std::endl
+                << buffer << std::endl
+                << "================================"
+                << std::endl;
+    }
 
     Request request(buffer);
 
@@ -98,11 +101,13 @@ int Server::startListening(
         write(_response_socket, response.c_str(),
               response.size());
 
-    std::cout << ">>> SENDING RESPONSE >>>>>>>>>>>"
-              << std::endl
-              << response << std::endl
-              << "================================"
-              << std::endl;
+    if (VERBOSE_LOG) {
+      std::cout << ">>> SENDING RESPONSE >>>>>>>>>>>"
+                << std::endl
+                << response << std::endl
+                << "================================"
+                << std::endl;
+    }
 
     ENSURE(bytesSent == response.size());
 
