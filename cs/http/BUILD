@@ -19,8 +19,8 @@ cc_library(
     hdrs = ["server.hh"],
     deps = [
         ":request",
-        "//cs/sanity:ensure",
         "//cs/profiling:time_it",
+        "//cs/sanity:ensure",
         "//cs/sanity:error",
     ],
 )
