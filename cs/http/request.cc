@@ -94,12 +94,7 @@ bool Request::Parse(std::string str) {
   }
   ENSURE(ReadThroughNewline(str, &cursor));
   // Read body
-  std::stringstream ss;
-  while (cursor < str.length()) {
-    ss << str.at(cursor);
-    IncrementCursor(str, &cursor);
-  }
-  _body = ss.str();
+  _body = str.substr(cursor, str.length() - cursor);
   return true;
 }
 }  // namespace cs::http
