@@ -49,10 +49,11 @@ std::string request_handler(Request request) {
             });
       });
 
-  std::cout << "Total render time is " << render_time_ms
-            << " ms." << std::endl;
+  std::stringstream ss;
+  ss << "Total render time is " << render_time_ms << " ms."
+     << std::endl;
 
-  return "done";
+  return ss.str();
 }
 
 int main() {
