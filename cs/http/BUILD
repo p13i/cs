@@ -17,6 +17,17 @@ cc_library(
     srcs = ["server.cc"],
     hdrs = ["server.hh"],
     deps = [
+        ":request",
+        "//cs/sanity:ensure",
+        "//cs/sanity:error",
+    ],
+)
+
+cc_library(
+    name = "request",
+    # srcs = ["request.cc"],
+    hdrs = ["request.hh"],
+    deps = [
         "//cs/sanity:ensure",
         "//cs/sanity:error",
     ],

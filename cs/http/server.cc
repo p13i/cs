@@ -6,6 +6,7 @@
 #include <iostream>
 #include <sstream>
 
+#include "cs/http/request.hh"
 #include "cs/sanity/ensure.hh"
 #include "cs/sanity/error.hh"
 
@@ -88,6 +89,9 @@ int Server::startListening(
               << buffer << std::endl
               << "================================"
               << std::endl;
+
+    Request request(buffer);
+    std::cout << request << std::endl;
 
     std::string response = WrapHttpResponse(
         request_handler(std::string(buffer)));
