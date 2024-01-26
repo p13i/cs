@@ -7,10 +7,11 @@
 #include <vector>
 
 #include "cs/app/scene_animator.hh"
+#include "cs/http/request.hh"
+#include "cs/http/server.hh"
 #include "cs/profiling/time_it.hh"
 #include "cs/renderer/film.hh"
 #include "cs/renderer/pixel.hh"
-#include "server.hh"
 
 #define APP_FRAME_RATE_FPS 1
 #define APP_ANIMATION_DURATION_SEC 1
@@ -20,10 +21,14 @@
 #define APP_SCREEN_HEIGHT 512
 
 using ::cs::app::SceneAnimator;
+using ::cs::http::Request;
 using ::cs::renderer::Film;
 using ::cs::renderer::Pixel;
 
-std::string request_handler(std::string request) {
+std::string request_handler(Request request) {
+  std::cout << "request_handler(request=" << request << ")"
+            << std::endl;
+
   std::tuple<unsigned int, unsigned int> film_dimensions(
       APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT);
   SceneAnimator animator(APP_ANIMATION_NUM_FRAMES,

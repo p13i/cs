@@ -9,6 +9,8 @@
 #include <functional>
 #include <string>
 
+#include "cs/http/request.hh"
+
 namespace cs::http {
 
 // Based on: https://github.com/OsasAzamegbe/http-server
@@ -16,8 +18,8 @@ class Server {
  public:
   Server(std::string ip_address, int port);
   ~Server();
-  int startListening(std::function<std::string(std::string)>
-                         request_handler);
+  int startListening(
+      std::function<std::string(Request)> request_handler);
 
  private:
   std::string _ip_address;

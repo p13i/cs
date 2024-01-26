@@ -63,8 +63,7 @@ void Server::closeServer() {
 }
 
 int Server::startListening(
-    std::function<std::string(std::string)>
-        request_handler) {
+    std::function<std::string(Request)> request_handler) {
   ENSURE(listen(_socket, 20) >= 0);
 
   std::cout << "Listening on "
@@ -91,10 +90,9 @@ int Server::startListening(
               << std::endl;
 
     Request request(buffer);
-    std::cout << request << std::endl;
 
-    std::string response = WrapHttpResponse(
-        request_handler(std::string(buffer)));
+    std::string response =
+        WrapHttpResponse(request_handler(request));
 
     long unsigned int bytesSent =
         write(_response_socket, response.c_str(),

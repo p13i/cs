@@ -4,6 +4,7 @@ cc_binary(
         "main.cc",
     ],
     deps = [
+        ":request",
         ":server",
         "//cs/app:scene_animator",
         "//cs/profiling:time_it",
