@@ -8,17 +8,23 @@
 #include <sstream>
 #include <string>
 
+#include "cs/http/status.hh"
 #include "cs/sanity/ensure.hh"
 
 namespace cs::http {
 
+const std::string kContentTypeTextPlain = "text/plain";
+const std::string kContentTypeTextHtml = "text/html";
+
 class Response {
  public:
-  Response() : Response(200, "") {}
-  Response(uint32_t status, std::string body)
-      : _status(status), _body(body) {
-    ENSURE(status == 200);
-  }
+  Response()
+      : Response(HTTP_200_OK, kContentTypeTextPlain, "") {}
+  Response(Status status, std::string content_type,
+           std::string body)
+      : _status(status),
+        _content_type(content_type),
+        _body(body) {}
 
   friend std::ostream& operator<<(
       std::ostream& os, const Response& response) {
@@ -28,10 +34,12 @@ class Response {
 
   std::string body() { return _body; }
 
+  Status status() { return _status; }
+
   std::string to_string() {
     std::stringstream ss;
-    ss << "HTTP/1.1 200 OK" << std::endl
-       << "Content-Type: text/html" << std::endl
+    ss << "HTTP/1.1 " << _status << std::endl
+       << "Content-Type: " << _content_type << std::endl
        << "Content-Length: " << _body.size() << std::endl
        << std::endl
        << _body;
@@ -39,7 +47,8 @@ class Response {
   }
 
  private:
-  uint32_t _status;
+  Status _status;
+  std::string _content_type;
   std::string _body;
 };
 

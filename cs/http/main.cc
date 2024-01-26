@@ -22,6 +22,8 @@
 #define APP_SCREEN_HEIGHT 512
 
 using ::cs::app::SceneAnimator;
+using ::cs::http::HTTP_200_OK;
+using ::cs::http::kContentTypeTextHtml;
 using ::cs::http::Request;
 using ::cs::http::Response;
 using ::cs::renderer::Film;
@@ -55,7 +57,8 @@ Response request_handler(Request request) {
   ss << "Total render time is " << render_time_ms << " ms."
      << std::endl;
 
-  return Response(200, ss.str());
+  return Response(HTTP_200_OK, kContentTypeTextHtml,
+                  ss.str());
 }
 
 int main() {

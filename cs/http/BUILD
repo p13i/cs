@@ -5,8 +5,8 @@ cc_binary(
     ],
     deps = [
         ":request",
-        ":server",
         ":response",
+        ":server",
         "//cs/app:scene_animator",
         "//cs/profiling:time_it",
         "//cs/renderer:film",
@@ -21,7 +21,6 @@ cc_library(
     deps = [
         ":request",
         ":response",
-        "//cs/sanity:ensure",
         "//cs/profiling:time_it",
         "//cs/sanity:ensure",
         "//cs/sanity:error",
@@ -43,7 +42,13 @@ cc_library(
     srcs = ["response.cc"],
     hdrs = ["response.hh"],
     deps = [
+        ":status",
         "//cs/sanity:ensure",
         "//cs/sanity:error",
     ],
+)
+
+cc_library(
+    name = "status",
+    hdrs = ["status.hh"],
 )

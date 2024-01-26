@@ -93,6 +93,7 @@ int Server::startListening(
     std::stringstream ss;
     ss << response.body() << std::endl
        << "<hr/>Processed in " << render_time_ms << " ms.";
+    response = Response(HTTP_200_OK, kContentTypeTextHtml, ss.str());
     std::string response_str = response.to_string();
 
     long unsigned int bytesSent =
