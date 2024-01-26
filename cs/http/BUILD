@@ -20,6 +20,7 @@ cc_library(
     deps = [
         ":request",
         "//cs/sanity:ensure",
+        "//cs/profiling:time_it",
         "//cs/sanity:error",
     ],
 )

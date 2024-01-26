@@ -7,6 +7,7 @@
 #include <sstream>
 
 #include "cs/http/request.hh"
+#include "cs/profiling/time_it.hh"
 #include "cs/sanity/ensure.hh"
 #include "cs/sanity/error.hh"
 
@@ -76,26 +77,33 @@ int Server::startListening(
         accept(_socket, (sockaddr *)&_socketAddress,
                &_socketAddress_len);
 
-    ENSURE(_response_socket >= 0);
+    std::string response;
+    unsigned int render_time_ms = cs::profiling::time_it(
+        [&response, request_handler, this]() {
+          ENSURE(_response_socket >= 0);
 
-    char buffer[BUFFER_SIZE] = {0};
-    int bytesReceived =
-        read(_response_socket, buffer, BUFFER_SIZE);
+          char buffer[BUFFER_SIZE] = {0};
+          int bytesReceived =
+              read(_response_socket, buffer, BUFFER_SIZE);
 
-    ENSURE(bytesReceived >= 0);
+          ENSURE(bytesReceived >= 0);
 
-    if (VERBOSE_LOG) {
-      std::cout << "<<< NEW REQUEST <<<<<<<<<<<<<<<<"
-                << std::endl
-                << buffer << std::endl
-                << "================================"
-                << std::endl;
-    }
+          if (VERBOSE_LOG) {
+            std::cout << "<<< NEW REQUEST <<<<<<<<<<<<<<<<"
+                      << std::endl
+                      << buffer << std::endl
+                      << "================================"
+                      << std::endl;
+          }
 
-    Request request(buffer);
+          Request request(buffer);
+          response = request_handler(request);
+        });
 
-    std::string response =
-        WrapHttpResponse(request_handler(request));
+    std::stringstream ss;
+    ss << response << std::endl << "<hr/>Processed in " << render_time_ms
+       << " ms.";
+    response = WrapHttpResponse(ss.str());
 
     long unsigned int bytesSent =
         write(_response_socket, response.c_str(),
