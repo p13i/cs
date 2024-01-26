@@ -101,8 +101,8 @@ int Server::startListening(
         });
 
     std::stringstream ss;
-    ss << response << std::endl << "<hr/>Processed in " << render_time_ms
-       << " ms.";
+    ss << response << std::endl
+       << "<hr/>Processed in " << render_time_ms << " ms.";
     response = WrapHttpResponse(ss.str());
 
     long unsigned int bytesSent =
