@@ -24,6 +24,7 @@
 
 using ::cs::app::SceneAnimator;
 using ::cs::http::HTTP_200_OK;
+using ::cs::http::HTTP_404_NOT_FOUND;
 using ::cs::http::kContentTypeTextHtml;
 using ::cs::http::Request;
 using ::cs::http::Response;
@@ -37,6 +38,15 @@ Response request_handler(Request request) {
   std::cout << "request_handler(request=" << request << ")"
             << std::endl;
 
+  if (request.method() == "GET" &&
+      request.path() == "/render/") {
+    return render(request);
+  }
+
+  return Response(HTTP_404_NOT_FOUND);
+}
+
+Response render(Request request) {
   std::tuple<unsigned int, unsigned int> film_dimensions(
       APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT);
   SceneAnimator animator(APP_ANIMATION_NUM_FRAMES,

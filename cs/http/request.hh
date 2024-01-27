@@ -37,6 +37,10 @@ class Request {
 
   Result Parse(std::string str);
 
+  std::string path() { return _path; }
+
+  std::string method() { return _method; }
+
  private:
   std::string _method;
   std::string _path;

@@ -22,6 +22,7 @@ struct Status {
 };
 
 static const Status HTTP_200_OK(200, "OK");
+static const Status HTTP_404_NOT_FOUND(404, "NOT FOUND");
 
 }  // namespace cs::http
 
