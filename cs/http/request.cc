@@ -32,19 +32,6 @@ bool IncrementCursor(std::string str, uint* cursor) {
   return *cursor < str.length();
 }
 
-bool ReadChar(std::string str, uint* cursor, char* c) {
-  if (*cursor >= str.length()) {
-    return false;
-  }
-  *c = str.at(*cursor);
-  // Skip carrige returns
-  if (*c == '\r') {
-    return IncrementCursor(str, cursor) &&
-           ReadChar(str, cursor, c);
-  }
-  return true;
-}
-
 bool ReadWord(std::string str, uint* cursor,
               std::string* token, char ending_token = ' ') {
   std::stringstream ss;
