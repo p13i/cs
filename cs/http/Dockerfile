@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 
-RUN sudo apt install sudo
+RUN apt install sudo
 
 RUN DEBIAN_FRONTEND=noninteractive sudo apt-get update
 
