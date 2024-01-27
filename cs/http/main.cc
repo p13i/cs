@@ -34,16 +34,35 @@ using ::cs::result::Error;
 using ::cs::result::Ok;
 using ::cs::result::Result;
 
-Response request_handler(Request request) {
-  std::cout << "request_handler(request=" << request << ")"
-            << std::endl;
+typedef std::function<Response(Request)> RequestHandler;
 
-  if (request.method() == "GET" && request.path() == "/") {
-    return render(request);
+class WebApp {
+ public:
+  Response main_handler(Request request) {
+    std::cout << request << std::endl;
+    for (auto path_info : _handlers) {
+      const auto [method, path, handler] = path_info;
+      if (request.method() == method &&
+          request.path() == path) {
+        return handler(request);
+      }
+    }
+    return Response(HTTP_404_NOT_FOUND);
+  };
+
+  Result register_handler(std::string method,
+                          std::string path,
+                          RequestHandler handler) {
+    _handlers.push_back(
+        std::make_tuple(method, path, handler));
+    return Ok();
   }
 
-  return Response(HTTP_404_NOT_FOUND);
-}
+ private:
+  std::vector<
+      std::tuple<std::string, std::string, RequestHandler>>
+      _handlers;
+};
 
 Response render(Request request) {
   std::tuple<unsigned int, unsigned int> film_dimensions(
@@ -74,16 +93,20 @@ Response render(Request request) {
                   ss.str());
 }
 
-Result RunServer() {
+Result RunApp() {
+  WebApp app;
+  ENSURE_OK(app.register_handler("GET", "/", render));
   auto server = cs::http::Server("0.0.0.0", 8080);
   ENSURE_OK(server.startServer());
-  ENSURE_OK(server.startListening(request_handler));
+  ENSURE_OK(server.startListening(std::bind(
+      &WebApp::main_handler, app, std::placeholders::_1)));
   return Ok();
 }
 
 int main() {
-  Result result = RunServer();
+  Result result = RunApp();
   if (!result.ok()) {
     std::cerr << result.message() << std::endl;
   }
+  return result.ok() ? 0 : 1;
 }
