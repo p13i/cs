@@ -3,7 +3,7 @@ FROM ubuntu:22.04
 RUN DEBIAN_FRONTEND=noninteractive \
     apt-get update && \
     apt-get -y install sudo && \
-    sudo apt-get -y install make
+    sudo apt-get -y install make git
 
 WORKDIR /app
 
