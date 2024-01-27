@@ -13,6 +13,7 @@
 #include "cs/profiling/time_it.hh"
 #include "cs/renderer/film.hh"
 #include "cs/renderer/pixel.hh"
+#include "cs/result/result.hh"
 
 #define APP_FRAME_RATE_FPS 1
 #define APP_ANIMATION_DURATION_SEC 1
@@ -28,6 +29,9 @@ using ::cs::http::Request;
 using ::cs::http::Response;
 using ::cs::renderer::Film;
 using ::cs::renderer::Pixel;
+using ::cs::result::Error;
+using ::cs::result::Ok;
+using ::cs::result::Result;
 
 Response request_handler(Request request) {
   std::cout << "request_handler(request=" << request << ")"
@@ -61,7 +65,16 @@ Response request_handler(Request request) {
                   ss.str());
 }
 
-int main() {
+Result RunServer() {
   auto server = cs::http::Server("0.0.0.0", 8080);
-  return server.startListening(request_handler);
+  ENSURE_OK(server.startServer());
+  ENSURE_OK(server.startListening(request_handler));
+  return Ok();
+}
+
+int main() {
+  Result result = RunServer();
+  if (!result.ok()) {
+    std::cerr << result.message() << std::endl;
+  }
 }

@@ -8,13 +8,18 @@
 #include <sstream>
 #include <string>
 
+#include "cs/result/result.hh"
 #include "cs/sanity/ensure.hh"
 
 namespace cs::http {
 
+using ::cs::result::Error;
+using ::cs::result::Ok;
+using ::cs::result::Result;
+
 class Request {
  public:
-  Request(std::string str) { ENSURE(Parse(str)); };
+  Request(){};
 
   friend std::ostream& operator<<(std::ostream& os,
                                   const Request& request) {
@@ -30,7 +35,7 @@ class Request {
     return os;
   }
 
-  bool Parse(std::string str);
+  Result Parse(std::string str);
 
  private:
   std::string _method;

@@ -11,6 +11,7 @@
 
 #include "cs/http/request.hh"
 #include "cs/http/response.hh"
+#include "cs/result/result.hh"
 
 namespace cs::http {
 
@@ -19,8 +20,11 @@ class Server {
  public:
   Server(std::string ip_address, int port);
   ~Server();
-  int startListening(
+  Result startListening(
       std::function<Response(Request)> request_handler);
+
+  Result startServer();
+  Result closeServer();
 
  private:
   std::string _ip_address;
@@ -31,9 +35,6 @@ class Server {
   struct sockaddr_in _socketAddress;
   unsigned int _socketAddress_len;
   std::string _serverMessage;
-
-  int startServer();
-  void closeServer();
 };
 
 }  // namespace cs::http

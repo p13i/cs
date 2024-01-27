@@ -11,6 +11,7 @@ cc_binary(
         "//cs/profiling:time_it",
         "//cs/renderer:film",
         "//cs/renderer:pixel",
+        "//cs/result",
     ],
 )
 
@@ -22,6 +23,7 @@ cc_library(
         ":request",
         ":response",
         "//cs/profiling:time_it",
+        "//cs/result",
         "//cs/sanity:ensure",
         "//cs/sanity:error",
     ],
@@ -32,6 +34,7 @@ cc_library(
     srcs = ["request.cc"],
     hdrs = ["request.hh"],
     deps = [
+        "//cs/result",
         "//cs/sanity:ensure",
         "//cs/sanity:error",
     ],
@@ -43,6 +46,7 @@ cc_library(
     hdrs = ["response.hh"],
     deps = [
         ":status",
+        "//cs/result",
         "//cs/sanity:ensure",
         "//cs/sanity:error",
     ],

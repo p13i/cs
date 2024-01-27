@@ -7,33 +7,43 @@
 #include <sstream>
 #include <string>
 
+#include "cs/result/result.hh"
 #include "cs/sanity/ensure.hh"
 
 namespace cs::http {
 
 namespace {
 
-bool AtEndOfLine(std::string str, uint cursor) {
+using ::cs::result::Error;
+using ::cs::result::Ok;
+using ::cs::result::Result;
+
+Result AtEndOfLine(std::string str, uint cursor) {
   if (cursor >= str.length()) {
-    return false;
+    return Error("cursor exceeded string length");
   }
   if (str.at(cursor) == '\n') {
-    return true;
+    return Ok();
   }
-  if ((cursor + 1) < str.length()) {
-    return str.at(cursor) == '\r' &&
-           str.at(cursor + 1) == '\n';
-  }
-  return false;
+  if ((cursor + 1) < str.length() &&
+      str.at(cursor) == '\r' &&
+      str.at(cursor + 1) == '\n') {
+    return Ok();
+  };
+  return Error("failed to find end of line");
 }
 
-bool IncrementCursor(std::string str, uint* cursor) {
+Result IncrementCursor(std::string str, uint* cursor) {
   *cursor = *cursor + 1;
-  return *cursor < str.length();
+  if (*cursor >= str.length()) {
+    return Error("cursor exceeded string length");
+  }
+  return Ok();
 }
 
-bool ReadWord(std::string str, uint* cursor,
-              std::string* token, char ending_token = ' ') {
+Result ReadWord(std::string str, uint* cursor,
+                std::string* token,
+                char ending_token = ' ') {
   std::stringstream ss;
   char c;
   while (*cursor < str.length() &&
@@ -42,16 +52,17 @@ bool ReadWord(std::string str, uint* cursor,
     if (c != '\r') {
       ss << c;
     }
-    IncrementCursor(str, cursor);
+    ENSURE_OK(IncrementCursor(str, cursor));
   }
   if (*cursor == str.length()) {
-    return false;
+    return Error("cursor exceeded string length");
+    ;
   }
   *token = ss.str();
-  return true;
+  return Ok();
 };
 
-bool ReadThroughNewline(std::string str, uint* cursor) {
+Result ReadThroughNewline(std::string str, uint* cursor) {
   std::stringstream ss;
   bool found_newline = false;
   while (*cursor < str.length() && !found_newline) {
@@ -60,43 +71,46 @@ bool ReadThroughNewline(std::string str, uint* cursor) {
     }
     IncrementCursor(str, cursor);
   }
-  return found_newline;
+  if (!found_newline) {
+    return Error("failed to find newline");
+  }
+  return Ok();
 };
 
 }  // namespace
 
-bool Request::Parse(std::string str) {
+Result Request::Parse(std::string str) {
   std::cout << "Parse(str=" << str << ")" << std::endl
             << std::flush;
   uint cursor = 0;
   // Read HTTP method
-  ENSURE(ReadWord(str, &cursor, &_method));
+  ENSURE_OK(ReadWord(str, &cursor, &_method));
   IncrementCursor(str, &cursor);
   // Read HTTP path
-  ENSURE(ReadWord(str, &cursor, &_path));
+  ENSURE_OK(ReadWord(str, &cursor, &_path));
   IncrementCursor(str, &cursor);
   // Read HTTP/1.1 tag
   std::string http_tag = "";
-  ENSURE(ReadWord(str, &cursor, &http_tag, '\n'));
+  ENSURE_OK(ReadWord(str, &cursor, &http_tag, '\n'));
   ENSURE(http_tag == "HTTP/1.1");
   IncrementCursor(str, &cursor);
   // Read headers
   bool reading_headers = true;
   while (reading_headers) {
     std::string name;
-    ENSURE(ReadWord(str, &cursor, &name, ':'));
+    ENSURE_OK(ReadWord(str, &cursor, &name, ':'));
     IncrementCursor(str, &cursor);
     std::string value;
-    ENSURE(ReadWord(str, &cursor, &value, '\n'));
-    ENSURE(ReadThroughNewline(str, &cursor));
+    ENSURE_OK(ReadWord(str, &cursor, &value, '\n'));
+    ENSURE_OK(ReadThroughNewline(str, &cursor));
     _headers[name] = value;
-    if (AtEndOfLine(str, cursor)) {
+    if (AtEndOfLine(str, cursor).ok()) {
       reading_headers = false;
     }
   }
-  ENSURE(ReadThroughNewline(str, &cursor));
+  ENSURE_OK(ReadThroughNewline(str, &cursor));
   // Read body
   _body = str.substr(cursor, str.length() - cursor);
-  return true;
+  return Ok();
 }
 }  // namespace cs::http

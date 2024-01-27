@@ -8,6 +8,7 @@
 
 #include "cs/http/request.hh"
 #include "cs/profiling/time_it.hh"
+#include "cs/result/result.hh"
 #include "cs/sanity/ensure.hh"
 #include "cs/sanity/error.hh"
 
@@ -15,7 +16,11 @@
 namespace {
 
 const unsigned int BUFFER_SIZE = 2 << 16;
-#define VERBOSE_LOG true;
+#define VERBOSE_LOG true
+
+using ::cs::result::Error;
+using ::cs::result::Ok;
+using ::cs::result::Result;
 
 }  // namespace
 
@@ -33,28 +38,27 @@ Server::Server(std::string ip_address, int port)
   _socketAddress.sin_port = htons(_port);
   _socketAddress.sin_addr.s_addr =
       inet_addr(_ip_address.c_str());
-  ENSURE(startServer() == 0);
 }
 
 Server::~Server() { closeServer(); }
 
-int Server::startServer() {
+Result Server::startServer() {
   _socket = socket(AF_INET, SOCK_STREAM, 0);
   ENSURE(_socket >= 0);
 
   ENSURE(bind(_socket, (sockaddr *)&_socketAddress,
               _socketAddress_len) >= 0);
 
-  return 0;
+  return Ok();
 }
 
-void Server::closeServer() {
+Result Server::closeServer() {
   close(_socket);
   close(_response_socket);
-  exit(0);
+  return Ok();
 }
 
-int Server::startListening(
+Result Server::startListening(
     std::function<Response(Request)> request_handler) {
   ENSURE(listen(_socket, 20) >= 0);
 
@@ -86,7 +90,8 @@ int Server::startListening(
                     << std::endl;
 #endif  // VERBOSE_LOG
 
-          Request request(buffer);
+          Request request;
+          request.Parse(buffer);
           response = request_handler(request);
         });
 
@@ -114,7 +119,7 @@ int Server::startListening(
     close(_response_socket);
   }
 
-  return 0;
+  return Ok();
 }
 
 }  // namespace cs::http
