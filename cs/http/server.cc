@@ -72,8 +72,10 @@ Result Server::startListening(
                &_socketAddress_len);
 
     Response response;
-    unsigned int render_time_ms = cs::profiling::time_it(
-        [&response, request_handler, this]() {
+    bool success = false;
+    unsigned int processing_time_ms =
+        cs::profiling::time_it([&response, request_handler,
+                                this, &success]() {
           ENSURE(_response_socket >= 0);
 
           char buffer[BUFFER_SIZE] = {0};
@@ -91,30 +93,40 @@ Result Server::startListening(
 #endif  // VERBOSE_LOG
 
           Request request;
-          request.Parse(buffer);
+          Result parse_result = request.Parse(buffer);
+          if (!parse_result.ok()) {
+            success = false;
+            std::cerr << parse_result.message()
+                      << std::endl;
+            return;
+          }
           response = request_handler(request);
+          success = true;
         });
 
-    std::stringstream ss;
-    ss << response.body() << std::endl
-       << "<hr/>Processed in " << render_time_ms << " ms.";
-    response = Response(HTTP_200_OK, kContentTypeTextHtml,
-                        ss.str());
-    std::string response_str = response.to_string();
+    if (success) {
+      std::stringstream ss;
+      ss << response.body() << std::endl
+         << "<hr/>Processed in " << processing_time_ms
+         << " ms.";
+      response = Response(HTTP_200_OK, kContentTypeTextHtml,
+                          ss.str());
+      std::string response_str = response.to_string();
 
-    long unsigned int bytesSent =
-        write(_response_socket, response_str.c_str(),
-              response_str.size());
+      long unsigned int bytesSent =
+          write(_response_socket, response_str.c_str(),
+                response_str.size());
 
 #if VERBOSE_LOG
-    std::cout << ">>> SENDING RESPONSE >>>>>>>>>>>"
-              << std::endl
-              << response << std::endl
-              << "================================"
-              << std::endl;
+      std::cout << ">>> SENDING RESPONSE >>>>>>>>>>>"
+                << std::endl
+                << response << std::endl
+                << "================================"
+                << std::endl;
 #endif  // VERBOSE_LOG
 
-    ENSURE(bytesSent == response_str.size());
+      ENSURE(bytesSent == response_str.size());
+    }
 
     close(_response_socket);
   }
