@@ -29,14 +29,10 @@ namespace cs::http {
 Server::Server(std::string ip_address, int port)
     : _ip_address(ip_address),
       _port(port),
-      _socket(),
-      _response_socket(),
-      _incomingMessage(),
-      _socketAddress(),
-      _socketAddress_len(sizeof(_socketAddress)) {
-  _socketAddress.sin_family = AF_INET;
-  _socketAddress.sin_port = htons(_port);
-  _socketAddress.sin_addr.s_addr =
+      _socket_address_length(sizeof(_socket_address)) {
+  _socket_address.sin_family = AF_INET;
+  _socket_address.sin_port = htons(_port);
+  _socket_address.sin_addr.s_addr =
       inet_addr(_ip_address.c_str());
 }
 
@@ -46,8 +42,8 @@ Result Server::startServer() {
   _socket = socket(AF_INET, SOCK_STREAM, 0);
   ENSURE(_socket >= 0);
 
-  ENSURE(bind(_socket, (sockaddr *)&_socketAddress,
-              _socketAddress_len) >= 0);
+  ENSURE(bind(_socket, (sockaddr *)&_socket_address,
+              _socket_address_length) >= 0);
 
   return Ok();
 }
@@ -63,13 +59,13 @@ Result Server::startListening(
   ENSURE(listen(_socket, 20) >= 0);
 
   std::cout << "Listening on "
-            << inet_ntoa(_socketAddress.sin_addr) << ":"
-            << ntohs(_socketAddress.sin_port) << std::endl;
+            << inet_ntoa(_socket_address.sin_addr) << ":"
+            << ntohs(_socket_address.sin_port) << std::endl;
 
   while (true) {
     _response_socket =
-        accept(_socket, (sockaddr *)&_socketAddress,
-               &_socketAddress_len);
+        accept(_socket, (sockaddr *)&_socket_address,
+               &_socket_address_length);
 
     Response response;
     bool success = false;

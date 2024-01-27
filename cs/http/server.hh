@@ -31,10 +31,8 @@ class Server {
   int _port;
   int _socket;
   int _response_socket;
-  long _incomingMessage;
-  struct sockaddr_in _socketAddress;
-  unsigned int _socketAddress_len;
-  std::string _serverMessage;
+  struct sockaddr_in _socket_address;
+  unsigned int _socket_address_length;
 };
 
 }  // namespace cs::http
