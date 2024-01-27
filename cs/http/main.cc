@@ -38,8 +38,7 @@ Response request_handler(Request request) {
   std::cout << "request_handler(request=" << request << ")"
             << std::endl;
 
-  if (request.method() == "GET" &&
-      request.path() == "/render/") {
+  if (request.method() == "GET" && request.path() == "/") {
     return render(request);
   }
 
