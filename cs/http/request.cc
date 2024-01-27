@@ -80,8 +80,6 @@ Result ReadThroughNewline(std::string str, uint* cursor) {
 }  // namespace
 
 Result Request::Parse(std::string str) {
-  std::cout << "Parse(str=" << str << ")" << std::endl
-            << std::flush;
   uint cursor = 0;
   // Read HTTP method
   ENSURE_OK(ReadWord(str, &cursor, &_method));
