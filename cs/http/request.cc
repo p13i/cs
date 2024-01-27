@@ -90,7 +90,10 @@ Result Request::Parse(std::string str) {
   // Read HTTP/1.1 tag
   std::string http_tag = "";
   ENSURE_OK(ReadWord(str, &cursor, &http_tag, '\n'));
-  ENSURE(http_tag == "HTTP/1.1");
+  if (http_tag != "HTTP/1.1") {
+    return Error(
+        "Didn't find HTTP/1.1 tag at end of first line.");
+  }
   IncrementCursor(str, &cursor);
   // Read headers
   bool reading_headers = true;
