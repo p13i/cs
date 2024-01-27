@@ -39,7 +39,6 @@ typedef std::function<Response(Request)> RequestHandler;
 class WebApp {
  public:
   Response main_handler(Request request) {
-    std::cout << request << std::endl;
     for (auto path_info : _handlers) {
       const auto [method, path, handler] = path_info;
       if (request.method() == method &&
