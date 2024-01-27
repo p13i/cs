@@ -1,8 +1,8 @@
 FROM ubuntu:22.04
 
-RUN apt install sudo
-
-RUN DEBIAN_FRONTEND=noninteractive sudo apt-get update
+RUN DEBIAN_FRONTEND=noninteractive \
+    apt-get update && \
+    apt-get -y install sudo
 
 RUN useradd -ms /bin/bash app
 
