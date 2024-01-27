@@ -49,9 +49,12 @@ bool ReadWord(std::string str, uint* cursor,
               std::string* token, char ending_token = ' ') {
   std::stringstream ss;
   char c;
-  while (ReadChar(str, cursor, &c) &&
+  while (*cursor < str.length() &&
          str.at(*cursor) != ending_token) {
-    ss << c;
+    c = str.at(*cursor);
+    if (c != '\r') {
+      ss << c;
+    }
     IncrementCursor(str, cursor);
   }
   if (*cursor == str.length()) {
