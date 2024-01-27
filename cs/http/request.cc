@@ -66,7 +66,8 @@ bool ReadThroughNewline(std::string str, uint* cursor) {
 }  // namespace
 
 bool Request::Parse(std::string str) {
-  std::cout << "Parse(str=" << str << ")";
+  std::cout << "Parse(str=" << str << ")" << std::endl
+            << std::flush;
   uint cursor = 0;
   // Read HTTP method
   ENSURE(ReadWord(str, &cursor, &_method));
