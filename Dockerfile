@@ -5,6 +5,10 @@ RUN DEBIAN_FRONTEND=noninteractive \
     apt-get -y install sudo && \
     sudo apt-get -y install make
 
+WORKDIR /app
+
+COPY . .
+
 RUN sudo make setup
 
 EXPOSE 8080
