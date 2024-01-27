@@ -8,4 +8,6 @@ USER app
 
 RUN make setup
 
+EXPOSE 8080
+
 CMD ["make", "http"]
