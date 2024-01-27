@@ -32,16 +32,26 @@ bool IncrementCursor(std::string str, uint* cursor) {
   return *cursor < str.length();
 }
 
-bool ReadToken(std::string str, uint* cursor,
-               std::string* token,
-               char ending_token = ' ') {
+bool ReadChar(std::string str, uint* cursor, char* c) {
+  if (*cursor >= str.length()) {
+    return false;
+  }
+  *c = str.at(*cursor);
+  // Skip carrige returns
+  if (*c == '\r') {
+    return IncrementCursor(str, cursor) &&
+           ReadChar(str, cursor, c);
+  }
+  return true;
+}
+
+bool ReadWord(std::string str, uint* cursor,
+              std::string* token, char ending_token = ' ') {
   std::stringstream ss;
-  while (*cursor < str.length() &&
+  char c;
+  while (ReadChar(str, cursor, &c) &&
          str.at(*cursor) != ending_token) {
-    char c = str.at(*cursor);
-    if (c != '\r') {
-      ss << c;
-    }
+    ss << c;
     IncrementCursor(str, cursor);
   }
   if (*cursor == str.length()) {
@@ -68,24 +78,24 @@ bool ReadThroughNewline(std::string str, uint* cursor) {
 bool Request::Parse(std::string str) {
   uint cursor = 0;
   // Read HTTP method
-  ENSURE(ReadToken(str, &cursor, &_method));
+  ENSURE(ReadWord(str, &cursor, &_method));
   IncrementCursor(str, &cursor);
   // Read HTTP path
-  ENSURE(ReadToken(str, &cursor, &_path));
+  ENSURE(ReadWord(str, &cursor, &_path));
   IncrementCursor(str, &cursor);
   // Read HTTP/1.1 tag
   std::string http_tag = "";
-  ENSURE(ReadToken(str, &cursor, &http_tag, '\n'));
+  ENSURE(ReadWord(str, &cursor, &http_tag, '\n'));
   ENSURE(http_tag == "HTTP/1.1");
   IncrementCursor(str, &cursor);
   // Read headers
   bool reading_headers = true;
   while (reading_headers) {
     std::string name;
-    ENSURE(ReadToken(str, &cursor, &name, ':'));
+    ENSURE(ReadWord(str, &cursor, &name, ':'));
     IncrementCursor(str, &cursor);
     std::string value;
-    ENSURE(ReadToken(str, &cursor, &value, '\n'));
+    ENSURE(ReadWord(str, &cursor, &value, '\n'));
     ENSURE(ReadThroughNewline(str, &cursor));
     _headers[name] = value;
     if (AtEndOfLine(str, cursor)) {
