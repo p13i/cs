@@ -15,7 +15,7 @@
 namespace {
 
 const unsigned int BUFFER_SIZE = 2 << 16;
-const bool VERBOSE_LOG = false;
+#define VERBOSE_LOG true;
 
 }  // namespace
 
@@ -78,13 +78,13 @@ int Server::startListening(
 
           ENSURE(bytesReceived >= 0);
 
-          if (VERBOSE_LOG) {
-            std::cout << "<<< NEW REQUEST <<<<<<<<<<<<<<<<"
-                      << std::endl
-                      << buffer << std::endl
-                      << "================================"
-                      << std::endl;
-          }
+#if VERBOSE_LOG
+          std::cout << "<<< NEW REQUEST <<<<<<<<<<<<<<<<"
+                    << std::endl
+                    << buffer << std::endl
+                    << "================================"
+                    << std::endl;
+#endif  // VERBOSE_LOG
 
           Request request(buffer);
           response = request_handler(request);
@@ -101,13 +101,13 @@ int Server::startListening(
         write(_response_socket, response_str.c_str(),
               response_str.size());
 
-    if (VERBOSE_LOG) {
-      std::cout << ">>> SENDING RESPONSE >>>>>>>>>>>"
-                << std::endl
-                << response << std::endl
-                << "================================"
-                << std::endl;
-    }
+#if VERBOSE_LOG
+    std::cout << ">>> SENDING RESPONSE >>>>>>>>>>>"
+              << std::endl
+              << response << std::endl
+              << "================================"
+              << std::endl;
+#endif  // VERBOSE_LOG
 
     ENSURE(bytesSent == response_str.size());
 
