@@ -65,14 +65,14 @@ Response render(Request request) {
                   ss.str());
 }
 
-Result RunWebApp() {
+Result RunMyWebApp() {
   WebApp app;
   ENSURE_OK(app.Register("GET", "/", render));
   return app.RunServer("0.0.0.0", 8080);
 }
 
 int main() {
-  Result result = RunWebApp();
+  Result result = RunMyWebApp();
   if (!result.ok()) {
     std::cerr << result << std::endl;
   }

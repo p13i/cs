@@ -31,6 +31,8 @@ lint:
 	find . -iname *.h -o -iname *.hh -o -iname *.cc | xargs clang-format -i
 
 sync:
+	git add .
+	git commit --allow-empty -m "[make save]"
 	git pull --rebase
 	git push
 
