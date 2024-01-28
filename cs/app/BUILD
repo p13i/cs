@@ -41,6 +41,7 @@ cc_binary(
     # below will compile the index.cc file with the emscripten SDK.
     tags = ["manual"],
     deps = [
+        "//cs/app:scene1",
         "//cs/app:scene_animator",
         "//cs/profiling:time_it",
         "//cs/renderer:film",
@@ -59,6 +60,7 @@ cc_binary(
         "main.cc",
     ],
     deps = [
+        "//cs/app:scene1",
         "//cs/app:scene_animator",
         "//cs/http:request",
         "//cs/http:response",
@@ -68,4 +70,9 @@ cc_binary(
         "//cs/renderer:pixel",
         "//cs/result",
     ],
+)
+
+cc_library(
+    name = "scene1",
+    hdrs = ["scene1.hh"],
 )

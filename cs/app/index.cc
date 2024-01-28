@@ -16,19 +16,11 @@
 #include <emscripten.h>
 #endif
 
+#include "cs/app/scene1.hh"
 #include "cs/app/scene_animator.hh"
 #include "cs/profiling/time_it.hh"
 #include "cs/renderer/film.hh"
 #include "cs/renderer/pixel.hh"
-
-#define APP_FRAME_RATE_FPS 60
-#define APP_ANIMATION_DURATION_SEC 5
-#define APP_NUM_FRAMES \
-  (APP_FRAME_RATE_FPS * APP_ANIMATION_DURATION_SEC)
-#define APP_ANIMATION_NUM_FRAMES \
-  (APP_FRAME_RATE_FPS * APP_ANIMATION_DURATION_SEC)
-#define APP_SCREEN_WIDTH 1024
-#define APP_SCREEN_HEIGHT 1024
 
 using ::cs::app::SceneAnimator;
 using ::cs::renderer::Film;
