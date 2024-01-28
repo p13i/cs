@@ -54,21 +54,25 @@ Response render(Request request) {
       });
 
   // Serialize first frame as a JavaScript 2D array.
-  Film first_film = frames.at(0);
-  std::stringstream image_js_ss;
-  image_js_ss << "[";
-  for (size_t x = 0; x < first_film.width; x++) {
-    image_js_ss << "[";
-    for (size_t y = 0; y < first_film.height; y++) {
-      const Pixel px = first_film.pixels[x][y];
-      // Convert from pixel's data type (uint8_t) to an int
-      // [https://stackoverflow.com/a/28414758]
-      image_js_ss << "[" << +px.r << ", " << +px.g << ", "
+  std::stringstream images_js_ss;
+  images_js_ss << "[";
+  for (size_t i = 0; i < frames.size(); frames++) {
+    const Film film = frames.at(i);
+    images_js_ss << "[";
+    for (size_t x = 0; x < film.width; x++) {
+      images_js_ss << "[";
+      for (size_t y = 0; y < first_film.height; y++) {
+        const Pixel px = first_film.pixels[x][y];
+        // Convert from pixel's data type (uint8_t) to an int
+        // [https://stackoverflow.com/a/28414758]
+        images_js_ss << "[" << +px.r << ", " << +px.g << ", "
                   << +px.b << ", " << +px.a << "],";
+      }
+      images_js_ss << "],";
     }
-    image_js_ss << "],";
+    images_js_ss << "],";
   }
-  image_js_ss << "];";
+  images_js_ss << "]";
 
   // clang-format off
   std::stringstream ss;
@@ -78,18 +82,24 @@ Response render(Request request) {
   << R"html("" height=")html" << first_film.height 
   << R"html("/>
 <script type="text/javascript">
-const IMAGE = )html" << image_js_ss.str() << R"html(
+const IMAGES = )html" << images_js_ss.str() << R"html(;
+const FPS = )html" << APP_FRAME_RATE_FPS << "html(;
 function drawImage() {
   const canvas = document.getElementById('canvas');
   ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  for (var y = canvas.height - 1; y >= 0; y--) {
-    for (var x = 0; x < canvas.width; x++) {
-      const [r, g, b, a] = IMAGE[x][y];
-      ctx.fillStyle = `rgba( ${r} , ${g} , ${b}, ${a} )`;
-      ctx.fillRect(x, y, 1, 1);
+  var frame = 0;
+  while (true) {
+    for (var y = canvas.height - 1; y >= 0; y--) {
+      for (var x = 0; x < canvas.width; x++) {
+        const [r, g, b, a] = IMAGES[frame][x][y];
+        ctx.fillStyle = `rgba( ${r} , ${g} , ${b}, ${a} )`;
+        ctx.fillRect(x, y, 1, 1);
+      }
     }
+    frame = (frame + 1) % IMAGES.length;
+    sleep(1000 / FPS);
   }
 }
 document.addEventListener("DOMContentLoaded", function() {
