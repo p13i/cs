@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 #include <iostream>
+#include <tuple>
 
 #include "cs/sanity/ensure.hh"
 
@@ -24,6 +25,10 @@ struct Pixel {
   bool operator==(const Pixel& other) const {
     return r == other.r && g == other.g && b == other.b &&
            a == other.a;
+  }
+
+  std::tuple<uint8_t, uint8_t, uint8_t, uint8_t> as_tuple() {
+    return std::make_tuple(r, g, b, a);
   }
 
   friend std::ostream& operator<<(std::ostream& os,
