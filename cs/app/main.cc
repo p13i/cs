@@ -56,13 +56,13 @@ Response render(Request request) {
   // Serialize first frame as a JavaScript 2D array.
   std::stringstream images_js_ss;
   images_js_ss << "[";
-  for (size_t i = 0; i < frames.size(); frames++) {
+  for (size_t i = 0; i < frames.size(); i++) {
     const Film film = frames.at(i);
     images_js_ss << "[";
     for (size_t x = 0; x < film.width; x++) {
       images_js_ss << "[";
-      for (size_t y = 0; y < first.height; y++) {
-        const Pixel px = first.pixels[x][y];
+      for (size_t y = 0; y < film.height; y++) {
+        const Pixel px = film.pixels[x][y];
         // Convert from pixel's data type (uint8_t) to an
         // int [https://stackoverflow.com/a/28414758]
         images_js_ss << "[" << +px.r << ", " << +px.g
