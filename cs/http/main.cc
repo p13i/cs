@@ -86,7 +86,7 @@ Response render(Request request) {
   << R"html("" height=")html" << first_film.height 
   << R"html("/>
 <script type="text/javascript">
-const IMAGE = )html" << image_js_ss.str() << R"html("
+const IMAGE = )html" << image_js_ss.str() << R"html(
 function drawImage() {
   const canvas = document.getElementById('canvas');
   ctx = canvas.getContext('2d');
