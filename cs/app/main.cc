@@ -84,7 +84,7 @@ Response render(Request request) {
   << R"html("/>
 <script type="text/javascript">
 const IMAGES = )html" << images_js_ss.str() << R"html(;
-const FPS = )html" << APP_FRAME_RATE_FPS << "html(;
+const FPS = )html" << APP_FRAME_RATE_FPS << R"html(;
 function drawImage() {
   const canvas = document.getElementById('canvas');
   ctx = canvas.getContext('2d');
