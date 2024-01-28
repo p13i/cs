@@ -74,7 +74,7 @@ Result RunWebApp() {
 int main() {
   Result result = RunWebApp();
   if (!result.ok()) {
-    std::cerr << result.message() << std::endl;
+    std::cerr << result << std::endl;
   }
-  return result.ok() ? 0 : 1;
+  return result.code();
 }
