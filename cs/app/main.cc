@@ -93,7 +93,8 @@ function drawImage() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   for (var y = canvas.height - 1; y >= 0; y--) {
     for (var x = 0; x < canvas.width; x++) {
-      const [r, g, b, a] = IMAGES[i][x][y];
+      var [r, g, b, a] = IMAGES[i][x][y];
+      a = 0;
       ctx.fillStyle = `rgba( ${r} , ${g} , ${b}, ${a} )`;
       ctx.fillRect(x, y, 1, 1);
     }
