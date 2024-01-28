@@ -78,7 +78,7 @@ struct SceneAnimator {
                    std::get<1>(film_dimensions_)) /
           2;
       p3 pos(0, 0,
-             map_value<size_t>(i, 0, num_frames_, -5, 5));
+             map_value<float>(i, 0, num_frames_, -10, -5));
       p3 look(0, 0, 0);
       p3 up(0, 1, 0);
       Transform w2c = LookAt(pos, look, up);
