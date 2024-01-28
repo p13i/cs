@@ -80,7 +80,7 @@ Response render(Request request) {
   ss << "<p>Ray-tracer rendered " << frames.size() << " frames in " << render_time_ms << " ms.</p>";
   ss << R"html(
 <canvas id="canvas" width=")html" << APP_SCREEN_WIDTH
-  << R"html("" height=")html" << APP_SCREEN_HEIGHT 
+  << R"html(" height=")html" << APP_SCREEN_HEIGHT 
   << R"html("/>
 <script type="text/javascript">
 const IMAGES = )html" << images_js_ss.str() << R"html(;
