@@ -89,7 +89,7 @@ Result Server::startListening(
 #endif  // VERBOSE_LOG
 
           Request request;
-          Result parse_result = request.Parse(buffer);
+          Result parse_result = buffer >> request;
           if (!parse_result.ok()) {
             success = false;
             std::cerr << parse_result.message()

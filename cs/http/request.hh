@@ -35,6 +35,11 @@ class Request {
     return os;
   }
 
+  friend Result operator>>(char buffer[],
+                           Request& request) {
+    return request.Parse(std::string(buffer));
+  }
+
   Result Parse(std::string str);
 
   std::string path() { return _path; }

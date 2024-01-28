@@ -39,7 +39,7 @@ class Result {
     }
     return os << "Result(" << ok_str
               << ", code=" << result._code
-              << "message=" << result._message << ")";
+              << ", message=" << result._message << ")";
   }
 
  private:
