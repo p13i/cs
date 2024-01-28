@@ -51,4 +51,4 @@ clean:
 
 http:
 	fuser -k 8080/tcp || echo "No-op"
-	bazel run //cs/http:main
+	bazel run //cs/app:main

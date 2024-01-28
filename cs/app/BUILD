@@ -52,3 +52,20 @@ wasm_cc_binary(
     name = "index.js",
     cc_target = ":index",
 )
+
+cc_binary(
+    name = "main",
+    srcs = [
+        "main.cc",
+    ],
+    deps = [
+        ":request",
+        ":response",
+        ":web_app",
+        "//cs/app:scene_animator",
+        "//cs/profiling:time_it",
+        "//cs/renderer:film",
+        "//cs/renderer:pixel",
+        "//cs/result",
+    ],
+)

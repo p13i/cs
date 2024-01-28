@@ -42,7 +42,7 @@ Response index(Request request) {
   std::stringstream ss;
   ss << "<h1>Welcome to my website!</h1>";
   ss << "<p>To code this app, I only used standard library "
-        "methods (like std::chrono or std::vector) for "
+        "methods (like `std::chrono` or `std::vector`) for "
         "this web app framework.</p>";
   return Response(HTTP_200_OK, kContentTypeTextHtml,
                   ss.str());
@@ -95,7 +95,7 @@ function drawImage() {
   for (var y = canvas.height - 1; y >= 0; y--) {
     for (var x = 0; x < canvas.width; x++) {
       const [r, g, b, a] = IMAGE[x][y];
-      ctx.fillStyle = `rgb( ${r} , ${g} , ${b} )`;
+      ctx.fillStyle = `rgba( ${r} , ${g} , ${b}, ${a} )`;
       ctx.fillRect(x, y, 1, 1);
     }
   }
