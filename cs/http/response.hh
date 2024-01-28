@@ -20,7 +20,7 @@ class Response {
  public:
   Response() : Response(HTTP_200_OK) {}
   Response(Status status)
-      : Response(status, kContentTypeTextPlain, "") {}
+      : Response(status, kContentTypeTextPlain, status.str()) {}
   Response(Status status, std::string content_type,
            std::string body)
       : _status(status),
