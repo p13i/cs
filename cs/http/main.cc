@@ -55,7 +55,6 @@ Response render(Request request) {
                          film_dimensions);
 
   std::vector<Film> frames;
-
   const auto render_time_ms =
       cs::profiling::time_it([&frames, &animator]() {
         frames = animator.render_all_frames();
