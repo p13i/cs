@@ -36,6 +36,13 @@ using ::cs::result::Error;
 using ::cs::result::Ok;
 using ::cs::result::Result;
 
+Response index(Request request) {
+  std::stringstream ss;
+  ss << "Welcome to my website!";
+  return Response(HTTP_200_OK, kContentTypeTextHtml,
+    ss.str());
+}
+
 Response render(Request request) {
   std::tuple<unsigned int, unsigned int> film_dimensions(
       APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT);
@@ -71,6 +78,7 @@ Response render(Request request) {
 Result RunMyWebApp() {
   WebApp app;
   // Routes
+  ROUTE("GET", "/", index);
   ROUTE("GET", "/render/", render);
 
   return app.RunServer("0.0.0.0", 8080);
