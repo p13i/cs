@@ -61,9 +61,50 @@ Response render(Request request) {
         frames = animator.render_all_frames();
       });
 
+  // Serialize first frame as a JavaScript 2D array.
+  Film first_film = frames.at(0);
+  std::stringstream image_js_ss;
+  image_js_ss << "[";
+  for (size_t x = 0; x < first_film.width; x++) {
+    image_js_ss << "[";
+    for (size_t y = 0; y < first_film.height; y++) {
+      const Pixel px = first_film.pixels[x][y];
+      // Convert from pixel's data type (uint8_t) to an int
+      // [https://stackoverflow.com/a/28414758]
+      image_js_ss << "[" << +px.r << ", " << +px.g << ", "
+                  << +px.b << ", " << +px.a << "]";
+    }
+    image_js_ss << "],";
+  }
+  image_js_ss << "];";
+
   // clang-format off
   std::stringstream ss;
   ss << "<p>Ray-tracer rendered " << frames.size() << " frames in " << render_time_ms << " ms.</p>";
+  ss << R"html(
+<canvas id="canvas" width=")html" << first_film.width 
+  << R"html("" height=")html" << first_film.height 
+  << R"html("/>
+<script type="text/javascript">
+const IMAGE = )html" << image_js_ss.str() << R"html("
+function drawImage() {
+  const canvas = document.getElementById('canvas');
+  ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (var y = canvas.height; y >= 0; y--) {
+    for (var x = 0; x < canvas.width; x++) {
+      const [r, g, b, a] = IMAGE[x][y];
+      ctx.fillStyle = `rgb( ${r} , ${g} , ${b} )`;
+      ctx.fillRect(x, y, 1, 1);
+    }
+  }
+}
+document.addEventListener("DOMContentLoaded", function() {
+  drawImage();
+});
+</script>
+)html";
   // clang-format on
 
   return Response(HTTP_200_OK, kContentTypeTextHtml,
