@@ -101,9 +101,9 @@ Result Server::startListening(
         });
 
     if (success) {
-      std::stringstream ss;
 #define APPEND_SERVER_STATS false
 #if APPEND_SERVER_STATS
+      std::stringstream ss;
       ss << response.body() << std::endl
          << "<hr/>Processed in " << processing_time_ms
          << " ms.";
