@@ -102,14 +102,14 @@ Result Server::startListening(
 
     if (success) {
       std::stringstream ss;
-#define APPEND_SERVER_STATS true
+#define APPEND_SERVER_STATS false
 #if APPEND_SERVER_STATS
       ss << response.body() << std::endl
          << "<hr/>Processed in " << processing_time_ms
          << " ms.";
-#endif
       response = Response(response.status(),
                           kContentTypeTextHtml, ss.str());
+#endif
       std::string response_str = response.to_string();
 
       unsigned long bytesSent =
