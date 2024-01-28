@@ -18,6 +18,8 @@
 
 #define APP_FRAME_RATE_FPS 1
 #define APP_ANIMATION_DURATION_SEC 1
+#define APP_NUM_FRAMES \
+  (APP_FRAME_RATE_FPS * APP_ANIMATION_DURATION_SEC)
 #define APP_ANIMATION_NUM_FRAMES \
   (APP_FRAME_RATE_FPS * APP_ANIMATION_DURATION_SEC)
 #define APP_SCREEN_WIDTH 512
@@ -54,36 +56,27 @@ Response render(Request request) {
 
   std::vector<Film> frames;
 
-  unsigned int render_time_ms =
-      time_it([&frames, &animator]() {
-        frames = animator.render_all_frames(
-            [](unsigned int render_time_ms,
-               unsigned int frame_num,
-               unsigned int num_frames) {
-              std::cout << "Rendered frame " << frame_num
-                        << " of " << num_frames << " in "
-                        << render_time_ms << " ms."
-                        << std::endl;
-            });
+  const auto render_time_ms =
+      cs::profiling::time_it([&frames, &animator]() {
+        frames = animator.render_all_frames();
       });
 
+  // clang-format off
   std::stringstream ss;
-  ss << "Total render time is " << render_time_ms << " ms."
-     << std::endl;
+  ss << "<p>Ray-tracer rendered " << APP_NUM_FRAMES << " frames in " << render_time_ms << " ms.</p>";
+
+  // clang-format on
 
   return Response(HTTP_200_OK, kContentTypeTextHtml,
                   ss.str());
 }
 
-#define ROUTE(method, path, handler_func) \
-  ENSURE_OK(app.Register(method, path, handler_func));
-
 Result RunMyWebApp() {
   WebApp app;
-  // Routes
-  ROUTE("GET", "/", index);
-  ROUTE("GET", "/render/", render);
-
+  // Routes.
+  ENSURE_OK(app.Register("GET", "/", index));
+  ENSURE_OK(app.Register("GET", "/render/", render));
+  // Run web app on host at port 8080.
   return app.RunServer("0.0.0.0", 8080);
 }
 
