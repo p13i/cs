@@ -92,7 +92,7 @@ function drawImage() {
   ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  for (var y = canvas.height; y >= 0; y--) {
+  for (var y = canvas.height - 1; y >= 0; y--) {
     for (var x = 0; x < canvas.width; x++) {
       const [r, g, b, a] = IMAGE[x][y];
       ctx.fillStyle = `rgb( ${r} , ${g} , ${b} )`;
