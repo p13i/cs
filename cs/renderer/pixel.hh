@@ -27,7 +27,8 @@ struct Pixel {
            a == other.a;
   }
 
-  std::tuple<uint8_t, uint8_t, uint8_t, uint8_t> as_tuple() {
+  std::tuple<uint8_t, uint8_t, uint8_t, uint8_t>
+  as_tuple() {
     return std::make_tuple(r, g, b, a);
   }
 
