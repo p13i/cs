@@ -20,7 +20,7 @@ struct Status {
 
   std::string str() const {
     std::stringstream ss;
-    ss << status;
+    ss << *this;
     return ss.str();
   };
 
