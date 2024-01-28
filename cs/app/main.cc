@@ -63,10 +63,11 @@ Response render(Request request) {
       images_js_ss << "[";
       for (size_t y = 0; y < first_film.height; y++) {
         const Pixel px = first_film.pixels[x][y];
-        // Convert from pixel's data type (uint8_t) to an int
-        // [https://stackoverflow.com/a/28414758]
-        images_js_ss << "[" << +px.r << ", " << +px.g << ", "
-                  << +px.b << ", " << +px.a << "],";
+        // Convert from pixel's data type (uint8_t) to an
+        // int [https://stackoverflow.com/a/28414758]
+        images_js_ss << "[" << +px.r << ", " << +px.g
+                     << ", " << +px.b << ", " << +px.a
+                     << "],";
       }
       images_js_ss << "],";
     }
