@@ -10,6 +10,7 @@
 #include "cs/http/request.hh"
 #include "cs/http/response.hh"
 #include "cs/http/server.hh"
+#include "cs/http/web_app.hh"
 #include "cs/profiling/time_it.hh"
 #include "cs/renderer/film.hh"
 #include "cs/renderer/pixel.hh"
@@ -28,40 +29,12 @@ using ::cs::http::HTTP_404_NOT_FOUND;
 using ::cs::http::kContentTypeTextHtml;
 using ::cs::http::Request;
 using ::cs::http::Response;
+using ::cs::http::WebApp;
 using ::cs::renderer::Film;
 using ::cs::renderer::Pixel;
 using ::cs::result::Error;
 using ::cs::result::Ok;
 using ::cs::result::Result;
-
-typedef std::function<Response(Request)> RequestHandler;
-
-class WebApp {
- public:
-  Response main_handler(Request request) {
-    for (auto path_info : _handlers) {
-      const auto [method, path, handler] = path_info;
-      if (request.method() == method &&
-          request.path() == path) {
-        return handler(request);
-      }
-    }
-    return Response(HTTP_404_NOT_FOUND);
-  };
-
-  Result register_handler(std::string method,
-                          std::string path,
-                          RequestHandler handler) {
-    _handlers.push_back(
-        std::make_tuple(method, path, handler));
-    return Ok();
-  }
-
- private:
-  std::vector<
-      std::tuple<std::string, std::string, RequestHandler>>
-      _handlers;
-};
 
 Response render(Request request) {
   std::tuple<unsigned int, unsigned int> film_dimensions(
@@ -92,18 +65,14 @@ Response render(Request request) {
                   ss.str());
 }
 
-Result RunApp() {
+Result RunWebApp() {
   WebApp app;
-  ENSURE_OK(app.register_handler("GET", "/", render));
-  auto server = cs::http::Server("0.0.0.0", 8080);
-  ENSURE_OK(server.startServer());
-  ENSURE_OK(server.startListening(std::bind(
-      &WebApp::main_handler, app, std::placeholders::_1)));
-  return Ok();
+  ENSURE_OK(app.Register("GET", "/", render));
+  return app.RunServer("0.0.0.0", 8080);
 }
 
 int main() {
-  Result result = RunApp();
+  Result result = RunWebApp();
   if (!result.ok()) {
     std::cerr << result.message() << std::endl;
   }

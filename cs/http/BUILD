@@ -6,7 +6,7 @@ cc_binary(
     deps = [
         ":request",
         ":response",
-        ":server",
+        ":web_app",
         "//cs/app:scene_animator",
         "//cs/profiling:time_it",
         "//cs/renderer:film",
@@ -55,4 +55,17 @@ cc_library(
 cc_library(
     name = "status",
     hdrs = ["status.hh"],
+)
+
+cc_library(
+    name = "web_app",
+    hdrs = [
+        "web_app.hh",
+    ],
+    deps = [
+        ":request",
+        ":response",
+        ":server",
+        "//cs/result",
+    ],
 )
