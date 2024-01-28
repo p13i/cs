@@ -49,11 +49,12 @@ Response index(Request request) {
 }
 
 Response render(Request request) {
+  // Build scene
   std::tuple<unsigned int, unsigned int> film_dimensions(
       APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT);
   SceneAnimator animator(APP_ANIMATION_NUM_FRAMES,
                          film_dimensions);
-
+  // Render out frames
   std::vector<Film> frames;
   const auto render_time_ms =
       cs::profiling::time_it([&frames, &animator]() {
@@ -62,7 +63,7 @@ Response render(Request request) {
 
   // clang-format off
   std::stringstream ss;
-  ss << "<p>Ray-tracer rendered " << APP_NUM_FRAMES << " frames in " << render_time_ms << " ms.</p>";
+  ss << "<p>Ray-tracer rendered " << frames.size() << " frames in " << render_time_ms << " ms.</p>";
   // clang-format on
 
   return Response(HTTP_200_OK, kContentTypeTextHtml,
