@@ -65,9 +65,14 @@ Response render(Request request) {
                   ss.str());
 }
 
+#define ROUTE(method, path, handler_func) \
+  ENSURE_OK(app.Register(method, path, handler_func));
+
 Result RunMyWebApp() {
   WebApp app;
-  ENSURE_OK(app.Register("GET", "/", render));
+  // Routes
+  ROUTE("GET", "/render/", render);
+
   return app.RunServer("0.0.0.0", 8080);
 }
 
