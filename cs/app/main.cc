@@ -85,27 +85,30 @@ Response render(Request request) {
 <script type="text/javascript">
 const IMAGES = )html" << images_js_ss.str() << R"html(;
 const FPS = )html" << APP_FRAME_RATE_FPS << R"html(;
+var i = 0;
 function drawImage() {
   const canvas = document.getElementById('canvas');
   ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  var frame = 0;
-  while (true) {
-    for (var y = canvas.height - 1; y >= 0; y--) {
-      for (var x = 0; x < canvas.width; x++) {
-        const [r, g, b, a] = IMAGES[frame][x][y];
-        ctx.fillStyle = `rgba( ${r} , ${g} , ${b}, ${a} )`;
-        ctx.fillRect(x, y, 1, 1);
-      }
+  for (var y = canvas.height - 1; y >= 0; y--) {
+    for (var x = 0; x < canvas.width; x++) {
+      const [r, g, b, a] = IMAGES[i][x][y];
+      ctx.fillStyle = `rgba( ${r} , ${g} , ${b}, ${a} )`;
+      ctx.fillRect(x, y, 1, 1);
     }
-    frame = (frame + 1) % IMAGES.length;
-    const sleep = ms => new Promise(r => setTimeout(r, ms));
-    sleep(1000 / FPS);
   }
+  i = (i + 1) % IMAGES.length;
+  queueDrawImage();
 }
+
+function queueDrawImage() {
+  const delayMs = 1000 / FPS;
+  setTimeout(drawImage, delayMs);
+}
+
 document.addEventListener("DOMContentLoaded", function() {
-  drawImage();
+  queueDrawImage();
 });
 </script>
 )html";
