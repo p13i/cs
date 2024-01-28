@@ -38,9 +38,12 @@ using ::cs::result::Result;
 
 Response index(Request request) {
   std::stringstream ss;
-  ss << "Welcome to my website!";
+  ss << "<h1>Welcome to my website!<h1>";
+  ss << "<p>To code this app, I only used standard library "
+        "methods (like std::chrono or std::vector) for "
+        "this web app framework.</p>";
   return Response(HTTP_200_OK, kContentTypeTextHtml,
-    ss.str());
+                  ss.str());
 }
 
 Response render(Request request) {
