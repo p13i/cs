@@ -72,7 +72,7 @@ Response render(Request request) {
       // Convert from pixel's data type (uint8_t) to an int
       // [https://stackoverflow.com/a/28414758]
       image_js_ss << "[" << +px.r << ", " << +px.g << ", "
-                  << +px.b << ", " << +px.a << "]";
+                  << +px.b << ", " << +px.a << "],";
     }
     image_js_ss << "],";
   }
