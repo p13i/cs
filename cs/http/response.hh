@@ -43,8 +43,7 @@ class Response {
        << "Content-Type: " << _content_type << std::endl
        << "Content-Length: " << _body.size() << std::endl
        << std::endl
-       << _body
-       << std::endl;
+       << _body << std::endl;
     return ss.str();
   }
 
