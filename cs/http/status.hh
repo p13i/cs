@@ -2,9 +2,9 @@
 #define CS_HTTP_STATUS_HH
 
 #include <stdint.h>
-#include <sstream>
 
 #include <map>
+#include <sstream>
 #include <string>
 
 namespace cs::http {
