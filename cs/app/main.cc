@@ -81,7 +81,7 @@ Response render(Request request) {
   ss << R"html(
 <canvas id="canvas" width=")html" << APP_SCREEN_WIDTH
   << R"html(" height=")html" << APP_SCREEN_HEIGHT 
-  << R"html("/>
+  << R"html(">
 <script type="text/javascript">
 const IMAGES = )html" << images_js_ss.str() << R"html(;
 const FPS = )html" << APP_FRAME_RATE_FPS << R"html(;
@@ -100,6 +100,7 @@ function drawImage() {
       }
     }
     frame = (frame + 1) % IMAGES.length;
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
     sleep(1000 / FPS);
   }
 }
