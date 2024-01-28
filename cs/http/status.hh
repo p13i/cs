@@ -2,6 +2,7 @@
 #define CS_HTTP_STATUS_HH
 
 #include <stdint.h>
+#include <sstream>
 
 #include <map>
 #include <string>
@@ -16,6 +17,12 @@ struct Status {
                                   const Status& status) {
     return os << status.code << " " << status.name;
   }
+
+  std::string str() const {
+    std::stringstream ss;
+    ss << status;
+    return ss.str();
+  };
 
   uint32_t code;
   std::string name;
