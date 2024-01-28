@@ -77,7 +77,7 @@ struct SceneAnimator {
           std::min(std::get<0>(film_dimensions_),
                    std::get<1>(film_dimensions_)) /
           2;
-      p3 pos(map_value<float>(i, 0, num_frames_, -5, 5),
+      p3 pos(map_value<float>(i, 0, num_frames_, -25, 5),
              0,
              map_value<float>(i, 0, num_frames_, -10, -5));
       p3 look(0, 0, 0);
