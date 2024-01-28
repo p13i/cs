@@ -59,10 +59,10 @@ cc_binary(
         "main.cc",
     ],
     deps = [
+        "//cs/app:scene_animator",
         "//cs/http:request",
         "//cs/http:response",
         "//cs/http:web_app",
-        "//cs/app:scene_animator",
         "//cs/profiling:time_it",
         "//cs/renderer:film",
         "//cs/renderer:pixel",
