@@ -112,7 +112,7 @@ Result Server::startListening(
                           kContentTypeTextHtml, ss.str());
       std::string response_str = response.to_string();
 
-      long unsigned int bytesSent =
+      unsigned long bytesSent =
           write(_response_socket, response_str.c_str(),
                 response_str.size());
 
