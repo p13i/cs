@@ -64,7 +64,6 @@ Response render(Request request) {
   // clang-format off
   std::stringstream ss;
   ss << "<p>Ray-tracer rendered " << APP_NUM_FRAMES << " frames in " << render_time_ms << " ms.</p>";
-
   // clang-format on
 
   return Response(HTTP_200_OK, kContentTypeTextHtml,
