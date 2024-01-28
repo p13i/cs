@@ -124,7 +124,9 @@ Result Server::startListening(
                 << std::endl;
 #endif  // VERBOSE_LOG
 
-      ENSURE(bytesSent == response_str.size());
+      if (bytesSent != response_str.size()) {
+        std :: cerr << "Failed to send out " << bytesSent << "." << std::endl;
+      }
     }
 
     close(_response_socket);
