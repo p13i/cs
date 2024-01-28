@@ -40,7 +40,7 @@ Response index(Request request) {
   std::stringstream ss;
   ss << "Welcome to my website!";
   return Response(HTTP_200_OK, kContentTypeTextHtml,
-    ss.str());
+                  ss.str());
 }
 
 Response render(Request request) {
