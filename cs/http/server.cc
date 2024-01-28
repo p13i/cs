@@ -101,12 +101,9 @@ Result Server::startListening(
         });
 
     if (success) {
-      std::stringstream ss;
-      ss << response.body() << std::endl
-         << "<hr/>Processed in " << processing_time_ms
-         << " ms.";
-      response = Response(response.status(),
-                          kContentTypeTextHtml, ss.str());
+      response =
+          Response(response.status(), kContentTypeTextHtml,
+                   response.body());
       std::string response_str = response.to_string();
 
       long unsigned int bytesSent =
