@@ -125,7 +125,8 @@ Result Server::startListening(
 #endif  // VERBOSE_LOG
 
       if (bytesSent != response_str.size()) {
-        std :: cerr << "Failed to send out " << bytesSent << "." << std::endl;
+        std ::cerr << "Failed to send out " << bytesSent
+                   << "." << std::endl;
       }
     }
 
