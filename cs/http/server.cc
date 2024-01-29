@@ -16,7 +16,7 @@
 namespace {
 
 const unsigned int BUFFER_SIZE = 2 << 16;
-#define VERBOSE_LOG false
+#define VERBOSE_LOG true
 
 using ::cs::result::Error;
 using ::cs::result::Ok;
@@ -69,7 +69,7 @@ Result Server::startListening(
 
     Response response;
     bool success = false;
-    unsigned int processing_time_ms =
+    [[maybe_unused]] unsigned int processing_time_ms =
         cs::profiling::time_it([&response, request_handler,
                                 this, &success]() {
           ENSURE(_response_socket >= 0);
@@ -80,14 +80,6 @@ Result Server::startListening(
 
           ENSURE(bytesReceived >= 0);
 
-#if VERBOSE_LOG
-          std::cout << "<<< NEW REQUEST <<<<<<<<<<<<<<<<"
-                    << std::endl
-                    << buffer << std::endl
-                    << "================================"
-                    << std::endl;
-#endif  // VERBOSE_LOG
-
           Request request;
           Result parse_result = buffer >> request;
           if (!parse_result.ok()) {
@@ -96,6 +88,15 @@ Result Server::startListening(
                       << std::endl;
             return;
           }
+
+#if VERBOSE_LOG
+          std::cout << "<<< NEW REQUEST <<<<<<<<<<<<<<<<"
+                    << std::endl
+                    << request << std::endl
+                    << "================================"
+                    << std::endl;
+#endif  // VERBOSE_LOG
+
           response = request_handler(request);
           success = true;
         });
