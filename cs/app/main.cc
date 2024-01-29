@@ -98,7 +98,6 @@ Response render(Request request) {
       oneSecondStartMs = startMs;
     }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (var y = canvas.height - 1; y >= 0; y--) {
       for (var x = 0; x < canvas.width; x++) {
         var [r, g, b, a] = IMAGES[i][x][y];
