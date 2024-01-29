@@ -28,6 +28,11 @@ std::string NowAsISO8601TimeUTC() {
   return ss.str();
 }
 
+bool PathMatches(std::string app_path,
+                 std::string user_path) {
+  return app_path == user_path;
+}
+
 }  // namespace
 
 class WebApp {
@@ -58,7 +63,7 @@ class WebApp {
     for (auto path_info : _handlers) {
       const auto [method, path, handler] = path_info;
       if (request.method() == method &&
-          request.path() == path) {
+          PathMatches(request.path(), path)) {
         found_handler = true;
         response = handler(request);
         break;
