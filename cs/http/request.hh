@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 #include <map>
+#include <optional>
 #include <ostream>
 #include <sstream>
 #include <string>
@@ -17,6 +18,28 @@ using ::cs::result::Error;
 using ::cs::result::Ok;
 using ::cs::result::Result;
 
+typedef std::map<std::string, std::string> QueryParams;
+
+namespace {
+std::ostream& operator<<(
+    std::ostream& os,
+    const std::map<std::string, std::string>& map) {
+  os << "{";
+  bool first = true;
+  for (auto it = map.begin(); it != map.end(); it++) {
+    if (!first) {
+      os << ", ";
+    } else {
+      first = false;
+    }
+    os << "<key=" << it->first << ", value=" << it->second
+       << ">";
+  }
+  os << "}";
+  return os;
+}
+}  // namespace
+
 class Request {
  public:
   Request(){};
@@ -24,14 +47,10 @@ class Request {
   friend std::ostream& operator<<(std::ostream& os,
                                   const Request& request) {
     os << "Request(method=" << request._method
-       << ", path=" << request._path << ", headers=";
-    // Print headers
-    for (auto it = request._headers.begin();
-         it != request._headers.end(); it++) {
-      os << "<name=" << it->first
-         << ", value=" << it->second << ">, ";
-    }
-    os << "body=" << request._body << ")";
+       << ", path=" << request._path
+       << ", query_params=" << request._query_params
+       << ", headers=" << request._headers
+       << ", body=" << request._body << ")";
     return os;
   }
 
@@ -46,9 +65,19 @@ class Request {
 
   std::string method() { return _method; }
 
+  std::optional<std::string> get_query_param(
+      std::string name) {
+    auto found = _query_params.find(name);
+    if (found == _query_params.end()) {
+      return std::nullopt;
+    }
+    return found->second;
+  }
+
  private:
   std::string _method;
   std::string _path;
+  QueryParams _query_params;
   std::map<std::string, std::string> _headers;
   std::string _body;
 };

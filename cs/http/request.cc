@@ -77,6 +77,46 @@ Result ReadThroughNewline(std::string str, uint* cursor) {
   return Ok();
 };
 
+Result ParsePath(std::string original_path,
+                 std::string* just_path,
+                 QueryParams* query_params) {
+  // Find just the path before the query params
+  uint cursor = 0;
+  Result read_to_qmark =
+      ReadWord(original_path, &cursor, just_path, '?');
+  std::cout << "original_path=" << original_path
+            << ", cursor=" << cursor
+            << ", just_path=" << *just_path << std::endl;
+  if (cursor >= original_path.size()) {
+    return Ok();
+  } else if (!read_to_qmark.ok()) {
+    return read_to_qmark;
+  }
+  // Parse query params string
+  ENSURE(original_path.at(cursor) == '?');
+  ENSURE_OK(IncrementCursor(original_path, &cursor));
+  while (cursor < original_path.size()) {
+    std::string name;
+    ENSURE_OK(ReadWord(original_path, &cursor, &name, '='));
+    ENSURE_OK(IncrementCursor(original_path, &cursor));
+    std::string value;
+    Result read_amp =
+        ReadWord(original_path, &cursor, &value, '&');
+    if (cursor >= original_path.size() || read_amp.ok()) {
+      query_params->insert({name, value});
+    } else {
+      return read_amp;
+    }
+    if (cursor < original_path.size()) {
+      ENSURE(original_path.at(cursor) == '&');
+      ENSURE_OK(IncrementCursor(original_path, &cursor));
+    } else {
+      break;
+    }
+  }
+  return Ok();
+}
+
 }  // namespace
 
 Result Request::Parse(std::string str) {
@@ -86,6 +126,7 @@ Result Request::Parse(std::string str) {
   IncrementCursor(str, &cursor);
   // Read HTTP path
   ENSURE_OK(ReadWord(str, &cursor, &_path));
+  ENSURE_OK(ParsePath(_path, &_path, &_query_params));
   IncrementCursor(str, &cursor);
   // Read HTTP/1.1 tag
   std::string http_tag = "";
