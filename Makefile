@@ -4,6 +4,8 @@ SHELL=/usr/bin/bash
 
 default: build test site serve
 
+ci: clean setup lint build test site
+
 build:
 	bazel build --config=debug --jobs=1 --local_cpu_resources=1 --local_ram_resources=1 -- //...
 
