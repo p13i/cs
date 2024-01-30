@@ -36,31 +36,44 @@ Result AtEndOfLine(std::string str, uint cursor) {
 Result IncrementCursor(std::string str, uint* cursor) {
   *cursor = *cursor + 1;
   if (*cursor >= str.length()) {
-    return Error("cursor exceeded string length");
+    std::stringstream ss;
+    ss << "cursor exceeded string length. ";
+    ss << "*cursor=" << *cursor << ", ";
+    ss << "str.length()=" << str.length() << ", ";
+    ss << "str=" << str;
+    return Error(ss.str());
   }
   return Ok();
 }
 
+#define STRING_CONTAINS(str, ch) \
+  (str.find(ch) != std::string::npos)
+
 Result ReadWord(std::string str, uint* cursor,
                 std::string* token,
-                char ending_token = ' ') {
+                std::string ending_tokens) {
   std::stringstream ss;
   char c;
   while (*cursor < str.length() &&
-         str.at(*cursor) != ending_token) {
+         !STRING_CONTAINS(ending_tokens, str.at(*cursor))) {
     c = str.at(*cursor);
     if (c != '\r') {
       ss << c;
     }
-    ENSURE_OK(IncrementCursor(str, cursor));
+    Result increment_res = IncrementCursor(str, cursor);
+    if (STRING_CONTAINS(ending_tokens, '\n') && *cursor >= str.length()) {
+      break;
+    } else if (!increment_res.ok()) {
+      return increment_res;
+    }
   }
-  if (*cursor == str.length()) {
+  if (*cursor == str.length() &&
+      !STRING_CONTAINS(ending_tokens, '\n')) {
     return Error("cursor exceeded string length");
-    ;
   }
   *token = ss.str();
   return Ok();
-};
+}
 
 Result ReadThroughNewline(std::string str, uint* cursor) {
   std::stringstream ss;
@@ -83,7 +96,7 @@ Result ParsePath(std::string original_path,
   // Find just the path before the query params
   uint cursor = 0;
   Result read_to_qmark =
-      ReadWord(original_path, &cursor, just_path, '?');
+      ReadWord(original_path, &cursor, just_path, "?");
   std::cout << "original_path=" << original_path
             << ", cursor=" << cursor
             << ", just_path=" << *just_path << std::endl;
@@ -97,22 +110,17 @@ Result ParsePath(std::string original_path,
   ENSURE_OK(IncrementCursor(original_path, &cursor));
   while (cursor < original_path.size()) {
     std::string name;
-    ENSURE_OK(ReadWord(original_path, &cursor, &name, '='));
+    ENSURE_OK(ReadWord(original_path, &cursor, &name, "="));
     ENSURE_OK(IncrementCursor(original_path, &cursor));
     std::string value;
-    Result read_amp =
-        ReadWord(original_path, &cursor, &value, '&');
-    if (cursor >= original_path.size() || read_amp.ok()) {
-      query_params->insert({name, value});
-    } else {
-      return read_amp;
-    }
-    if (cursor < original_path.size()) {
-      ENSURE(original_path.at(cursor) == '&');
-      ENSURE_OK(IncrementCursor(original_path, &cursor));
-    } else {
+    ENSURE_OK(
+        ReadWord(original_path, &cursor, &value, "&\n"));
+    query_params->insert({name, value});
+    if (cursor >= original_path.size()) {
       break;
     }
+    ENSURE(original_path.at(cursor) == '&');
+    ENSURE_OK(IncrementCursor(original_path, &cursor));
   }
   return Ok();
 }
@@ -122,28 +130,28 @@ Result ParsePath(std::string original_path,
 Result Request::Parse(std::string str) {
   uint cursor = 0;
   // Read HTTP method
-  ENSURE_OK(ReadWord(str, &cursor, &_method));
-  IncrementCursor(str, &cursor);
+  ENSURE_OK(ReadWord(str, &cursor, &_method, " "));
+  ENSURE_OK(IncrementCursor(str, &cursor));
   // Read HTTP path
-  ENSURE_OK(ReadWord(str, &cursor, &_path));
+  ENSURE_OK(ReadWord(str, &cursor, &_path, " "));
   ENSURE_OK(ParsePath(_path, &_path, &_query_params));
-  IncrementCursor(str, &cursor);
+  ENSURE_OK(IncrementCursor(str, &cursor));
   // Read HTTP/1.1 tag
   std::string http_tag = "";
-  ENSURE_OK(ReadWord(str, &cursor, &http_tag, '\n'));
+  ENSURE_OK(ReadWord(str, &cursor, &http_tag, "\n"));
   if (http_tag != "HTTP/1.1") {
     return Error(
         "Didn't find HTTP/1.1 tag at end of first line.");
   }
-  IncrementCursor(str, &cursor);
+  ENSURE_OK(IncrementCursor(str, &cursor));
   // Read headers
   bool reading_headers = true;
   while (reading_headers) {
     std::string name;
-    ENSURE_OK(ReadWord(str, &cursor, &name, ':'));
-    IncrementCursor(str, &cursor);
+    ENSURE_OK(ReadWord(str, &cursor, &name, ":"));
+    ENSURE_OK(IncrementCursor(str, &cursor));
     std::string value;
-    ENSURE_OK(ReadWord(str, &cursor, &value, '\n'));
+    ENSURE_OK(ReadWord(str, &cursor, &value, "\n"));
     ENSURE_OK(ReadThroughNewline(str, &cursor));
     _headers[name] = value;
     if (AtEndOfLine(str, cursor).ok()) {
