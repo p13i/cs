@@ -9,8 +9,6 @@ cc_library(
         "parser.c",
         "parser_consumers.c",
         "runtime.c",
-        "utils_strings.c",
-        "utils_strings.h",
     ],
     hdrs = [
         "debug.h",
@@ -18,6 +16,7 @@ cc_library(
         "parser_expectations.h",
         "runtime.h",
     ],
+    deps = [":utils_strings"],
 )
 
 cc_library(
@@ -37,6 +36,11 @@ cc_test(
 
 cc_library(
     name = "parser_test_library",
+    hdrs = ["parser_tests.h"],
+)
+
+cc_library(
+    name = "parser_test",
     srcs = [
         "parser_conditionals_tests.cc",
         "parser_ops_equ_tests.cc",
@@ -44,12 +48,10 @@ cc_library(
         "parser_ops_tests.cc",
         "parser_tests.cc",
     ],
-    hdrs = [
-        "parser_tests.h",
-    ],
     deps = [
         ":gtest",
         ":parser",
+        ":parser_test_library",
     ],
 )
 
