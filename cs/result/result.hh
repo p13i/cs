@@ -5,10 +5,12 @@
 
 #include <string>
 
-#define ENSURE_OK(result)             \
-  if (!result.ok()) {                 \
-    std::cerr << result << std::endl; \
-    return result;                    \
+#define ENSURE_OK(result)                                  \
+  if (!result.ok()) {                                      \
+    std::cerr << "ENSURE_OK failed at " << __FILE__ << ":" \
+              << __LINE__ << ". " << #result << ": "       \
+              << result << std::endl;                      \
+    return result;                                         \
   }
 
 namespace cs::result {
