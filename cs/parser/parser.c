@@ -22,7 +22,10 @@
 #include "debug.h"
 #include "runtime.h"
 #include "utils_strings.h"
+#define PARSER_INCLUDE_TESTS_IN_MAIN 0
+#if PARSER_INCLUDE_TESTS_IN_MAIN
 #include "parser_tests.h"
+#endif // PARSER_INCLUDE_TESTS_IN_MAIN
 
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
@@ -36,10 +39,12 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
+#if PARSER_INCLUDE_TESTS_IN_MAIN
 	if (0 == strcmp(argv[1], "tests"))
 	{
 		return Parser_Tests_main(argc, argv);
 	}
+#endif // PARSER_INCLUDE_TESTS_IN_MAIN
 
 	char *string;
 	if ('.' == argv[1][0])
