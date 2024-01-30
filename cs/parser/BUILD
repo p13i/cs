@@ -21,13 +21,11 @@ cc_library(
 )
 
 cc_library(
-   name= "parser_test",
+   name= "parser_test_library",
    hdrs=[
-"gtest.h",
 "parser_tests.h",
    ],
    srcs=[
-"gtest-all.cc",
 "parser_ops_equ_tests.cc",
 "parser_ops_for_tests.cc",
 "parser_conditionals_tests.cc",
@@ -36,5 +34,12 @@ cc_library(
 "utils_strings_test.cc",],
     deps=[
 ":parser",
+":gtest"
     ]
+)
+
+cc_library(
+    name="gtest",
+    hdrs=["gtest.h"],
+    srcs=["gtest-all.cc"],
 )
