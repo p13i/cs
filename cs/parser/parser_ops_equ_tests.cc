@@ -2,21 +2,18 @@
 #include "parser_tests.h"
 #include "runtime.h"
 
-TEST(equ, base_case)
-{
-    EXPECT_EVALUATION("equ(0,0)", true, 1);
-    EXPECT_EVALUATION("equ(0,1)", true, 0);
-    EXPECT_EVALUATION("equ(1,1)", true, 1);
+TEST(equ, base_case) {
+  EXPECT_EVALUATION("equ(0,0)", true, 1);
+  EXPECT_EVALUATION("equ(0,1)", true, 0);
+  EXPECT_EVALUATION("equ(1,1)", true, 1);
 }
 
-TEST(equ, with_spaces)
-{
-    EXPECT_EVALUATION(" equ( 0 , 0 ) ", true, 1);
+TEST(equ, with_spaces) {
+  EXPECT_EVALUATION(" equ( 0 , 0 ) ", true, 1);
 }
 
-TEST(equ, inside_iff)
-{
-    EXPECT_EVALUATION(R"(
+TEST(equ, inside_iff) {
+  EXPECT_EVALUATION(R"(
         exe(
             var(A),
             set(A, 0),
@@ -28,12 +25,12 @@ TEST(equ, inside_iff)
 
             get(A)
         )
-    )", true, 2);
+    )",
+                    true, 2);
 }
 
-TEST(equ, inside_ife)
-{
-    EXPECT_EVALUATION(R"(
+TEST(equ, inside_ife) {
+  EXPECT_EVALUATION(R"(
         exe(
             var(A),
             set(A, 0),
@@ -47,5 +44,6 @@ TEST(equ, inside_ife)
 
             get(A)
         )
-    )", true, 1);
+    )",
+                    true, 1);
 }
