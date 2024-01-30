@@ -1,7 +1,8 @@
 #include "gtest/gtest.h"
+extern "C" {
 #include "parser_tests.h"
 #include "runtime.h"
-
+}
 #if 0
 // for loop syntax
 // for( VAR_INIT, TERM_COND, NEXT_STEP, EXPR_BLOCK )

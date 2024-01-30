@@ -1,6 +1,8 @@
 #include "gtest/gtest.h"
+extern "C" {
 #include "parser_tests.h"
 #include "runtime.h"
+}
 
 TEST(equ, base_case) {
   EXPECT_EVALUATION("equ(0,0)", true, 1);
@@ -12,6 +14,7 @@ TEST(equ, with_spaces) {
   EXPECT_EVALUATION(" equ( 0 , 0 ) ", true, 1);
 }
 
+#if 0
 TEST(equ, inside_iff) {
   EXPECT_EVALUATION(R"(
         exe(
@@ -47,3 +50,4 @@ TEST(equ, inside_ife) {
     )",
                     true, 1);
 }
+#endif

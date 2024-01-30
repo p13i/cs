@@ -8,7 +8,6 @@
 
 #include "runtime.h"
 
-#include "parser.h"
 #include "debug.h"
 #include "utils_strings.h"
 
@@ -87,10 +86,10 @@ static bool _IsValidVarName(const char *varName)
 	for (size_t i = 0; i < len; i++)
 	{
 		char thisChar = varName[i];
-		if (false == Parser_IsValidCharForVarName(thisChar))
+		bool isValidVarName = ('A' <= thisChar && thisChar <= 'Z') || (thisChar == '_');
+		if (false == isValidVarName)
 		{
 			ERROR("Variable name has invalid char '%c' at index %d\n", thisChar, i);
-			Parser_ShowError(varName, i);
 			return false;
 		}
 	}

@@ -1,22 +1,33 @@
-cc_binary(
-    name = "main",
-    deps = [":parser"],
-)
-
 cc_library(
     name = "parser",
     srcs = [
         "parser.c",
         "parser_consumers.c",
-        "runtime.c",
     ],
     hdrs = [
-        "debug.h",
         "parser.h",
         "parser_expectations.h",
-        "runtime.h",
     ],
-    deps = [":utils_strings"],
+    deps = [
+        ":debug_library",
+        ":runtime",
+        ":utils_strings",
+    ],
+)
+
+cc_library(
+    name = "debug_library",
+    hdrs = ["debug.h"],
+)
+
+cc_library(
+    name = "runtime",
+    srcs = ["runtime.c"],
+    hdrs = ["runtime.h"],
+    deps = [
+        ":debug_library",
+        ":utils_strings",
+    ],
 )
 
 cc_library(
@@ -39,18 +50,62 @@ cc_library(
     hdrs = ["parser_tests.h"],
 )
 
-cc_library(
-    name = "parser_test",
+cc_test(
+    name = "parser_tests",
     srcs = [
-        "parser_conditionals_tests.cc",
-        "parser_ops_equ_tests.cc",
-        "parser_ops_for_tests.cc",
-        "parser_ops_tests.cc",
         "parser_tests.cc",
     ],
     deps = [
-        "@googletest//:gtest_main",
         ":parser",
         ":parser_test_library",
+        "@googletest//:gtest_main",
+    ],
+)
+
+cc_test(
+    name = "parser_conditionals_test",
+    srcs = [
+        "parser_conditionals_tests.cc",
+    ],
+    deps = [
+        ":parser",
+        ":parser_test_library",
+        "@googletest//:gtest_main",
+    ],
+)
+
+cc_test(
+    name = "parser_ops_equ_test",
+    srcs = [
+        "parser_ops_equ_tests.cc",
+    ],
+    deps = [
+        ":parser",
+        ":parser_test_library",
+        "@googletest//:gtest_main",
+    ],
+)
+
+cc_test(
+    name = "parser_ops_for_tests",
+    srcs = [
+        "parser_ops_for_tests.cc",
+    ],
+    deps = [
+        ":parser",
+        ":parser_test_library",
+        "@googletest//:gtest_main",
+    ],
+)
+
+cc_test(
+    name = "parser_ops_tests",
+    srcs = [
+        "parser_ops_tests.cc",
+    ],
+    deps = [
+        ":parser",
+        ":parser_test_library",
+        "@googletest//:gtest_main",
     ],
 )

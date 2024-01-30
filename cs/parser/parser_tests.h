@@ -2,9 +2,10 @@
 #define PARSER_TESTS
 
 #include "gtest/gtest.h"
-#include "parser.h"
 
-int Parser_Tests_main(int argc, char **argv);
+extern "C" {
+#include "parser.h"
+}
 
 #define EXPECT_EVALUATION(string, expectedSuccess,      \
                           expectedResult)               \

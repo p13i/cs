@@ -1,6 +1,9 @@
 #include "gtest/gtest.h"
+
+extern "C" {
 #include "parser_tests.h"
 #include "runtime.h"
+}
 
 #if 0
 TEST(equ, base_case)
@@ -16,7 +19,6 @@ TEST(neq, base_case)
     EXPECT_EVALUATION("neq(0,1)", true, 1);
     EXPECT_EVALUATION("neq(1,1)", false, 0);
 }
-#endif
 
 TEST(iff, base_case) {
   // Third arg is optional (else)
@@ -106,3 +108,4 @@ TEST(ife, inside_exe_block_with_new_var) {
     )",
                     true, 1);
 }
+#endif

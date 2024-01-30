@@ -30,6 +30,7 @@
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 
+#if PARSER_INCLUDE_TESTS_IN_MAIN
 int main(int argc, char **argv)
 {
 	if (argc != 2)
@@ -75,6 +76,7 @@ int main(int argc, char **argv)
 		return -1;
 	}
 }
+#endif // PARSER_INCLUDE_TESTS_IN_MAIN
 
 // Source: https://stackoverflow.com/a/174552
 static char *readFileContentsToString(char *filename)
