@@ -49,14 +49,8 @@ cc_library(
         "parser_tests.cc",
     ],
     deps = [
-        ":gtest",
+        "@googletest//:gtest_main",
         ":parser",
         ":parser_test_library",
     ],
-)
-
-cc_library(
-    name = "gtest",
-    srcs = ["gtest-all.cc"],
-    hdrs = ["gtest.h"],
 )

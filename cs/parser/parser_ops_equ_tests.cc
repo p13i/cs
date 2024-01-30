@@ -1,4 +1,4 @@
-#include "gtest.h"
+#include "gtest/gtest.h"
 #include "parser_tests.h"
 #include "runtime.h"
 
