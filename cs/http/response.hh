@@ -31,7 +31,7 @@ class Response {
   friend std::ostream& operator<<(
       std::ostream& os, const Response& response) {
     return os << "Response(status=" << response._status
-              << ", body=" << response._body << ")";
+              << ", body=" << response._body.substr(0, 128) << ")";
   }
 
   std::string body() { return _body; }
