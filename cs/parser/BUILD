@@ -1,29 +1,30 @@
 cc_binary(
-    name="parser",
-    srcs=[
-        "debug.h",
-"parser.c",
-"parser_consumers.c",
-"parser_expectations.h",
-"parser.h",
-"runtime.c",
-"runtime.h",
-"utils_strings.c",
-"utils_strings.h",
-    ]
+    name="main",
+    deps=[":parser"]
 )
 
-cc_test(
-    name="parser_test",
-    srcs=[
-"gtest-all.cc",
+cc_library(
+   name= "parser",
+    hdrs=[
+        "debug.h",
+"parser_expectations.h",
+"parser.h",
+"runtime.h",
 "gtest.h",
+"parser_tests.h",
+    ],
+    srcs=[
+"parser.c",
+"parser_consumers.c",
+"runtime.c",
+"utils_strings.c",
+"utils_strings.h",
+"gtest-all.cc",
 "parser_ops_equ_tests.cc",
 "parser_ops_for_tests.cc",
 "parser_conditionals_tests.cc",
 "parser_ops_tests.cc",
 "parser_tests.cc",
-"parser_tests.h",
 "utils_strings_test.cc",
     ]
 )
