@@ -61,7 +61,8 @@ Result ReadWord(std::string str, uint* cursor,
       ss << c;
     }
     Result increment_res = IncrementCursor(str, cursor);
-    if (STRING_CONTAINS(ending_tokens, '\n') && *cursor >= str.length()) {
+    if (STRING_CONTAINS(ending_tokens, '\n') &&
+        *cursor >= str.length()) {
       break;
     } else if (!increment_res.ok()) {
       return increment_res;
