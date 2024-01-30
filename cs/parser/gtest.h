@@ -2622,13 +2622,14 @@ inline void FlushInfoLog() { fflush(NULL); }
 //    it aborts the program. It aborts the program
 //    irrespective of whether it is built in the debug mode
 //    or not.
-#define GTEST_CHECK_(condition)                            \
-  GTEST_AMBIGUOUS_ELSE_BLOCKER_                            \
-  if (::testing::internal::IsTrue(condition))              \
-    ;                                                      \
-  else                                                     \
-    GTEST_LOG_(FATAL) << "Condition " #condition " failed" \
-                                                 ". "
+#define GTEST_CHECK_(condition)                  \
+  GTEST_AMBIGUOUS_ELSE_BLOCKER_                  \
+  if (::testing::internal::IsTrue(condition))    \
+    ;                                            \
+  else                                           \
+    GTEST_LOG_(FATAL) << "Condition " #condition \
+                         " failed"               \
+                         ". "
 
 // An all-mode assert to verify that the given POSIX-style
 // function call returns 0 (indicating success).  Known
@@ -11648,7 +11649,7 @@ enum TypeKind {
   kConvertibleToInteger,  // a type implicitly convertible
                           // to BiggestInt (e.g. a named or
                           // unnamed enum type)
-  kOtherType  // anything else
+  kOtherType              // anything else
 };
 
 // TypeWithoutFormatter<T, kTypeKind>::PrintValue(value, os)
