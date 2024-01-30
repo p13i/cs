@@ -21,6 +21,21 @@ cc_library(
 )
 
 cc_library(
+    name = "utils_strings",
+    srcs = ["utils_strings.c"],
+    hdrs = ["utils_strings.h"],
+)
+
+cc_test(
+    name = "utils_strings_test",
+    srcs = ["utils_strings_test.cc"],
+    deps = [
+        ":utils_strings",
+        "@googletest//:gtest_main",
+    ],
+)
+
+cc_library(
     name = "parser_test_library",
     srcs = [
         "parser_conditionals_tests.cc",
@@ -28,7 +43,6 @@ cc_library(
         "parser_ops_for_tests.cc",
         "parser_ops_tests.cc",
         "parser_tests.cc",
-        "utils_strings_test.cc",
     ],
     hdrs = [
         "parser_tests.h",

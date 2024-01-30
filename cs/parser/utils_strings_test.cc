@@ -1,8 +1,9 @@
+extern "C" {
 #include "utils_strings.h"
+}
 
-#include "gtest.h"
-#include "parser_tests.h"
-#include "runtime.h"
+#include "gmock/gmock.h"
+#include "gtest/gtest.h"
 
 TEST(HasPrefix, BaseCase) {
   EXPECT_TRUE(Utils_Strings_HasPrefix("a", "a"));
