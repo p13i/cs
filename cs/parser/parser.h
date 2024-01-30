@@ -28,7 +28,7 @@
 // 		`add ( 23 , 59 ) `
 //
 //	Whitespace of any kind (tabs, newlines, or spaces)
-//can 	be placed freely around the tokens of this simple
+// can 	be placed freely around the tokens of this simple
 //	programming language interpreter, maybe call it
 //	"p-lang"?
 //
@@ -43,10 +43,10 @@
 //
 //	There must be a comma `,` between arguments to an
 //	operation. However, there cannot be a comma after
-//the 	last argument of an operation. In imperitive
-//operations 	like exe(...), the value of the last expression
-//in this 	arguments list is the exe expression's "return
-//value," 	so to speak.
+// the 	last argument of an operation. In imperitive
+// operations 	like exe(...), the value of the last
+// expression in this 	arguments list is the exe
+// expression's "return value," 	so to speak.
 ////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////
