@@ -12,6 +12,7 @@
 #include "cs/http/response.hh"
 #include "cs/http/server.hh"
 #include "cs/http/web_app.hh"
+#include "cs/net/json/object.hh"
 #include "cs/profiling/time_it.hh"
 #include "cs/renderer/film.hh"
 #include "cs/renderer/pixel.hh"
@@ -21,9 +22,11 @@ using ::cs::app::SceneAnimator;
 using ::cs::http::HTTP_200_OK;
 using ::cs::http::HTTP_404_NOT_FOUND;
 using ::cs::http::kContentTypeTextHtml;
+using ::cs::http::kContentTypeTextJson;
 using ::cs::http::Request;
 using ::cs::http::Response;
 using ::cs::http::WebApp;
+using ::cs::net::json::Object;
 using ::cs::renderer::Film;
 using ::cs::renderer::Pixel;
 using ::cs::result::Error;
@@ -135,11 +138,27 @@ Response render(Request request) {
                   ss.str());
 }
 
+Response json(Request request) {
+  Object object(std::map<std::string, Object>{
+      {"key", Object(std::string("value"))},
+      {"key2", Object(std::vector<Object>{
+                   Object(true),
+                   Object(false),
+                   Object(std::string("hello")),
+                   Object(1.4f),
+               })}});
+  std::stringstream ss;
+  ss << object;
+  return Response(HTTP_200_OK, kContentTypeTextJson,
+                  ss.str());
+}
+
 Result RunMyWebApp() {
   WebApp app;
   // Routes.
   ENSURE_OK(app.Register("GET", "/", index));
   ENSURE_OK(app.Register("GET", "/render/", render));
+  ENSURE_OK(app.Register("GET", "/json/", json));
   // Run web app on host at port 8080.
   return app.RunServer("0.0.0.0", 8080);
 }

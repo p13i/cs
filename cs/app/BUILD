@@ -65,6 +65,7 @@ cc_binary(
         "//cs/http:request",
         "//cs/http:response",
         "//cs/http:web_app",
+        "//cs/net/json:object",
         "//cs/profiling:time_it",
         "//cs/renderer:film",
         "//cs/renderer:pixel",

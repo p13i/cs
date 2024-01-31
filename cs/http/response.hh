@@ -15,6 +15,7 @@ namespace cs::http {
 
 const std::string kContentTypeTextPlain = "text/plain";
 const std::string kContentTypeTextHtml = "text/html";
+const std::string kContentTypeTextJson = "text/json";
 
 class Response {
  public:
