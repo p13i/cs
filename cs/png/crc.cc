@@ -8,7 +8,7 @@ uint64_t cs::crc::ComputeCRC(uint8_t* buffer,
 
   // Populate CRC table
   unsigned long c;
-  int n, k;
+  unsigned long n, k;
 
   for (n = 0; n < 256; n++) {
     c = (unsigned long)n;
