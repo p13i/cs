@@ -15,8 +15,8 @@ using ::cs::result::Result;
 using ::cs::result::ResultOr;
 }  // namespace
 
-ResultOr<bool> ParseBoolean(std::string str,
-                            unsigned int* cursor);
+ResultOr<bool> ParseBoolean(std::string str, uint* cursor);
+
 
 }  // namespace cs::net::json
 

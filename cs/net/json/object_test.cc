@@ -8,12 +8,13 @@ using ::cs::net::json::Type;
 using ::cs::result::Result;
 using ::testing::Eq;
 using ::testing::IsTrue;
+using ::testing::IsFalse;
 
 TEST(Parse, BaseCase) {
   Object* object = new Object();
   std::string input = "";
   Result result = input >> object;
-  EXPECT_THAT(result.ok(), IsTrue());
+  ASSERT_THAT(result.ok(), IsTrue());
   EXPECT_THAT(*object, Eq(Object()));
 }
 
@@ -21,16 +22,16 @@ TEST(Parse, BooleanTrue) {
   Object* object = new Object();
   std::string input = "true";
   Result result = input >> object;
-  EXPECT_THAT(result.ok(), IsTrue());
+  ASSERT_THAT(result.ok(), IsTrue());
   EXPECT_THAT(object->type(), Eq(Type::BOOLEAN));
-  EXPECT_THAT(object->as_bool(), Eq(true));
+  EXPECT_THAT(object->as_bool(), IsTrue());
 }
 
 TEST(Parse, BooleanFalse) {
   Object* object = new Object();
   std::string input = "false";
   Result result = input >> object;
-  EXPECT_THAT(result.ok(), IsTrue());
+  ASSERT_THAT(result.ok(), IsTrue());
   EXPECT_THAT(object->type(), Eq(Type::BOOLEAN));
-  EXPECT_THAT(object->as_bool(), Eq(false));
+  EXPECT_THAT(object->as_bool(), IsFalse());
 }
