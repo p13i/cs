@@ -1,5 +1,6 @@
 #include "cs/net/json/parsers.hh"
 
+#include <cmath>
 #include <map>
 #include <string>
 #include <vector>
@@ -54,7 +55,88 @@ ResultOr<bool> ParseBoolean(std::string str, uint* cursor) {
 
   return Error(cs::string::format(
       "Didn't find boolean at str[*cursor:]=%s",
-             str.substr(*cursor)));
+      str.substr(*cursor)));
+}
+
+ResultOr<float> ParseFloat(std::string str, uint* cursor) {
+  if (str.empty()) {
+    return Error("Input str is empty.");
+  }
+
+  if (cursor == nullptr) {
+    return Error("Cursor pointer is null.");
+  }
+
+  uint i = 0;
+  bool is_negative = false;
+  bool has_exponent = false;
+  bool negative_exponent = false;
+  float decimal_multiplier = 0.1f;
+  uint exponent_value = 0;
+  float result = 0.0f;
+
+  // Handle leading whitespace.
+  while (InBounds(str, i) && std::isspace(str[i])) {
+    i++;
+  }
+
+  // Handle sign.
+  if (InBounds(str, i) &&
+      (str[i] == '-' || str[i] == '+')) {
+    is_negative = (str[i] == '-');
+    i++;
+  }
+
+  // Parse digits and build the integer part.
+  while (InBounds(str, i) && std::isdigit(str[i])) {
+    float digit = static_cast<float>(str[i] - '0');
+    result = result * 10.0f + digit;
+    i++;
+  }
+
+  // Parse decimal point and digits for the fractional part.
+  if (InBounds(str, i) && str[i] == '.') {
+    i++;
+    while (InBounds(str, i) && std::isdigit(str[i])) {
+      float digit = static_cast<float>(str[i] - '0');
+      result += digit * decimal_multiplier;
+      decimal_multiplier *= 0.1f;
+      i++;
+    }
+  }
+
+  // Parse exponent and digits for the exponent part.
+  if (InBounds(str, i) &&
+      (str[i] == 'e' || str[i] == 'E')) {
+    has_exponent = true;
+    i++;
+
+    if (InBounds(str, i) &&
+        (str[i] == '-' || str[i] == '+')) {
+      negative_exponent = (str[i] == '-');
+      i++;
+    }
+
+    while (InBounds(str, i) && std::isdigit(str[i])) {
+      exponent_value = exponent_value * 10 + (str[i] - '0');
+      i++;
+    }
+  }
+
+  // Apply sign and exponent.
+  result = (is_negative ? -result : result);
+  if (has_exponent) {
+    if (negative_exponent) {
+      exponent_value *= -1;
+    }
+    float exponentiated = std::pow(10.0f, exponent_value);
+    result *= exponentiated;
+  }
+
+  // Update cursor position.
+  *cursor = i;
+
+  return result;
 }
 
 }  // namespace cs::net::json
