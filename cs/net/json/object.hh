@@ -97,6 +97,9 @@ class Object {
       } else if (c == '+' || c == '-' || c == '.' ||
                  ('0' <= c && c <= '9')) {
         // Parse float
+        ASSIGN_OR_RETURN(object->_number_value,
+                         ParseFloat(str, &cursor));
+        object->_type = Type::NUMBER;
       } else if (c == '"') {
         // Parse string
       } else if (c == 't' || c == 'f') {
