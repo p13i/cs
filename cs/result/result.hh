@@ -3,14 +3,26 @@
 
 #include <stdio.h>
 
+#include <iostream>
 #include <string>
 
-#define ENSURE_OK(result)                                  \
-  if (!result.ok()) {                                      \
-    std::cerr << "ENSURE_OK failed at " << __FILE__ << ":" \
-              << __LINE__ << ". " << #result << ": "       \
-              << result << std::endl;                      \
-    return result;                                         \
+#define ASSIGN_OR_RETURN(var, result_or) \
+  {                                      \
+    if (result_or.result().ok()) {       \
+      var = result_or.data();            \
+    } else {                             \
+      return result_or.result();         \
+    }                                    \
+  }
+
+#define ENSURE_OK(result)                             \
+  {                                                   \
+    if (!result.ok()) {                               \
+      std::cerr << "ENSURE_OK failed at " << __FILE__ \
+                << ":" << __LINE__ << ". " << #result \
+                << ": " << result << std::endl;       \
+      return result;                                  \
+    }                                                 \
   }
 
 namespace cs::result {
@@ -33,13 +45,7 @@ class Result {
 
   friend std::ostream& operator<<(std::ostream& os,
                                   const Result& result) {
-    std::string ok_str;
-    if (result._ok) {
-      ok_str = "OK";
-    } else {
-      ok_str = "ERROR";
-    }
-    return os << "Result(" << ok_str
+    return os << "Result(" << (result._ok ? "OK" : "ERROR")
               << ", code=" << result._code
               << ", message=" << result._message << ")";
   }
@@ -57,7 +63,27 @@ class Ok : public Result {
 
 class Error : public Result {
  public:
-  Error(std::string message) : Result(false, message) {}
+  Error(const std::string& message)
+      : Result(false, message) {}
+};
+
+// ResultOr class with a template parameter for data
+template <typename Data>
+class ResultOr {
+ public:
+  ResultOr(const Data& data) : _result(Ok()), _data(data) {}
+
+  ResultOr(const Error& result) : _result(result) {}
+
+  ResultOr(const Result& result, const Data& data)
+      : _result(result), _data(data) {}
+
+  Data data() { return _data; }
+  Result result() { return _result; }
+
+ private:
+  Result _result;
+  Data _data;
 };
 
 }  // namespace cs::result
