@@ -3,21 +3,39 @@
 
 #include <map>
 #include <memory>
+#include <ostream>
+#include <sstream>
 #include <string>
 #include <vector>
 
+#include "cs/net/json/parsers.hh"
+#include "cs/result/result.hh"
 #include "cs/sanity/ensure.hh"
+#include "cs/string/format.h"
+
+using ::cs::net::json::ParseBoolean;
+using ::cs::result::Error;
+using ::cs::result::Ok;
+using ::cs::result::Result;
 
 namespace cs::net::json {
+
 enum class Type {
-  BOOLEAN,
-  NUMBER,
-  STRING,
-  ARRAY,
-  OBJECT,
+  UNSET = 0,
+  BOOLEAN = 1,
+  NUMBER = 2,
+  STRING = 3,
+  ARRAY = 4,
+  OBJECT = 5,
 };
+
+/**
+ * There are five fundamental types to JSON. They are
+ * boolean, float, string, array, and the kev-value mapping.
+ */
 class Object {
  public:
+  Object() : _type(Type::UNSET) {}
   Object(bool value)
       : _type(Type::BOOLEAN), _bool_value(value) {}
   Object(float number)
@@ -27,7 +45,7 @@ class Object {
   Object(std::vector<Object> value)
       : _type(Type::ARRAY), _array_value(value) {}
   Object(std::map<std::string, Object> value)
-      : _type(Type::OBJECT), _object_value(value) {}
+      : _type(Type::OBJECT), _map_value(value) {}
 
   Type type() { return _type; }
 
@@ -51,9 +69,49 @@ class Object {
     return _array_value;
   }
 
-  std::map<std::string, Object> as_object() const {
+  std::map<std::string, Object> as_map() const {
     ENSURE(_type == Type::OBJECT);
-    return _object_value;
+    return _map_value;
+  }
+
+  friend bool operator==(Object a, Object b) {
+    // HACK
+    return a.to_string() == b.to_string();
+  }
+
+  friend Result operator>>(std::string str,
+                           Object* object) {
+    unsigned int cursor = 0;
+    [[maybe_unused]] std::map<std::string, Object>
+        map_value;
+    [[maybe_unused]] std::vector<Object> array_value;
+    [[maybe_unused]] float float_value;
+    [[maybe_unused]] std::string string_value;
+    [[maybe_unused]] bool bool_value;
+    while (cursor < str.length()) {
+      char c = str.at(cursor);
+      if (c == '{') {
+        // Parse map
+      } else if (c == '[') {
+        // Parse array
+      } else if (c == '+' || c == '-' || c == '.' ||
+                 ('0' <= c && c <= '9')) {
+        // Parse float
+      } else if (c == '"') {
+        // Parse string
+      } else if (c == 't' || c == 'f') {
+        // Parse bool
+        ASSIGN_OR_RETURN(object->_bool_value,
+                         ParseBoolean(str, &cursor));
+        object->_type = Type::BOOLEAN;
+      } else {
+        return Error(cs::string::format(
+            "Reached unexpected character ('%c') at "
+            "cursor=%d",
+            c, cursor));
+      }
+    }
+    return Ok();
   }
 
   friend std::ostream& operator<<(std::ostream& os,
@@ -83,7 +141,7 @@ class Object {
     } else if (object._type == Type::OBJECT) {
       os << "{";
       bool first = true;
-      for (const auto& kv : object.as_object()) {
+      for (const auto& kv : object.as_map()) {
         if (!first) {
           os << ",";
         } else {
@@ -96,13 +154,19 @@ class Object {
     return os;
   }
 
+  std::string to_string() {
+    std::stringstream ss;
+    ss << *this;
+    return ss.str();
+  }
+
  private:
   Type _type;
   bool _bool_value;
   float _number_value;
   std::string _string_value;
   std::vector<Object> _array_value;
-  std::map<std::string, Object> _object_value;
+  std::map<std::string, Object> _map_value;
 };
 }  // namespace cs::net::json
 
