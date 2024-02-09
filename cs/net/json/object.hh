@@ -13,7 +13,6 @@
 #include "cs/sanity/ensure.hh"
 #include "cs/string/format.h"
 
-using ::cs::net::json::ParseBoolean;
 using ::cs::result::Error;
 using ::cs::result::Ok;
 using ::cs::result::Result;
