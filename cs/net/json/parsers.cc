@@ -42,9 +42,6 @@ bool TryConsumeString(std::string str, std::string target,
 }  // namespace
 
 ResultOr<bool> ParseBoolean(std::string str, uint* cursor) {
-  const std::string TRUE = "true";
-  const std::string FALSE = "false";
-
   if (TryConsumeString(str, "true", cursor)) {
     return true;
   }
