@@ -9,9 +9,6 @@
 namespace cs::net::json {
 
 namespace {
-using ::cs::result::Error;
-using ::cs::result::Ok;
-using ::cs::result::Result;
 using ::cs::result::ResultOr;
 }  // namespace
 
