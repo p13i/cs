@@ -154,6 +154,9 @@ ResultOr<std::string*> ParseString(std::string str,
     if (str[*cursor] == '"') {
       break;
     }
+    if (str[*cursor] == '\\') {
+      *cursor += 1;
+    }
     ss << str[*cursor];
     *cursor += 1;
   }
