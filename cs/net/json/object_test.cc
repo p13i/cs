@@ -10,110 +10,63 @@ using ::testing::Eq;
 using ::testing::FloatEq;
 using ::testing::IsFalse;
 using ::testing::IsTrue;
+using ::testing::Matcher;
 
-TEST(Parse, BaseCase) {
-  Object* object = new Object();
-  std::string input = "";
-  Result result = input >> object;
-  ASSERT_THAT(result.ok(), IsTrue());
-  EXPECT_THAT(*object, Eq(Object()));
+class ObjectParsingTest : public ::testing::Test {};
+
+#define EXPECT_PARSE_OK(input, type, matcher)     \
+  {                                               \
+    Object* object = new Object();                \
+    Result result = std::string(input) >> object; \
+    ASSERT_THAT(result.ok(), IsTrue());           \
+    EXPECT_THAT(object->as_##type(), matcher);    \
+    delete object;                                \
+  }
+
+TEST_F(ObjectParsingTest, BaseCase) {
+  EXPECT_PARSE_OK("", object, Eq(Object()));
 }
 
-TEST(Parse, BooleanTrue) {
-  Object* object = new Object();
-  std::string input = "true";
-  Result result = input >> object;
-  ASSERT_THAT(result.ok(), IsTrue());
-  EXPECT_THAT(object->type(), Eq(Type::BOOLEAN));
-  EXPECT_THAT(object->as_bool(), IsTrue());
+TEST_F(ObjectParsingTest, BooleanTrue) {
+  EXPECT_PARSE_OK("true", bool, IsTrue());
 }
 
-TEST(Parse, BooleanFalse) {
-  Object* object = new Object();
-  std::string input = "false";
-  Result result = input >> object;
-  ASSERT_THAT(result.ok(), IsTrue());
-  EXPECT_THAT(object->type(), Eq(Type::BOOLEAN));
-  EXPECT_THAT(object->as_bool(), IsFalse());
+TEST_F(ObjectParsingTest, BooleanFalse) {
+  EXPECT_PARSE_OK("false", bool, IsFalse());
 }
 
-TEST(Parse, Float0) {
-  Object* object = new Object();
-  std::string input = "0";
-  Result result = input >> object;
-  ASSERT_THAT(result.ok(), IsTrue());
-  EXPECT_THAT(object->type(), Eq(Type::NUMBER));
-  EXPECT_THAT(object->as_number(), Eq(0));
+TEST_F(ObjectParsingTest, Float0) {
+  EXPECT_PARSE_OK("0", number, Eq(0));
 }
 
-TEST(Parse, Float0_1) {
-  Object* object = new Object();
-  std::string input = "0.1";
-  Result result = input >> object;
-  ASSERT_THAT(result.ok(), IsTrue());
-  EXPECT_THAT(object->type(), Eq(Type::NUMBER));
-  EXPECT_THAT(object->as_number(), FloatEq(0.1));
+TEST_F(ObjectParsingTest, Float0_1) {
+  EXPECT_PARSE_OK("0.1", number, FloatEq(0.1));
 }
 
-TEST(Parse, Float1_1) {
-  Object* object = new Object();
-  std::string input = "1.1";
-  Result result = input >> object;
-  ASSERT_THAT(result.ok(), IsTrue());
-  EXPECT_THAT(object->type(), Eq(Type::NUMBER));
-  EXPECT_THAT(object->as_number(), FloatEq(1.1));
+TEST_F(ObjectParsingTest, Float1_1) {
+  EXPECT_PARSE_OK("1.1", number, FloatEq(1.1));
 }
 
-TEST(Parse, FloatNeg0) {
-  Object* object = new Object();
-  std::string input = "-0";
-  Result result = input >> object;
-  ASSERT_THAT(result.ok(), IsTrue());
-  EXPECT_THAT(object->type(), Eq(Type::NUMBER));
-  EXPECT_THAT(object->as_number(), FloatEq(0));
+TEST_F(ObjectParsingTest, FloatNeg0) {
+  EXPECT_PARSE_OK("-0", number, FloatEq(0));
 }
 
-TEST(Parse, FloatPos0) {
-  Object* object = new Object();
-  std::string input = "+0";
-  Result result = input >> object;
-  ASSERT_THAT(result.ok(), IsTrue());
-  EXPECT_THAT(object->type(), Eq(Type::NUMBER));
-  EXPECT_THAT(object->as_number(), FloatEq(0));
+TEST_F(ObjectParsingTest, FloatPos0) {
+  EXPECT_PARSE_OK("+0", number, FloatEq(0));
 }
 
-TEST(Parse, Float100) {
-  Object* object = new Object();
-  std::string input = "100";
-  Result result = input >> object;
-  ASSERT_THAT(result.ok(), IsTrue());
-  EXPECT_THAT(object->type(), Eq(Type::NUMBER));
-  EXPECT_THAT(object->as_number(), FloatEq(100));
+TEST_F(ObjectParsingTest, Float100) {
+  EXPECT_PARSE_OK("100", number, FloatEq(100));
 }
 
-TEST(Parse, Float100_001) {
-  Object* object = new Object();
-  std::string input = "100.001";
-  Result result = input >> object;
-  ASSERT_THAT(result.ok(), IsTrue());
-  EXPECT_THAT(object->type(), Eq(Type::NUMBER));
-  EXPECT_THAT(object->as_number(), FloatEq(100.001));
+TEST_F(ObjectParsingTest, Float100_001) {
+  EXPECT_PARSE_OK("100.001", number, FloatEq(100.001));
 }
 
-TEST(Parse, Float1e1) {
-  Object* object = new Object();
-  std::string input = "1e0";
-  Result result = input >> object;
-  ASSERT_THAT(result.ok(), IsTrue());
-  EXPECT_THAT(object->type(), Eq(Type::NUMBER));
-  EXPECT_THAT(object->as_number(), FloatEq(1));
+TEST_F(ObjectParsingTest, Float1e1) {
+  EXPECT_PARSE_OK("1e0", number, FloatEq(1));
 }
 
-TEST(Parse, Float12e2) {
-  Object* object = new Object();
-  std::string input = "12e2";
-  Result result = input >> object;
-  ASSERT_THAT(result.ok(), IsTrue());
-  EXPECT_THAT(object->type(), Eq(Type::NUMBER));
-  EXPECT_THAT(object->as_number(), FloatEq(1200));
+TEST_F(ObjectParsingTest, Float12e2) {
+  EXPECT_PARSE_OK("12e2", number, FloatEq(1200));
 }

@@ -73,6 +73,11 @@ class Object {
     return _map_value;
   }
 
+  Object as_object() const {
+    ENSURE(_type == Type::UNSET);
+    return *this;
+  }
+
   friend bool operator==(Object a, Object b) {
     // HACK
     return a.to_string() == b.to_string();
