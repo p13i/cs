@@ -139,14 +139,15 @@ Response render(Request request) {
 }
 
 Response json(Request request) {
-  Object object(std::map<std::string, Object*>{
-      {"key", new Object(std::string("value"))},
-      {"key2", new Object(std::vector<Object*>{
-                   new Object(true),
-                   new Object(false),
-                   new Object(std::string("hello")),
-                   new Object(1.4f),
-               })}});
+  Object* object =
+      new Object(std::map<std::string, Object*>{
+          {"key", new Object(std::string("value"))},
+          {"key2", new Object(std::vector<Object*>{
+                       new Object(true),
+                       new Object(false),
+                       new Object(std::string("hello")),
+                       new Object(1.4f),
+                   })}});
   std::stringstream ss;
   ss << object;
   return Response(HTTP_200_OK, kContentTypeTextJson,
