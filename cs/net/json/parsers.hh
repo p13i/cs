@@ -18,7 +18,7 @@ ResultOr<bool> ParseBoolean(std::string str, uint* cursor);
 ResultOr<float> ParseFloat(std::string str, uint* cursor);
 
 ResultOr<std::string*> ParseString(std::string str,
-                                  uint* cursor);
+                                   uint* cursor);
 
 }  // namespace cs::net::json
 
