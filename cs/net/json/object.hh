@@ -25,7 +25,7 @@ enum class Type {
   NUMBER = 2,
   STRING = 3,
   ARRAY = 4,
-  OBJECT = 5,
+  MAP = 5,
 };
 
 /**
@@ -44,7 +44,7 @@ class Object {
   Object(std::vector<Object*> value)
       : _type(Type::ARRAY), _array_value(value) {}
   Object(std::map<std::string, Object*> value)
-      : _type(Type::OBJECT), _map_value(value) {}
+      : _type(Type::MAP), _map_value(value) {}
 
   Type type() { return _type; }
 
@@ -69,7 +69,7 @@ class Object {
   }
 
   std::map<std::string, Object*> as_map() const {
-    ENSURE(_type == Type::OBJECT);
+    ENSURE(_type == Type::MAP);
     return _map_value;
   }
 
@@ -145,7 +145,7 @@ class Object {
         os << elem;
       }
       os << "]";
-    } else if (object->_type == Type::OBJECT) {
+    } else if (object->_type == Type::MAP) {
       os << "{";
       bool first = true;
       for (const auto& kv : object->as_map()) {
