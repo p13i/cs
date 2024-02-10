@@ -41,9 +41,9 @@ class Object {
       : _type(Type::NUMBER), _number_value(number) {}
   Object(std::string value)
       : _type(Type::STRING), _string_value(value) {}
-  Object(std::vector<Object> value)
+  Object(std::vector<Object*> value)
       : _type(Type::ARRAY), _array_value(value) {}
-  Object(std::map<std::string, Object> value)
+  Object(std::map<std::string, Object*> value)
       : _type(Type::OBJECT), _map_value(value) {}
 
   Type type() { return _type; }
@@ -63,12 +63,12 @@ class Object {
     return _string_value;
   }
 
-  std::vector<Object> as_array() const {
+  std::vector<Object*> as_array() const {
     ENSURE(_type == Type::ARRAY);
     return _array_value;
   }
 
-  std::map<std::string, Object> as_map() const {
+  std::map<std::string, Object*> as_map() const {
     ENSURE(_type == Type::OBJECT);
     return _map_value;
   }
@@ -172,8 +172,8 @@ class Object {
   bool _bool_value;
   float _number_value;
   std::string _string_value;
-  std::vector<Object> _array_value;
-  std::map<std::string, Object> _map_value;
+  std::vector<Object*> _array_value;
+  std::map<std::string, Object*> _map_value;
 };
 }  // namespace cs::net::json
 
