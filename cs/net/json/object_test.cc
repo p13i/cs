@@ -23,10 +23,6 @@ class ObjectParsingTest : public ::testing::Test {};
     delete object;                                \
   }
 
-TEST_F(ObjectParsingTest, BaseCase) {
-  EXPECT_PARSE_OK("", object, Eq(Object()));
-}
-
 TEST_F(ObjectParsingTest, BooleanTrue) {
   EXPECT_PARSE_OK("true", bool, IsTrue());
 }
@@ -69,4 +65,16 @@ TEST_F(ObjectParsingTest, Float1e1) {
 
 TEST_F(ObjectParsingTest, Float12e2) {
   EXPECT_PARSE_OK("12e2", number, FloatEq(1200));
+}
+
+TEST_F(ObjectParsingTest, EmptyString) {
+  EXPECT_PARSE_OK("\"\"", string, Eq("\"\""));
+}
+
+TEST_F(ObjectParsingTest, StringWithOneCharacter) {
+  EXPECT_PARSE_OK("\"a\"", string, Eq("\"a\""));
+}
+
+TEST_F(ObjectParsingTest, StringAbc) {
+  EXPECT_PARSE_OK("\"abc\"", string, Eq("\"abc\""));
 }

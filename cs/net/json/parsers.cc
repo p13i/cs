@@ -1,7 +1,9 @@
 #include "cs/net/json/parsers.hh"
 
 #include <cmath>
+#include <iostream>
 #include <map>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -134,6 +136,31 @@ ResultOr<float> ParseFloat(std::string str, uint* cursor) {
   *cursor = i;
 
   return result;
+}
+
+ResultOr<std::string*> ParseString(std::string str,
+                                   uint* cursor) {
+  if (!InBounds(str, *cursor)) {
+    return Error("Cursor out of bounds.");
+  }
+
+  if (str[*cursor] != '"') {
+    return Error("Did not find leading '\"' in string.");
+  }
+  *cursor += 1;
+
+  std::stringstream ss;
+  while (InBounds(str, *cursor)) {
+    if (str[*cursor] == '"') {
+      break;
+    }
+    ss << str[*cursor];
+    *cursor += 1;
+  }
+  if (str[*cursor] != '"') {
+    return Error("Didn't find ending '\"' character.");
+  }
+  return new std::string(ss.str());
 }
 
 }  // namespace cs::net::json

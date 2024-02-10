@@ -40,7 +40,7 @@ class Object {
   Object(float number)
       : _type(Type::NUMBER), _number_value(number) {}
   Object(std::string value)
-      : _type(Type::STRING), _string_value(value) {}
+      : _type(Type::STRING), _string_value(&value) {}
   Object(std::vector<Object*> value)
       : _type(Type::ARRAY), _array_value(value) {}
   Object(std::map<std::string, Object*> value)
@@ -60,7 +60,7 @@ class Object {
 
   std::string as_string() const {
     ENSURE(_type == Type::STRING);
-    return _string_value;
+    return *_string_value;
   }
 
   std::vector<Object*> as_array() const {
@@ -71,11 +71,6 @@ class Object {
   std::map<std::string, Object*> as_map() const {
     ENSURE(_type == Type::MAP);
     return _map_value;
-  }
-
-  Object as_object() const {
-    ENSURE(_type == Type::UNSET);
-    return *this;
   }
 
   friend bool operator==(Object a, Object b) {
@@ -90,7 +85,7 @@ class Object {
         map_value;
     [[maybe_unused]] std::vector<Object> array_value;
     [[maybe_unused]] float float_value;
-    [[maybe_unused]] std::string string_value;
+    [[maybe_unused]] std::string* string_value;
     [[maybe_unused]] bool bool_value;
     while (cursor < str.length()) {
       char c = str.at(cursor);
@@ -106,6 +101,9 @@ class Object {
         object->_type = Type::NUMBER;
       } else if (c == '"') {
         // Parse string
+        ASSIGN_OR_RETURN(object->_string_value,
+                         ParseString(str, &cursor));
+        object->_type = Type::STRING;
       } else if (c == 't' || c == 'f') {
         // Parse bool
         ASSIGN_OR_RETURN(object->_bool_value,
@@ -171,7 +169,7 @@ class Object {
   Type _type;
   bool _bool_value;
   float _number_value;
-  std::string _string_value;
+  std::string* _string_value;
   std::vector<Object*> _array_value;
   std::map<std::string, Object*> _map_value;
 };
