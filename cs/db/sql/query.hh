@@ -29,7 +29,7 @@ const Query get_all_people_in_retirement_age = table.query()
     .from("MySqlTable")
     .where(age_gt_0);
 Result<std::vector<People>> result = get_all_people_in_retirement_age.excute();
-ENSURE_OK(result);
+OK_OR_RETURN(result);
 std::vector<People> people_able_to_retire = result.data();
 
 #endif

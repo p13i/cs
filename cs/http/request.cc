@@ -108,20 +108,21 @@ Result ParsePath(std::string original_path,
   }
   // Parse query params string
   ENSURE(original_path.at(cursor) == '?');
-  ENSURE_OK(IncrementCursor(original_path, &cursor));
+  OK_OR_RETURN(IncrementCursor(original_path, &cursor));
   while (cursor < original_path.size()) {
     std::string name;
-    ENSURE_OK(ReadWord(original_path, &cursor, &name, "="));
-    ENSURE_OK(IncrementCursor(original_path, &cursor));
+    OK_OR_RETURN(
+        ReadWord(original_path, &cursor, &name, "="));
+    OK_OR_RETURN(IncrementCursor(original_path, &cursor));
     std::string value;
-    ENSURE_OK(
+    OK_OR_RETURN(
         ReadWord(original_path, &cursor, &value, "&\n"));
     query_params->insert({name, value});
     if (cursor >= original_path.size()) {
       break;
     }
     ENSURE(original_path.at(cursor) == '&');
-    ENSURE_OK(IncrementCursor(original_path, &cursor));
+    OK_OR_RETURN(IncrementCursor(original_path, &cursor));
   }
   return Ok();
 }
@@ -131,35 +132,35 @@ Result ParsePath(std::string original_path,
 Result Request::Parse(std::string str) {
   uint cursor = 0;
   // Read HTTP method
-  ENSURE_OK(ReadWord(str, &cursor, &_method, " "));
-  ENSURE_OK(IncrementCursor(str, &cursor));
+  OK_OR_RETURN(ReadWord(str, &cursor, &_method, " "));
+  OK_OR_RETURN(IncrementCursor(str, &cursor));
   // Read HTTP path
-  ENSURE_OK(ReadWord(str, &cursor, &_path, " "));
-  ENSURE_OK(ParsePath(_path, &_path, &_query_params));
-  ENSURE_OK(IncrementCursor(str, &cursor));
+  OK_OR_RETURN(ReadWord(str, &cursor, &_path, " "));
+  OK_OR_RETURN(ParsePath(_path, &_path, &_query_params));
+  OK_OR_RETURN(IncrementCursor(str, &cursor));
   // Read HTTP/1.1 tag
   std::string http_tag = "";
-  ENSURE_OK(ReadWord(str, &cursor, &http_tag, "\n"));
+  OK_OR_RETURN(ReadWord(str, &cursor, &http_tag, "\n"));
   if (http_tag != "HTTP/1.1") {
     return Error(
         "Didn't find HTTP/1.1 tag at end of first line.");
   }
-  ENSURE_OK(IncrementCursor(str, &cursor));
+  OK_OR_RETURN(IncrementCursor(str, &cursor));
   // Read headers
   bool reading_headers = true;
   while (reading_headers) {
     std::string name;
-    ENSURE_OK(ReadWord(str, &cursor, &name, ":"));
-    ENSURE_OK(IncrementCursor(str, &cursor));
+    OK_OR_RETURN(ReadWord(str, &cursor, &name, ":"));
+    OK_OR_RETURN(IncrementCursor(str, &cursor));
     std::string value;
-    ENSURE_OK(ReadWord(str, &cursor, &value, "\n"));
-    ENSURE_OK(ReadThroughNewline(str, &cursor));
+    OK_OR_RETURN(ReadWord(str, &cursor, &value, "\n"));
+    OK_OR_RETURN(ReadThroughNewline(str, &cursor));
     _headers[name] = value;
     if (AtEndOfLine(str, cursor).ok()) {
       reading_headers = false;
     }
   }
-  ENSURE_OK(ReadThroughNewline(str, &cursor));
+  OK_OR_RETURN(ReadThroughNewline(str, &cursor));
   // Read body
   _body = str.substr(cursor, str.length() - cursor);
   return Ok();

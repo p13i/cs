@@ -46,8 +46,8 @@ class WebApp {
 
   Result RunServer(std::string ip_address, int port) {
     auto server = cs::http::Server(ip_address, port);
-    ENSURE_OK(server.startServer());
-    ENSURE_OK(server.startListening(
+    OK_OR_RETURN(server.startServer());
+    OK_OR_RETURN(server.startListening(
         std::bind(&WebApp::main_handler, this,
                   std::placeholders::_1)));
     return Ok();

@@ -15,14 +15,14 @@
     }                                    \
   }
 
-#define ENSURE_OK(result)                             \
-  {                                                   \
-    if (!result.ok()) {                               \
-      std::cerr << "ENSURE_OK failed at " << __FILE__ \
-                << ":" << __LINE__ << ". " << #result \
-                << ": " << result << std::endl;       \
-      return result;                                  \
-    }                                                 \
+#define OK_OR_RETURN(result)                             \
+  {                                                      \
+    if (!result.ok()) {                                  \
+      std::cerr << "OK_OR_RETURN failed at " << __FILE__ \
+                << ":" << __LINE__ << ". " << #result    \
+                << ": " << result << std::endl;          \
+      return result;                                     \
+    }                                                    \
   }
 
 namespace cs::result {

@@ -157,9 +157,9 @@ Response json(Request request) {
 Result RunMyWebApp() {
   WebApp app;
   // Routes.
-  ENSURE_OK(app.Register("GET", "/", index));
-  ENSURE_OK(app.Register("GET", "/render/", render));
-  ENSURE_OK(app.Register("GET", "/json/", json));
+  OK_OR_RETURN(app.Register("GET", "/", index));
+  OK_OR_RETURN(app.Register("GET", "/render/", render));
+  OK_OR_RETURN(app.Register("GET", "/json/", json));
   // Run web app on host at port 8080.
   return app.RunServer("0.0.0.0", 8080);
 }
