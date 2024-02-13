@@ -46,11 +46,11 @@ class Result {
     }
   }
 
-  bool ok() { return _ok; }
+  bool ok() const { return _ok; }
 
-  std::string message() { return _message; }
+  std::string message() const { return _message; }
 
-  int code() { return _code; }
+  int code() const { return _code; }
 
   friend std::ostream& operator<<(std::ostream& os,
                                   const Result& result) {
@@ -92,6 +92,7 @@ class ResultOr : public Result {
   ResultOr(const Result& result, const Data& data)
       : Result(result), _result(result), _data(data) {}
 
+  bool ok() const { return _result.ok(); }
   Data data() const { return _data; }
   Data value() const { return _data; }
   Result result() const { return _result; }
