@@ -78,17 +78,23 @@ class Error : public Result {
 
 // ResultOr class with a template parameter for data
 template <typename Data>
-class ResultOr {
+class ResultOr : public Result {
  public:
-  ResultOr(const Data& data) : _result(Ok()), _data(data) {}
+  ResultOr(const Data& data)
+      : Result(Ok()), _result(Ok()), _data(data) {}
 
-  ResultOr(const Error& result) : _result(result) {}
+  ResultOr(const Error& result)
+      : Result(result), _result(result) {}
+
+  ResultOr(const Result& result)
+      : Result(result), _result(result) {}
 
   ResultOr(const Result& result, const Data& data)
-      : _result(result), _data(data) {}
+      : Result(result), _result(result), _data(data) {}
 
-  Data data() { return _data; }
-  Result result() { return _result; }
+  Data data() const { return _data; }
+  Data value() const { return _data; }
+  Result result() const { return _result; }
 
  private:
   Result _result;

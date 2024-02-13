@@ -4,6 +4,10 @@
 #include "gtest/gtest.h"
 
 using ::cs::net::json::Object;
+using ::cs::net::json::ParseBoolean;
+using ::cs::net::json::ParseFloat;
+using ::cs::net::json::ParseObject;
+using ::cs::net::json::ParseString;
 using ::cs::net::json::Type;
 using ::cs::result::Result;
 using ::testing::Eq;
@@ -12,69 +16,92 @@ using ::testing::IsFalse;
 using ::testing::IsTrue;
 using ::testing::Matcher;
 
-class ObjectParsingTest : public ::testing::Test {};
+// TEST(ParseBoolean, EmptyString) {
+//   uint cursor = 0;
+//   auto result = ParseBoolean("", &cursor);
+//   ASSERT_THAT(result.result().ok(), IsFalse());
+// }
 
-#define EXPECT_PARSE_OK(input, type, matcher)     \
-  {                                               \
-    Object* object = new Object();                \
-    Result result = std::string(input) >> object; \
-    ASSERT_THAT(result.ok(), IsTrue());           \
-    EXPECT_THAT(object->as_##type(), matcher);    \
-    delete object;                                \
-  }
+// TEST(ParseBoolean, True) {
+//   uint cursor = 0;
+//   auto result = ParseBoolean("true", &cursor);
+//   ASSERT_THAT(result.result().ok(), IsTrue());
+//   ASSERT_THAT(result.data(), IsTrue());
+// }
 
-TEST_F(ObjectParsingTest, BooleanTrue) {
-  EXPECT_PARSE_OK("true", bool, IsTrue());
+TEST(ParseBoolean, True) {
+  uint cursor = 0;
+  auto result = ParseBoolean("true", &cursor);
+  EXPECT_THAT(result.result().ok(), IsTrue());
+  EXPECT_THAT(result.value(), IsTrue());
+  EXPECT_THAT(cursor, Eq(4));
 }
 
-TEST_F(ObjectParsingTest, BooleanFalse) {
-  EXPECT_PARSE_OK("false", bool, IsFalse());
+TEST(ParseBoolean, TrueWithStuffAfter) {
+  uint cursor = 0;
+  auto result = ParseBoolean("trueabc", &cursor);
+  EXPECT_THAT(result.result().ok(), IsTrue());
+  EXPECT_THAT(cursor, Eq(4));
+  EXPECT_THAT(result.data(), IsTrue());
 }
 
-TEST_F(ObjectParsingTest, Float0) {
-  EXPECT_PARSE_OK("0", number, Eq(0));
+TEST(ParseBoolean, FalseWithStuffAfter) {
+  uint cursor = 0;
+  auto result = ParseBoolean("falseabc", &cursor);
+  EXPECT_THAT(result.result().ok(), IsTrue());
+  EXPECT_THAT(cursor, Eq(5));
+  EXPECT_THAT(result.data(), IsFalse());
 }
 
-TEST_F(ObjectParsingTest, Float0_1) {
-  EXPECT_PARSE_OK("0.1", number, FloatEq(0.1));
+TEST(ParseBoolean, TrueWithWhitespaceBeforeShouldError) {
+  uint cursor = 0;
+  auto result = ParseBoolean(" false", &cursor);
+  EXPECT_THAT(result.result().ok(), IsFalse());
+  EXPECT_THAT(cursor, Eq(0));
 }
 
-TEST_F(ObjectParsingTest, Float1_1) {
-  EXPECT_PARSE_OK("1.1", number, FloatEq(1.1));
+TEST(ParseFloat, Float0) {
+  uint cursor = 0;
+  EXPECT_THAT(ParseFloat("0", &cursor).value(), FloatEq(0));
 }
 
-TEST_F(ObjectParsingTest, FloatNeg0) {
-  EXPECT_PARSE_OK("-0", number, FloatEq(0));
+TEST(ParseFloat, Float0_1) {
+  uint cursor = 0;
+  EXPECT_THAT(ParseFloat("0.1", &cursor).value(), FloatEq(0.1));
 }
 
-TEST_F(ObjectParsingTest, FloatPos0) {
-  EXPECT_PARSE_OK("+0", number, FloatEq(0));
+TEST(ParseFloat, Float1_1) {
+  uint cursor = 0;
+  EXPECT_THAT(ParseFloat("1.1", &cursor).value(), FloatEq(1.1));
 }
 
-TEST_F(ObjectParsingTest, Float100) {
-  EXPECT_PARSE_OK("100", number, FloatEq(100));
+TEST(ParseFloat, FloatNeg0) {
+  uint cursor = 0;
+  EXPECT_THAT(ParseFloat("-0", &cursor).value(), FloatEq(0));
 }
 
-TEST_F(ObjectParsingTest, Float100_001) {
-  EXPECT_PARSE_OK("100.001", number, FloatEq(100.001));
+TEST(ParseFloat, FloatPos0) {
+  uint cursor = 0;
+  EXPECT_THAT(ParseFloat("+0", &cursor).value(), FloatEq(0));
 }
 
-TEST_F(ObjectParsingTest, Float1e1) {
-  EXPECT_PARSE_OK("1e0", number, FloatEq(1));
+TEST(ParseFloat, Float100) {
+  uint cursor = 0;
+  EXPECT_THAT(ParseFloat("100", &cursor).value(), FloatEq(100));
 }
 
-TEST_F(ObjectParsingTest, Float12e2) {
-  EXPECT_PARSE_OK("12e2", number, FloatEq(1200));
+TEST(ParseFloat, Float100_001) {
+  uint cursor = 0;
+  EXPECT_THAT(ParseFloat("100.001", &cursor).value(),
+              FloatEq(100.001));
 }
 
-TEST_F(ObjectParsingTest, EmptyString) {
-  EXPECT_PARSE_OK("\"\"", string, Eq("\"\""));
+TEST(ParseFloat, Float1e1) {
+  uint cursor = 0;
+  EXPECT_THAT(ParseFloat("1e0", &cursor).value(), FloatEq(1));
 }
 
-TEST_F(ObjectParsingTest, StringWithOneCharacter) {
-  EXPECT_PARSE_OK("\"a\"", string, Eq("\"a\""));
-}
-
-TEST_F(ObjectParsingTest, StringAbc) {
-  EXPECT_PARSE_OK("\"abc\"", string, Eq("\"abc\""));
+TEST(ParseFloat, Float12e2) {
+  uint cursor = 0;
+  EXPECT_THAT(ParseFloat("12e2", &cursor).value(), FloatEq(1200));
 }
