@@ -17,48 +17,52 @@ using ::testing::IsFalse;
 using ::testing::IsTrue;
 using ::testing::Matcher;
 
-// TEST(ParseBoolean, EmptyString) {
-//   uint cursor = 0;
-//   auto result = ParseBoolean("", &cursor);
-//   ASSERT_THAT(result.result().ok(), IsFalse());
-// }
+class ParseTest : public ::testing::Test {
+ public:
+  void SetUp() override { _cursor = 0; }
 
-// TEST(ParseBoolean, True) {
-//   uint cursor = 0;
-//   auto result = ParseBoolean("true", &cursor);
-//   ASSERT_THAT(result.result().ok(), IsTrue());
-//   ASSERT_THAT(result.data(), IsTrue());
-// }
+  uint _cursor;
+};
 
-TEST(ParseBoolean, True) {
-  uint cursor = 0;
-  auto result = ParseBoolean("true", &cursor);
-  EXPECT_THAT(result.result().ok(), IsTrue());
-  EXPECT_THAT(result.value(), IsTrue());
-  EXPECT_THAT(cursor, Eq(4));
+class ParseBooleanTest : public ParseTest {};
+
+TEST_F(ParseBooleanTest, EmptyString) {
+  auto result = ParseBoolean("", &_cursor);
+  ASSERT_THAT(result.ok(), IsFalse());
 }
 
-TEST(ParseBoolean, TrueWithStuffAfter) {
-  uint cursor = 0;
-  auto result = ParseBoolean("trueabc", &cursor);
-  EXPECT_THAT(result.result().ok(), IsTrue());
-  EXPECT_THAT(cursor, Eq(4));
+TEST_F(ParseBooleanTest, True) {
+  auto result = ParseBoolean("true", &_cursor);
+  EXPECT_THAT(result.ok(), IsTrue());
+  EXPECT_THAT(result.value(), IsTrue());
+  EXPECT_THAT(_cursor, Eq(4));
+}
+
+TEST_F(ParseBooleanTest, False) {
+  auto result = ParseBoolean("false", &_cursor);
+  EXPECT_THAT(result.ok(), IsTrue());
+  EXPECT_THAT(result.value(), IsFalse());
+  EXPECT_THAT(_cursor, Eq(5));
+}
+
+TEST_F(ParseBooleanTest, TrueWithStuffAfter) {
+  auto result = ParseBoolean("trueabc", &_cursor);
+  EXPECT_THAT(result.ok(), IsTrue());
+  EXPECT_THAT(_cursor, Eq(4));
   EXPECT_THAT(result.data(), IsTrue());
 }
 
-TEST(ParseBoolean, FalseWithStuffAfter) {
-  uint cursor = 0;
-  auto result = ParseBoolean("falseabc", &cursor);
-  EXPECT_THAT(result.result().ok(), IsTrue());
-  EXPECT_THAT(cursor, Eq(5));
+TEST_F(ParseBooleanTest, FalseWithStuffAfter) {
+  auto result = ParseBoolean("falseabc", &_cursor);
+  EXPECT_THAT(result.ok(), IsTrue());
+  EXPECT_THAT(_cursor, Eq(5));
   EXPECT_THAT(result.data(), IsFalse());
 }
 
-TEST(ParseBoolean, TrueWithWhitespaceBeforeShouldError) {
-  uint cursor = 0;
-  auto result = ParseBoolean(" false", &cursor);
-  EXPECT_THAT(result.result().ok(), IsFalse());
-  EXPECT_THAT(cursor, Eq(0));
+TEST_F(ParseBooleanTest, TrueWithWhitespaceBeforeShouldError) {
+  auto result = ParseBoolean(" false", &_cursor);
+  EXPECT_THAT(result.ok(), IsFalse());
+  EXPECT_THAT(_cursor, Eq(0));
 }
 
 TEST(ParseFloat, Float0) {
@@ -113,13 +117,6 @@ TEST(ParseFloat, Float12e2) {
   EXPECT_THAT(ParseFloat("12e2", &cursor).value(),
               FloatEq(1200));
 }
-
-class ParseTest : public ::testing::Test {
- public:
-  void SetUp() override { _cursor = 0; }
-
-  uint _cursor;
-};
 
 class ParseStringTest : public ParseTest {};
 
