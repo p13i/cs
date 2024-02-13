@@ -97,6 +97,15 @@ class ResultOr : public Result {
   Data value() const { return _data; }
   Result result() const { return _result; }
 
+  friend std::ostream& operator<<(
+      std::ostream& os, const ResultOr<Data>& result) {
+    return os << "ResultOr("
+              << (result.ok() ? "OK" : "ERROR")
+              << ", code=" << result.code()
+              << ", message=" << result.message()
+              << ", data=" << result.value() << ")";
+  }
+
  private:
   Result _result;
   Data _data;
