@@ -1,5 +1,5 @@
-#ifndef CS_HTTP_SERVER_HH
-#define CS_HTTP_SERVER_HH
+#ifndef CS_NET_HTTP_SERVER_HH
+#define CS_NET_HTTP_SERVER_HH
 
 #include <arpa/inet.h>
 #include <stdio.h>
@@ -37,4 +37,4 @@ class Server {
 
 }  // namespace cs::net::http
 
-#endif  // CS_HTTP_SERVER_HH
+#endif  // CS_NET_HTTP_SERVER_HH

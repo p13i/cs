@@ -1,5 +1,5 @@
-#ifndef CS_HTTP_RESPONSE_HH
-#define CS_HTTP_RESPONSE_HH
+#ifndef CS_NET_HTTP_RESPONSE_HH
+#define CS_NET_HTTP_RESPONSE_HH
 
 #include <stdint.h>
 
@@ -58,4 +58,4 @@ class Response {
 
 }  // namespace cs::net::http
 
-#endif  // CS_HTTP_RESPONSE_HH
+#endif  // CS_NET_HTTP_RESPONSE_HH

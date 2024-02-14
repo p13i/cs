@@ -1,5 +1,5 @@
-#ifndef CS_HTTP_REQUEST_HH
-#define CS_HTTP_REQUEST_HH
+#ifndef CS_NET_HTTP_REQUEST_HH
+#define CS_NET_HTTP_REQUEST_HH
 
 #include <stdint.h>
 
@@ -84,4 +84,4 @@ class Request {
 
 }  // namespace cs::net::http
 
-#endif  // CS_HTTP_REQUEST_HH
+#endif  // CS_NET_HTTP_REQUEST_HH

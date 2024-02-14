@@ -1,5 +1,5 @@
-#ifndef CS_HTTP_STATUS_HH
-#define CS_HTTP_STATUS_HH
+#ifndef CS_NET_HTTP_STATUS_HH
+#define CS_NET_HTTP_STATUS_HH
 
 #include <stdint.h>
 
@@ -33,4 +33,4 @@ static const Status HTTP_404_NOT_FOUND(404, "NOT FOUND");
 
 }  // namespace cs::net::http
 
-#endif  // CS_HTTP_STATUS_HH
+#endif  // CS_NET_HTTP_STATUS_HH
