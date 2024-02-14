@@ -5,14 +5,14 @@ new_git_repository(
     name = "googletest",
     build_file = "@//:gmock.BUILD",
     remote = "https://github.com/google/googletest",
-    tag = "release-1.10.0",
+    commit = "703bd9caab50b139428cea1aaff9974ebee5742e",
 )
 
 git_repository(
     name = "emsdk",
     remote = "https://github.com/emscripten-core/emsdk.git",
     strip_prefix = "bazel",
-    tag = "3.1.44",
+    commit = "a896e3d066448b3530dbcaa48869fafefd738f57",
 )
 
 load("@emsdk//:deps.bzl", emsdk_deps = "deps")
