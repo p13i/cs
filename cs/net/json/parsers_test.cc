@@ -501,3 +501,30 @@ TEST_F(ParseObjectTest,
               StrEq("abc"));
   EXPECT_THAT(_cursor, Eq(str.size()));
 }
+
+TEST_F(ParseObjectTest, OneFloat) {
+  std::string str = "1.1";
+  auto result = ParseObject(str, &_cursor);
+  ASSERT_THAT(result.ok(), IsTrue()) << result;
+  EXPECT_THAT(result.value()->type(), Eq(Type::NUMBER));
+  EXPECT_THAT(result.value()->as_number(), FloatEq(1.1));
+  EXPECT_THAT(_cursor, Eq(str.size()));
+}
+
+TEST_F(ParseObjectTest, OneBool) {
+  std::string str = "false";
+  auto result = ParseObject(str, &_cursor);
+  ASSERT_THAT(result.ok(), IsTrue()) << result;
+  EXPECT_THAT(result.value()->type(), Eq(Type::BOOLEAN));
+  EXPECT_THAT(result.value()->as_bool(), IsFalse());
+  EXPECT_THAT(_cursor, Eq(str.size()));
+}
+
+TEST_F(ParseObjectTest, OneString) {
+  std::string str = "\"abc\"";
+  auto result = ParseObject(str, &_cursor);
+  ASSERT_THAT(result.ok(), IsTrue()) << result;
+  EXPECT_THAT(result.value()->type(), Eq(Type::STRING));
+  EXPECT_THAT(result.value()->as_string(), StrEq("abc"));
+  EXPECT_THAT(_cursor, Eq(str.size()));
+}

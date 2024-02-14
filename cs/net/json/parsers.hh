@@ -28,8 +28,8 @@ using ::cs::string::format;
 ResultOr<Object*> ParseObject(std::string str,
                               uint* cursor);
 
-ResultOr<std::map<std::string, Object*>> ParseMap(std::string str,
-                                                  uint* cursor);
+ResultOr<std::map<std::string, Object*>> ParseMap(
+    std::string str, uint* cursor);
 
 ResultOr<std::string> ParseString(std::string str,
                                   uint* cursor);
