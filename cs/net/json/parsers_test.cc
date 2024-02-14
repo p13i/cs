@@ -176,39 +176,55 @@ TEST_F(ParseArrayTest, ArrayWithOneElement) {
   EXPECT_THAT(_cursor, Eq(3));
 }
 
-#if 0
 TEST_F(ParseArrayTest, ArrayWithTwoElements) {
-  auto result = ParseObject("[1, 2]", &_cursor);
-  ASSERT_THAT(result.ok(), IsTrue());
-  EXPECT_THAT(result.value().type(), Eq(Type::kArray));
-  EXPECT_THAT(result.value().size(), Eq(2));
-  EXPECT_THAT(result.value().at(0).type(),
-              Eq(Type::kNumber));
-  EXPECT_THAT(result.value().at(0).number(), FloatEq(1));
-  EXPECT_THAT(result.value().at(1).type(),
-              Eq(Type::kNumber));
-  EXPECT_THAT(result.value().at(1).number(), FloatEq(2));
+  auto result = ParseObject("[1,2]", &_cursor);
+  ASSERT_THAT(result.ok(), IsTrue()) << result;
+  EXPECT_THAT(result.value()->type(), Eq(Type::ARRAY));
+  auto array = result.value()->as_array();
+  EXPECT_THAT(array.size(), Eq(2));
+  EXPECT_THAT(array.at(0)->type(), Eq(Type::NUMBER));
+  EXPECT_THAT(array.at(0)->as_number(), FloatEq(1));
+  EXPECT_THAT(array.at(1)->type(), Eq(Type::NUMBER));
+  EXPECT_THAT(array.at(1)->as_number(), FloatEq(2));
+  EXPECT_THAT(_cursor, Eq(5));
 }
 
-TEST_F(ParseArrayTest,
-       ArrayWithOneStringAndOneFloatAndOneBool) {
-  auto result =
-      ParseObject("[\"abc\", 1.1, true]", &_cursor);
-  ASSERT_THAT(result.ok(), IsTrue());
-  EXPECT_THAT(result.value()->as_array().type(),
-              Eq(Type::kArray));
-  EXPECT_THAT(result.value()->as_array().size(), Eq(3));
-  EXPECT_THAT(result.value()->as_array().at(0).type(),
-              Eq(Type::kString));
-  EXPECT_THAT(*result.value()->as_array().at(0).as_string(),
-              StrEq("abc"));
-  EXPECT_THAT(result.value()->as_array().at(1).type(),
-              Eq(Type::kNumber));
-  EXPECT_THAT(result.value()->as_array().at(1).as_number(),
-              FloatEq(1.1));
-  EXPECT_THAT(result.value()->as_array().at(2).type(),
-              Eq(Type::kBoolean));
-  EXPECT_THAT(result.value()->as_array().at(2).as_bool(),
-              IsTrue());
+TEST_F(ParseArrayTest, ArrayWithOneStringAndOneFloatAndOneBool) {
+  auto result = ParseObject("[\"abc\",1.1,true]", &_cursor);
+  ASSERT_THAT(result.ok(), IsTrue()) << result;
+  auto array = result.value();
+  EXPECT_THAT(array->type(), Eq(Type::ARRAY));
+  EXPECT_THAT(array->as_array().size(), Eq(3));
+  EXPECT_THAT(array->as_array().at(0)->type(), Eq(Type::STRING));
+  EXPECT_THAT(array->as_array().at(0)->as_string(), StrEq("abc"));
+  EXPECT_THAT(array->as_array().at(1)->type(), Eq(Type::NUMBER));
+  EXPECT_THAT(array->as_array().at(1)->as_number(), FloatEq(1.1));
+  EXPECT_THAT(array->as_array().at(2)->type(), Eq(Type::BOOLEAN));
+  EXPECT_THAT(array->as_array().at(2)->as_bool(), IsTrue());
+  EXPECT_THAT(_cursor, Eq(16));
 }
-#endif
+
+TEST_F(ParseArrayTest, NestedArray) {
+  auto result = ParseObject("[[1,2],[3,4]]", &_cursor);
+  ASSERT_TRUE(result.ok()) << result;
+
+  auto array = result.value();
+  EXPECT_EQ(array->type(), Type::ARRAY);
+  EXPECT_EQ(array->as_array().size(), 2);
+
+  auto subArray1 = array->as_array().at(0)->as_array();
+  EXPECT_EQ(subArray1.size(), 2);
+  EXPECT_EQ(subArray1.at(0)->type(), Type::NUMBER);
+  EXPECT_FLOAT_EQ(subArray1.at(0)->as_number(), 1);
+  EXPECT_EQ(subArray1.at(1)->type(), Type::NUMBER);
+  EXPECT_FLOAT_EQ(subArray1.at(1)->as_number(), 2);
+
+  auto subArray2 = array->as_array().at(1)->as_array();
+  EXPECT_EQ(subArray2.size(), 2);
+  EXPECT_EQ(subArray2.at(0)->type(), Type::NUMBER);
+  EXPECT_FLOAT_EQ(subArray2.at(0)->as_number(), 3);
+  EXPECT_EQ(subArray2.at(1)->type(), Type::NUMBER);
+  EXPECT_FLOAT_EQ(subArray2.at(1)->as_number(), 4);
+
+  EXPECT_EQ(_cursor, 13);
+}

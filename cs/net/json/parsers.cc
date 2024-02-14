@@ -92,31 +92,42 @@ ResultOr<float> ParseFloat(std::string str, uint* cursor) {
   bool is_negative = false;
   bool has_exponent = false;
   bool negative_exponent = false;
-  float decimal_multiplier = 0.1f;
-  uint exponent_value = 0;
+  float exponent_value = 0;
   float result = 0.0f;
 
   // Handle sign.
-  if (InBounds(str, *cursor) &&
-      (str[*cursor] == '-' || str[*cursor] == '+')) {
+  if (str[*cursor] == '+') {
+    *cursor += 1;
+  }
+
+  if (str[*cursor] == '-') {
     is_negative = (str[*cursor] == '-');
     *cursor += 1;
   }
 
   // Parse digits and build the integer part.
-  while (InBounds(str, *cursor) && std::isdigit(str[*cursor])) {
-    float digit = static_cast<float>(str[*cursor] - '0');
-    result = result * 10.0f + digit;
+  std::vector<uint> digits;
+  while (InBounds(str, *cursor) &&
+         std::isdigit(str[*cursor])) {
+    uint this_digit = str[*cursor] - '0';
+    digits.push_back(this_digit);
     *cursor += 1;
+  }
+
+  float tens_multiplier = 1;
+  for (int i = digits.size() - 1; i >= 0; i--) {
+    result += digits[i] * tens_multiplier;
+    tens_multiplier *= 10;
   }
 
   // Parse decimal point and digits for the fractional
   // part.
   if (InBounds(str, *cursor) && str[*cursor] == '.') {
     *cursor += 1;
+    float decimal_multiplier = 0.1f;
     while (InBounds(str, *cursor) &&
            std::isdigit(str[*cursor])) {
-      float digit = static_cast<float>(str[*cursor] - '0');
+      auto digit = str[*cursor] - '0';
       result += digit * decimal_multiplier;
       decimal_multiplier *= 0.1f;
       *cursor += 1;
@@ -129,10 +140,13 @@ ResultOr<float> ParseFloat(std::string str, uint* cursor) {
     has_exponent = true;
     *cursor += 1;
 
-    if (InBounds(str, *cursor) &&
-        (str[*cursor] == '-' || str[*cursor] == '+')) {
-      negative_exponent = (str[*cursor] == '-');
-      *cursor += 1;
+    if (InBounds(str, *cursor)) {
+      if (str[*cursor] == '+') {
+        *cursor += 1;
+      } else if (str[*cursor] == '-') {
+        negative_exponent = true;
+        *cursor += 1;
+      }
     }
 
     while (InBounds(str, *cursor) &&
@@ -149,9 +163,13 @@ ResultOr<float> ParseFloat(std::string str, uint* cursor) {
     if (negative_exponent) {
       exponent_value *= -1;
     }
-    float exponentiated = std::pow(10.0f, exponent_value);
-    result *= exponentiated;
+    result *= std::pow(10.f, exponent_value);
   }
+
+  // Print cursor.
+  std::cout << "ParseFloat: result=" << result
+            << ", cursor=" << *cursor << ", str=" << str
+            << std::endl;
 
   return result;
 }
@@ -186,6 +204,8 @@ ResultOr<std::string> ParseString(std::string str,
 
 ResultOr<std::vector<Object*>> ParseArray(std::string str,
                                           uint* cursor) {
+  std::cout << "ParseArray: str=" << str
+            << ", cursor=" << *cursor << std::endl;
   if (!InBounds(str, *cursor)) {
     return Error(cs::string::format(
         "Cursor out of bounds: str=%s, cursor=%d", str,
@@ -198,21 +218,29 @@ ResultOr<std::vector<Object*>> ParseArray(std::string str,
   *cursor += 1;
 
   std::vector<Object*> array;
-
   while (InBounds(str, *cursor)) {
     if (str[*cursor] == ']') {
       break;
     }
-#if 0
+    if (str[*cursor] == ',') {
+      *cursor += 1;
+      continue;
+    }
+#if 1
     Object* object;
     ASSIGN_OR_RETURN(object, ParseObject(str, cursor));
-#endif
+#else
     float value;
     ASSIGN_OR_RETURN(value, ParseFloat(str, cursor));
     Object* object = new Object(value);
-    object->_type = Type::NUMBER;
-    object->_number_value = value;
+#endif
     array.push_back(object);
+  }
+
+  // Print the array.
+  std::cout << "Array: ";
+  for (auto object : array) {
+    std::cout << object->_number_value << ", " << std::endl;
   }
 
   if (str[*cursor] != ']') {
@@ -225,6 +253,9 @@ ResultOr<std::vector<Object*>> ParseArray(std::string str,
 
 ResultOr<Object*> ParseObject(std::string str,
                               uint* cursor) {
+  std::cout << "ParseObject: str=" << str
+            << ", cursor=" << *cursor << std::endl;
+
   if (!InBounds(str, *cursor)) {
     return Error(cs::string::format(
         "Cursor out of bounds: str=%s, cursor=%d", str,
@@ -237,32 +268,42 @@ ResultOr<Object*> ParseObject(std::string str,
     if (c == '{') {
       // TODO Parse map
     } else if (c == '[') {
-      // TODO Parse array
-      std::cout << "Parsing array" << std::endl;
+      // Parse array
+      std::cout << "Parsing array at cursor=" << *cursor
+                << std::endl;
       ASSIGN_OR_RETURN(object->_array_value,
                        ParseArray(str, cursor));
       object->_type = Type::ARRAY;
+      std::cout << "ParseArray returned "
+                << object->_array_value.size()
+                << " with cursor=" << *cursor << std::endl;
+      break;
     } else if (c == '+' || c == '-' || c == '.' ||
                ('0' <= c && c <= '9')) {
       // Parse float
       ASSIGN_OR_RETURN(object->_number_value,
                        ParseFloat(str, cursor));
       object->_type = Type::NUMBER;
+      std::cout << "ParseFloat returned "
+                << object->_number_value << std::endl;
+      break;
     } else if (c == '"') {
       // Parse string
       ASSIGN_OR_RETURN(object->_string_value,
                        ParseString(str, cursor));
       object->_type = Type::STRING;
+      break;
     } else if (c == 't' || c == 'f') {
       // Parse bool
       ASSIGN_OR_RETURN(object->_bool_value,
                        ParseBoolean(str, cursor));
       object->_type = Type::BOOLEAN;
+      break;
     } else {
       return Error(cs::string::format(
           "Reached unexpected character ('%c') at "
           "cursor=%d",
-          c, cursor));
+          c, *cursor));
     }
   }
 

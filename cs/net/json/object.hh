@@ -64,7 +64,7 @@ class Object {
   Type type() { return _type; }
 
   bool as_bool() const {
-    ENSURE(_type != Type::BOOLEAN);
+    ENSURE(_type == Type::BOOLEAN);
     return _bool_value;
   }
 
