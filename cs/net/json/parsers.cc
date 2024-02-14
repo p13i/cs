@@ -204,8 +204,6 @@ ResultOr<std::string> ParseString(std::string str,
 
 ResultOr<std::vector<Object*>> ParseArray(std::string str,
                                           uint* cursor) {
-  std::cout << "ParseArray: str=" << str
-            << ", cursor=" << *cursor << std::endl;
   if (!InBounds(str, *cursor)) {
     return Error(cs::string::format(
         "Cursor out of bounds: str=%s, cursor=%d", str,
@@ -229,12 +227,6 @@ ResultOr<std::vector<Object*>> ParseArray(std::string str,
     Object* object;
     ASSIGN_OR_RETURN(object, ParseObject(str, cursor));
     array.push_back(object);
-  }
-
-  // Print the array.
-  std::cout << "Array: ";
-  for (auto object : array) {
-    std::cout << object->_number_value << ", " << std::endl;
   }
 
   if (str[*cursor] != ']') {
