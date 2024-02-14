@@ -54,3 +54,14 @@ cc_library(
         "//cs/string:format",
     ],
 )
+
+cc_test(
+    name="serialize_test",
+    srcs=["serialize_test.cc"],
+    deps=[
+        "//cs/net/json:object",
+        "//cs/net/json:serialize",
+        "//cs/result",
+        "@googletest//:gtest_main",
+    ],
+)
