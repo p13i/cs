@@ -56,9 +56,9 @@ cc_library(
 )
 
 cc_test(
-    name="serialize_test",
-    srcs=["serialize_test.cc"],
-    deps=[
+    name = "serialize_test",
+    srcs = ["serialize_test.cc"],
+    deps = [
         "//cs/net/json:object",
         "//cs/net/json:serialize",
         "//cs/result",

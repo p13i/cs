@@ -4,15 +4,15 @@ load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 new_git_repository(
     name = "googletest",
     build_file = "@//:gmock.BUILD",
-    remote = "https://github.com/google/googletest",
     commit = "703bd9caab50b139428cea1aaff9974ebee5742e",
+    remote = "https://github.com/google/googletest",
 )
 
 git_repository(
     name = "emsdk",
+    commit = "a896e3d066448b3530dbcaa48869fafefd738f57",
     remote = "https://github.com/emscripten-core/emsdk.git",
     strip_prefix = "bazel",
-    commit = "a896e3d066448b3530dbcaa48869fafefd738f57",
 )
 
 load("@emsdk//:deps.bzl", emsdk_deps = "deps")
