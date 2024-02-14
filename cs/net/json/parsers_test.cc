@@ -189,17 +189,23 @@ TEST_F(ParseArrayTest, ArrayWithTwoElements) {
   EXPECT_THAT(_cursor, Eq(5));
 }
 
-TEST_F(ParseArrayTest, ArrayWithOneStringAndOneFloatAndOneBool) {
+TEST_F(ParseArrayTest,
+       ArrayWithOneStringAndOneFloatAndOneBool) {
   auto result = ParseObject("[\"abc\",1.1,true]", &_cursor);
   ASSERT_THAT(result.ok(), IsTrue()) << result;
   auto array = result.value();
   EXPECT_THAT(array->type(), Eq(Type::ARRAY));
   EXPECT_THAT(array->as_array().size(), Eq(3));
-  EXPECT_THAT(array->as_array().at(0)->type(), Eq(Type::STRING));
-  EXPECT_THAT(array->as_array().at(0)->as_string(), StrEq("abc"));
-  EXPECT_THAT(array->as_array().at(1)->type(), Eq(Type::NUMBER));
-  EXPECT_THAT(array->as_array().at(1)->as_number(), FloatEq(1.1));
-  EXPECT_THAT(array->as_array().at(2)->type(), Eq(Type::BOOLEAN));
+  EXPECT_THAT(array->as_array().at(0)->type(),
+              Eq(Type::STRING));
+  EXPECT_THAT(array->as_array().at(0)->as_string(),
+              StrEq("abc"));
+  EXPECT_THAT(array->as_array().at(1)->type(),
+              Eq(Type::NUMBER));
+  EXPECT_THAT(array->as_array().at(1)->as_number(),
+              FloatEq(1.1));
+  EXPECT_THAT(array->as_array().at(2)->type(),
+              Eq(Type::BOOLEAN));
   EXPECT_THAT(array->as_array().at(2)->as_bool(), IsTrue());
   EXPECT_THAT(_cursor, Eq(16));
 }

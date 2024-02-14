@@ -22,13 +22,13 @@ cc_test(
 
 cc_library(
     name = "parsers",
+    srcs = ["parsers.cc"],
     hdrs = ["parsers.hh"],
-    srcs=["parsers.cc"],
     deps = [
+        "//cs/net/json:object",
         "//cs/result",
         "//cs/sanity:ensure",
         "//cs/string:format",
-        "//cs/net/json:object",
     ],
 )
 
@@ -36,8 +36,8 @@ cc_test(
     name = "parsers_test",
     srcs = ["parsers_test.cc"],
     deps = [
-        "//cs/net/json:parsers",
         "//cs/net/json:object",
+        "//cs/net/json:parsers",
         "//cs/result",
         "@googletest//:gtest_main",
     ],
