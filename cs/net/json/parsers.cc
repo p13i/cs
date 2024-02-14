@@ -237,6 +237,47 @@ ResultOr<std::vector<Object*>> ParseArray(std::string str,
   return array;
 }
 
+ResultOr<std::map<std::string, Object*>> ParseMap(
+    std::string str, uint* cursor) {
+  if (!InBounds(str, *cursor)) {
+    return Error(cs::string::format(
+        "Cursor out of bounds: str=%s, cursor=%d", str,
+        *cursor));
+  }
+
+  if (str[*cursor] != '{') {
+    return Error("Did not find leading '{' in map.");
+  }
+  *cursor += 1;
+
+  std::map<std::string, Object*> map;
+  while (InBounds(str, *cursor)) {
+    if (str[*cursor] == '}') {
+      break;
+    }
+    if (str[*cursor] == ',') {
+      *cursor += 1;
+      continue;
+    }
+    std::string key;
+    ASSIGN_OR_RETURN(key, ParseString(str, cursor));
+    if (str[*cursor] != ':') {
+      return Error("Did not find ':' after key in map.");
+    }
+    *cursor += 1;
+    Object* object;
+    ASSIGN_OR_RETURN(object, ParseObject(str, cursor));
+    map[key] = object;
+  }
+
+  if (str[*cursor] != '}') {
+    return Error("Did not find ending '}' in map.");
+  }
+  *cursor += 1;
+
+  return map;
+}
+
 ResultOr<Object*> ParseObject(std::string str,
                               uint* cursor) {
   std::cout << "ParseObject: str=" << str
@@ -253,6 +294,10 @@ ResultOr<Object*> ParseObject(std::string str,
     char c = str[*cursor];
     if (c == '{') {
       // TODO Parse map
+      ASSIGN_OR_RETURN(object->_map_value,
+                       ParseMap(str, cursor));
+      object->_type = Type::MAP;
+      break;
     } else if (c == '[') {
       // Parse array
       std::cout << "Parsing array at cursor=" << *cursor
