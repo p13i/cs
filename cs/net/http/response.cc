@@ -1,4 +1,4 @@
-#include "cs/http/response.hh"
+#include "cs/net/http/response.hh"
 
 #include <stdint.h>
 
@@ -9,4 +9,4 @@
 
 #include "cs/sanity/ensure.hh"
 
-namespace cs::http {}  // namespace cs::http
+namespace cs::net::http {}  // namespace cs::net::http

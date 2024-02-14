@@ -7,7 +7,7 @@
 #include <sstream>
 #include <string>
 
-namespace cs::http {
+namespace cs::net::http {
 
 struct Status {
   Status(uint32_t code, std::string name)
@@ -31,6 +31,6 @@ struct Status {
 static const Status HTTP_200_OK(200, "OK");
 static const Status HTTP_404_NOT_FOUND(404, "NOT FOUND");
 
-}  // namespace cs::http
+}  // namespace cs::net::http
 
 #endif  // CS_HTTP_STATUS_HH

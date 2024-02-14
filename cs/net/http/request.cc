@@ -1,4 +1,4 @@
-#include "cs/http/request.hh"
+#include "cs/net/http/request.hh"
 
 #include <stdint.h>
 
@@ -10,7 +10,7 @@
 #include "cs/result/result.hh"
 #include "cs/sanity/ensure.hh"
 
-namespace cs::http {
+namespace cs::net::http {
 
 namespace {
 
@@ -165,4 +165,4 @@ Result Request::Parse(std::string str) {
   _body = str.substr(cursor, str.length() - cursor);
   return Ok();
 }
-}  // namespace cs::http
+}  // namespace cs::net::http

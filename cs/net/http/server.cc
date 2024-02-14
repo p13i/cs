@@ -1,12 +1,12 @@
 
-#include "cs/http/server.hh"
+#include "cs/net/http/server.hh"
 
 #include <unistd.h>
 
 #include <iostream>
 #include <sstream>
 
-#include "cs/http/request.hh"
+#include "cs/net/http/request.hh"
 #include "cs/profiling/time_it.hh"
 #include "cs/result/result.hh"
 #include "cs/sanity/ensure.hh"
@@ -24,7 +24,7 @@ using ::cs::result::Result;
 
 }  // namespace
 
-namespace cs::http {
+namespace cs::net::http {
 
 Server::Server(std::string ip_address, int port)
     : _ip_address(ip_address),
@@ -137,4 +137,4 @@ Result Server::startListening(
   return Ok();
 }
 
-}  // namespace cs::http
+}  // namespace cs::net::http

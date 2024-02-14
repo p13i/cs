@@ -6,17 +6,17 @@
 #include <iomanip>
 #include <iostream>
 
-#include "cs/http/request.hh"
-#include "cs/http/response.hh"
-#include "cs/http/server.hh"
+#include "cs/net/http/request.hh"
+#include "cs/net/http/response.hh"
+#include "cs/net/http/server.hh"
 #include "cs/result/result.hh"
 
-namespace cs::http {
+namespace cs::net::http {
 namespace {
 
-using ::cs::http::kContentTypeTextHtml;
-using ::cs::http::Request;
-using ::cs::http::Response;
+using ::cs::net::http::kContentTypeTextHtml;
+using ::cs::net::http::Request;
+using ::cs::net::http::Response;
 typedef std::function<Response(Request)> RequestHandler;
 
 // https://stackoverflow.com/a/63864750
@@ -45,7 +45,7 @@ class WebApp {
   }
 
   Result RunServer(std::string ip_address, int port) {
-    auto server = cs::http::Server(ip_address, port);
+    auto server = cs::net::http::Server(ip_address, port);
     OK_OR_RETURN(server.startServer());
     OK_OR_RETURN(server.startListening(
         std::bind(&WebApp::main_handler, this,
@@ -81,6 +81,6 @@ class WebApp {
       std::tuple<std::string, std::string, RequestHandler>>
       _handlers;
 };
-}  // namespace cs::http
+}  // namespace cs::net::http
 
 #endif  // CS_HTTP_WEB_APP_HH

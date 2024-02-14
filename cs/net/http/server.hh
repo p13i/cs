@@ -9,11 +9,11 @@
 #include <functional>
 #include <string>
 
-#include "cs/http/request.hh"
-#include "cs/http/response.hh"
+#include "cs/net/http/request.hh"
+#include "cs/net/http/response.hh"
 #include "cs/result/result.hh"
 
-namespace cs::http {
+namespace cs::net::http {
 
 // Based on: https://github.com/OsasAzamegbe/http-server
 class Server {
@@ -35,6 +35,6 @@ class Server {
   unsigned int _socket_address_length;
 };
 
-}  // namespace cs::http
+}  // namespace cs::net::http
 
 #endif  // CS_HTTP_SERVER_HH

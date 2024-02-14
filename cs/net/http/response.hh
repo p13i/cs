@@ -8,10 +8,10 @@
 #include <sstream>
 #include <string>
 
-#include "cs/http/status.hh"
+#include "cs/net/http/status.hh"
 #include "cs/sanity/ensure.hh"
 
-namespace cs::http {
+namespace cs::net::http {
 
 const std::string kContentTypeTextPlain = "text/plain";
 const std::string kContentTypeTextHtml = "text/html";
@@ -56,6 +56,6 @@ class Response {
   std::string _body;
 };
 
-}  // namespace cs::http
+}  // namespace cs::net::http
 
 #endif  // CS_HTTP_RESPONSE_HH

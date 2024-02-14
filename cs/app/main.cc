@@ -8,10 +8,10 @@
 
 #include "cs/app/scene1.hh"
 #include "cs/app/scene_animator.hh"
-#include "cs/http/request.hh"
-#include "cs/http/response.hh"
-#include "cs/http/server.hh"
-#include "cs/http/web_app.hh"
+#include "cs/net/http/request.hh"
+#include "cs/net/http/response.hh"
+#include "cs/net/http/server.hh"
+#include "cs/net/http/web_app.hh"
 #include "cs/net/json/object.hh"
 #include "cs/profiling/time_it.hh"
 #include "cs/renderer/film.hh"
@@ -19,13 +19,13 @@
 #include "cs/result/result.hh"
 
 using ::cs::app::SceneAnimator;
-using ::cs::http::HTTP_200_OK;
-using ::cs::http::HTTP_404_NOT_FOUND;
-using ::cs::http::kContentTypeTextHtml;
-using ::cs::http::kContentTypeTextJson;
-using ::cs::http::Request;
-using ::cs::http::Response;
-using ::cs::http::WebApp;
+using ::cs::net::http::HTTP_200_OK;
+using ::cs::net::http::HTTP_404_NOT_FOUND;
+using ::cs::net::http::kContentTypeTextHtml;
+using ::cs::net::http::kContentTypeTextJson;
+using ::cs::net::http::Request;
+using ::cs::net::http::Response;
+using ::cs::net::http::WebApp;
 using ::cs::net::json::Object;
 using ::cs::renderer::Film;
 using ::cs::renderer::Pixel;

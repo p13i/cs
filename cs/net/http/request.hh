@@ -12,7 +12,7 @@
 #include "cs/result/result.hh"
 #include "cs/sanity/ensure.hh"
 
-namespace cs::http {
+namespace cs::net::http {
 
 using ::cs::result::Error;
 using ::cs::result::Ok;
@@ -82,6 +82,6 @@ class Request {
   std::string _body;
 };
 
-}  // namespace cs::http
+}  // namespace cs::net::http
 
 #endif  // CS_HTTP_REQUEST_HH
