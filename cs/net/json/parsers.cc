@@ -199,7 +199,7 @@ ResultOr<std::string> ParseString(std::string str,
     return Error("Didn't find ending '\"' character.");
   }
   OK_OR_RETURN(IncrementCursor(str, cursor));
-  return std::string(ss.str());
+  return ss.str();
 }
 
 ResultOr<std::vector<Object*>> ParseArray(std::string str,
