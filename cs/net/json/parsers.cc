@@ -294,9 +294,14 @@ ResultOr<Object*> ParseObject(std::string str,
     char c = str[*cursor];
     if (c == '{') {
       // TODO Parse map
+      std::cout << "Parsing map at cursor=" << *cursor
+                << std::endl;
       ASSIGN_OR_RETURN(object->_map_value,
                        ParseMap(str, cursor));
       object->_type = Type::MAP;
+      std::cout << "ParseMap returned "
+                << object->_map_value.size()
+                << " with cursor=" << *cursor << std::endl;
       break;
     } else if (c == '[') {
       // Parse array

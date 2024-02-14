@@ -25,6 +25,8 @@ using ::cs::result::ResultOr;
 using ::cs::string::format;
 }  // namespace
 
+Result operator>>(std::string str, Object* object);
+
 ResultOr<Object*> ParseObject(std::string str,
                               uint* cursor);
 

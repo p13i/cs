@@ -60,6 +60,7 @@ cc_test(
     srcs = ["serialize_test.cc"],
     deps = [
         "//cs/net/json:object",
+        "//cs/net/json:parsers",
         "//cs/net/json:serialize",
         "//cs/result",
         "@googletest//:gtest_main",
