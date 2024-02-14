@@ -6,6 +6,7 @@
 
 using ::cs::net::json::Object;
 using ::cs::net::json::Type;
+using ::cs::net::json::parsers::ParseArray;
 using ::cs::net::json::parsers::ParseBoolean;
 using ::cs::net::json::parsers::ParseFloat;
 using ::cs::net::json::parsers::ParseObject;
@@ -132,25 +133,25 @@ TEST_F(ParseFloatTest, Float12e2) {
 class ParseStringTest : public ParseTest {};
 
 TEST_F(ParseStringTest, EmptyString) {
-  EXPECT_THAT(*ParseString("\"\"", &_cursor).value(),
+  EXPECT_THAT(ParseString("\"\"", &_cursor).value(),
               StrEq(""));
   EXPECT_THAT(_cursor, Eq(2));
 }
 
 TEST_F(ParseStringTest, abc) {
-  EXPECT_THAT(*ParseString("\"abc\"", &_cursor).value(),
+  EXPECT_THAT(ParseString("\"abc\"", &_cursor).value(),
               StrEq("abc"));
   EXPECT_THAT(_cursor, Eq(5));
 }
 
 TEST_F(ParseStringTest, abcWithSpaces) {
-  EXPECT_THAT(*ParseString("\" a b c \"", &_cursor).value(),
+  EXPECT_THAT(ParseString("\" a b c \"", &_cursor).value(),
               StrEq(" a b c "));
   EXPECT_THAT(_cursor, Eq(9));
 }
 
 TEST_F(ParseStringTest, Newline) {
-  EXPECT_THAT(*ParseString("\"\n\"", &_cursor).value(),
+  EXPECT_THAT(ParseString("\"\n\"", &_cursor).value(),
               StrEq("\n"));
   EXPECT_THAT(_cursor, Eq(3));
 }
@@ -161,21 +162,21 @@ TEST_F(ParseArrayTest, EmptyArray) {
   auto result = ParseObject("[]", &_cursor);
   ASSERT_THAT(result.ok(), IsTrue()) << result;
   EXPECT_THAT(result.value()->type(), Eq(Type::ARRAY));
-  EXPECT_THAT(result.value()->as_array()->size(), Eq(0));
+  EXPECT_THAT(result.value()->as_array().size(), Eq(0));
   EXPECT_THAT(_cursor, Eq(2));
 }
 
-#if 0
 TEST_F(ParseArrayTest, ArrayWithOneElement) {
-  auto result = ParseObject("[1]", &_cursor);
+  auto result = ParseArray("[1]", &_cursor);
   ASSERT_THAT(result.ok(), IsTrue()) << result;
-  EXPECT_THAT(result.value()->type(), Eq(Type::ARRAY));
-  auto array = result.value()->as_array();
-  EXPECT_THAT(array->size(), Eq(1));
-  EXPECT_THAT(array->at(0)->type(), Eq(Type::NUMBER));
-  EXPECT_THAT(array->at(0)->as_number(), FloatEq(1));
+  auto array = result.value();
+  EXPECT_THAT(array.size(), Eq(1));
+  EXPECT_THAT(array.at(0)->type(), Eq(Type::NUMBER));
+  EXPECT_THAT(array.at(0)->as_number(), FloatEq(1));
+  EXPECT_THAT(_cursor, Eq(3));
 }
 
+#if 0
 TEST_F(ParseArrayTest, ArrayWithTwoElements) {
   auto result = ParseObject("[1, 2]", &_cursor);
   ASSERT_THAT(result.ok(), IsTrue());

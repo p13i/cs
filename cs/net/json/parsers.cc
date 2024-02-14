@@ -83,15 +83,12 @@ ResultOr<bool> ParseBoolean(std::string str, uint* cursor) {
 }
 
 ResultOr<float> ParseFloat(std::string str, uint* cursor) {
-  if (str.empty()) {
-    return Error("Input str is empty.");
+  if (!InBounds(str, *cursor)) {
+    return Error(cs::string::format(
+        "Cursor out of bounds: str=%s, cursor=%d", str,
+        *cursor));
   }
 
-  if (cursor == nullptr) {
-    return Error("Cursor pointer is null.");
-  }
-
-  uint i = 0;
   bool is_negative = false;
   bool has_exponent = false;
   bool negative_exponent = false;
@@ -99,52 +96,50 @@ ResultOr<float> ParseFloat(std::string str, uint* cursor) {
   uint exponent_value = 0;
   float result = 0.0f;
 
-  // Handle leading whitespace.
-  while (InBounds(str, i) && std::isspace(str[i])) {
-    i++;
-  }
-
   // Handle sign.
-  if (InBounds(str, i) &&
-      (str[i] == '-' || str[i] == '+')) {
-    is_negative = (str[i] == '-');
-    i++;
+  if (InBounds(str, *cursor) &&
+      (str[*cursor] == '-' || str[*cursor] == '+')) {
+    is_negative = (str[*cursor] == '-');
+    *cursor += 1;
   }
 
   // Parse digits and build the integer part.
-  while (InBounds(str, i) && std::isdigit(str[i])) {
-    float digit = static_cast<float>(str[i] - '0');
+  while (InBounds(str, *cursor) && std::isdigit(str[*cursor])) {
+    float digit = static_cast<float>(str[*cursor] - '0');
     result = result * 10.0f + digit;
-    i++;
+    *cursor += 1;
   }
 
   // Parse decimal point and digits for the fractional
   // part.
-  if (InBounds(str, i) && str[i] == '.') {
-    i++;
-    while (InBounds(str, i) && std::isdigit(str[i])) {
-      float digit = static_cast<float>(str[i] - '0');
+  if (InBounds(str, *cursor) && str[*cursor] == '.') {
+    *cursor += 1;
+    while (InBounds(str, *cursor) &&
+           std::isdigit(str[*cursor])) {
+      float digit = static_cast<float>(str[*cursor] - '0');
       result += digit * decimal_multiplier;
       decimal_multiplier *= 0.1f;
-      i++;
+      *cursor += 1;
     }
   }
 
   // Parse exponent and digits for the exponent part.
-  if (InBounds(str, i) &&
-      (str[i] == 'e' || str[i] == 'E')) {
+  if (InBounds(str, *cursor) &&
+      (str[*cursor] == 'e' || str[*cursor] == 'E')) {
     has_exponent = true;
-    i++;
+    *cursor += 1;
 
-    if (InBounds(str, i) &&
-        (str[i] == '-' || str[i] == '+')) {
-      negative_exponent = (str[i] == '-');
-      i++;
+    if (InBounds(str, *cursor) &&
+        (str[*cursor] == '-' || str[*cursor] == '+')) {
+      negative_exponent = (str[*cursor] == '-');
+      *cursor += 1;
     }
 
-    while (InBounds(str, i) && std::isdigit(str[i])) {
-      exponent_value = exponent_value * 10 + (str[i] - '0');
-      i++;
+    while (InBounds(str, *cursor) &&
+           std::isdigit(str[*cursor])) {
+      exponent_value =
+          exponent_value * 10 + (str[*cursor] - '0');
+      *cursor += 1;
     }
   }
 
@@ -158,14 +153,11 @@ ResultOr<float> ParseFloat(std::string str, uint* cursor) {
     result *= exponentiated;
   }
 
-  // Update cursor position.
-  *cursor = i;
-
   return result;
 }
 
-ResultOr<std::string*> ParseString(std::string str,
-                                   uint* cursor) {
+ResultOr<std::string> ParseString(std::string str,
+                                  uint* cursor) {
   if (!InBounds(str, *cursor)) {
     return Error(cs::string::format(
         "Cursor out of bounds: str=%s, cursor=%d", str,
@@ -189,44 +181,44 @@ ResultOr<std::string*> ParseString(std::string str,
     return Error("Didn't find ending '\"' character.");
   }
   OK_OR_RETURN(IncrementCursor(str, cursor));
-  return new std::string(ss.str());
+  return std::string(ss.str());
 }
 
-ResultOr<std::vector<Object*>*> ParseArray(std::string str,
-                                           uint* cursor) {
+ResultOr<std::vector<Object*>> ParseArray(std::string str,
+                                          uint* cursor) {
   if (!InBounds(str, *cursor)) {
     return Error(cs::string::format(
         "Cursor out of bounds: str=%s, cursor=%d", str,
         *cursor));
   }
 
-  if (!TryConsumeString(str, "[", cursor)) {
+  if (str[*cursor] != '[') {
     return Error("Did not find leading '[' in array.");
   }
+  *cursor += 1;
 
-  std::vector<Object*>* array = new std::vector<Object*>();
+  std::vector<Object*> array;
 
   while (InBounds(str, *cursor)) {
-    std::cout << "str=" << str << ", cursor=" << *cursor
-              << std::endl;
     if (str[*cursor] == ']') {
       break;
     }
-    if (str[*cursor] == ',') {
-      OK_OR_RETURN(IncrementCursor(str, cursor));
-      continue;
-    }
-
+#if 0
     Object* object;
     ASSIGN_OR_RETURN(object, ParseObject(str, cursor));
-    array->push_back(object);
-    *cursor += 1;
+#endif
+    float value;
+    ASSIGN_OR_RETURN(value, ParseFloat(str, cursor));
+    Object* object = new Object(value);
+    object->_type = Type::NUMBER;
+    object->_number_value = value;
+    array.push_back(object);
   }
 
-  if (!InBounds(str, *cursor) ||
-      !TryConsumeString(str, "]", cursor)) {
+  if (str[*cursor] != ']') {
     return Error("Did not find ending ']' in array.");
   }
+  *cursor += 1;
 
   return array;
 }

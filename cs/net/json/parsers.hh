@@ -28,12 +28,15 @@ using ::cs::string::format;
 ResultOr<Object*> ParseObject(std::string str,
                               uint* cursor);
 
-ResultOr<std::string*> ParseString(std::string str,
+ResultOr<std::string> ParseString(std::string str,
                                    uint* cursor);
 
 ResultOr<bool> ParseBoolean(std::string str, uint* cursor);
 
 ResultOr<float> ParseFloat(std::string str, uint* cursor);
+
+ResultOr<std::vector<Object*>> ParseArray(std::string str,
+                                           uint* cursor);
 
 }  // namespace cs::net::json::parsers
 

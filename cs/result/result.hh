@@ -8,10 +8,11 @@
 
 #define ASSIGN_OR_RETURN(var, result_or) \
   {                                      \
-    if (result_or.result().ok()) {       \
-      var = result_or.data();            \
+    const auto eval = result_or;         \
+    if (eval.result().ok()) {            \
+      var = eval.data();                 \
     } else {                             \
-      return result_or.result();         \
+      return eval.result();              \
     }                                    \
   }
 
@@ -102,8 +103,7 @@ class ResultOr : public Result {
     return os << "ResultOr("
               << (result.ok() ? "OK" : "ERROR")
               << ", code=" << result.code()
-              << ", message=" << result.message()
-              << ", data=" << result.value() << ")";
+              << ", message=" << result.message() << ")";
   }
 
  private:

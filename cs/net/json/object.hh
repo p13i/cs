@@ -54,13 +54,9 @@ class Object {
       : _type(Type::BOOLEAN), _bool_value(value) {}
   Object(float number)
       : _type(Type::NUMBER), _number_value(number) {}
-  Object(std::string* value)
-      : _type(Type::STRING), _string_value(value) {}
   Object(std::string value)
-      : _type(Type::STRING), _string_value(&value) {}
+      : _type(Type::STRING), _string_value(value) {}
   Object(std::vector<Object*> value)
-      : _type(Type::ARRAY), _array_value(&value) {}
-  Object(std::vector<Object*>* value)
       : _type(Type::ARRAY), _array_value(value) {}
   Object(std::map<std::string, Object*> value)
       : _type(Type::MAP), _map_value(value) {}
@@ -79,10 +75,10 @@ class Object {
 
   std::string as_string() const {
     ENSURE(_type == Type::STRING);
-    return *_string_value;
+    return _string_value;
   }
 
-  std::vector<Object*>* as_array() const {
+  std::vector<Object*> as_array() const {
     ENSURE(_type == Type::ARRAY);
     return _array_value;
   }
@@ -112,8 +108,8 @@ class Object {
 
   bool _bool_value;
   float _number_value;
-  std::string* _string_value;
-  std::vector<Object*>* _array_value;
+  std::string _string_value;
+  std::vector<Object*> _array_value;
   std::map<std::string, Object*> _map_value;
 };
 
@@ -132,7 +128,7 @@ std::ostream& SearializeObject(std::ostream& os,
   } else if (object->_type == Type::ARRAY) {
     os << "[";
     bool first = true;
-    for (const auto& elem : *object->as_array()) {
+    for (const auto& elem : object->as_array()) {
       if (!first) {
         os << ",";
       } else {
