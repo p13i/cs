@@ -26,9 +26,6 @@ using ::cs::string::format;
 
 class Object;
 
-Result MaybeConsumeWhitespace(std::string str,
-                              uint* cursor);
-
 // JSON serialization algorithm.
 std::ostream& SearializeObject(std::ostream& os,
                                const Object* object);
