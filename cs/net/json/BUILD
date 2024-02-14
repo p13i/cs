@@ -42,3 +42,15 @@ cc_test(
         "@googletest//:gtest_main",
     ],
 )
+
+cc_library(
+    name = "serialize",
+    srcs = ["serialize.cc"],
+    hdrs = ["serialize.hh"],
+    deps = [
+        "//cs/net/json:object",
+        "//cs/result",
+        "//cs/sanity:ensure",
+        "//cs/string:format",
+    ],
+)
