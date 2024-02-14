@@ -226,14 +226,8 @@ ResultOr<std::vector<Object*>> ParseArray(std::string str,
       *cursor += 1;
       continue;
     }
-#if 1
     Object* object;
     ASSIGN_OR_RETURN(object, ParseObject(str, cursor));
-#else
-    float value;
-    ASSIGN_OR_RETURN(value, ParseFloat(str, cursor));
-    Object* object = new Object(value);
-#endif
     array.push_back(object);
   }
 
