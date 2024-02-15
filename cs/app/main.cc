@@ -13,6 +13,7 @@
 #include "cs/net/http/server.hh"
 #include "cs/net/http/web_app.hh"
 #include "cs/net/json/object.hh"
+#include "cs/net/json/serialize.hh"
 #include "cs/profiling/time_it.hh"
 #include "cs/renderer/film.hh"
 #include "cs/renderer/pixel.hh"
