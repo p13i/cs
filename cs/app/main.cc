@@ -151,6 +151,7 @@ Response json(Request request) {
                    })}});
   std::stringstream ss;
   ss << object;
+  delete object;
   return Response(HTTP_200_OK, kContentTypeTextJson,
                   ss.str());
 }
