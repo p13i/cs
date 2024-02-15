@@ -49,7 +49,8 @@ TEST_F(SerializeTest, ExampleMap) {
   ASSERT_THAT(result.ok(), IsTrue());
   ASSERT_THAT(cursor, Eq(actual.length()));
   Object* parsed_object = result.value();
-  ASSERT_THAT(parsed_object->type(), Eq(Type::MAP)) << parsed_object;
+  ASSERT_THAT(parsed_object->type(), Eq(Type::MAP))
+      << parsed_object;
   auto map = parsed_object->as_map();
   ASSERT_THAT(map.size(), Eq(2));
   ASSERT_THAT(map["key"]->type(), Eq(Type::STRING));
