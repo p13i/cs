@@ -78,3 +78,8 @@ cc_library(
     name = "scene1",
     hdrs = ["scene1.hh"],
 )
+
+py_binary(
+    name = "prober",
+    srcs = ["prober.py"],
+)
