@@ -45,3 +45,25 @@ controls:
 net:
 * p2p
 * tcp
+
+ai:
+* csp
+* gpt
+* stats
+* nnet
+* minimax
+
+optimization:
+* gradient descent
+* dual primal solver
+
+games
+* uno
+* chess
+
+controls: 
+* pid 
+
+net:
+* p2p
+* tcp
