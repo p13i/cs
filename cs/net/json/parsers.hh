@@ -38,6 +38,8 @@ ResultOr<std::string> ParseString(std::string str,
 
 ResultOr<bool> ParseBoolean(std::string str, uint* cursor);
 
+ResultOr<float> ParseFloat(std::string str);
+
 ResultOr<float> ParseFloat(std::string str, uint* cursor);
 
 ResultOr<std::vector<Object*>> ParseArray(std::string str,

@@ -82,6 +82,11 @@ ResultOr<bool> ParseBoolean(std::string str, uint* cursor) {
       str.substr(*cursor)));
 }
 
+ResultOr<float> ParseFloat(std::string str) {
+  uint cursor = 0;
+  return ParseFloat(str, &cursor);
+}
+
 ResultOr<float> ParseFloat(std::string str, uint* cursor) {
   if (!InBounds(str, *cursor)) {
     return Error(cs::string::format(
