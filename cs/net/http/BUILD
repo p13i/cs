@@ -34,6 +34,7 @@ cc_library(
         "//cs/result",
         "//cs/sanity:ensure",
         "//cs/sanity:error",
+        "//cs/string:format",
     ],
 )
 

@@ -9,13 +9,20 @@
 #include <string>
 
 #include "cs/net/http/status.hh"
+#include "cs/result/result.hh"
 #include "cs/sanity/ensure.hh"
+#include "cs/string/format.h"
 
 namespace cs::net::http {
 
 const std::string kContentTypeTextPlain = "text/plain";
 const std::string kContentTypeTextHtml = "text/html";
 const std::string kContentTypeTextJson = "text/json";
+
+namespace {
+using ::cs::result::Error;
+using ::cs::result::Result;
+}  // namespace
 
 class Response {
  public:
@@ -28,6 +35,16 @@ class Response {
       : _status(status),
         _content_type(content_type),
         _body(body) {}
+  Response(const Result& result) {
+    if (result.ok()) {
+      _status = HTTP_200_OK;
+    } else {
+      _status = HTTP_400_BAD_REQUEST;
+    }
+    _content_type = kContentTypeTextPlain;
+    // _body = cs::string::format("%s: %s", _status.str(),
+    //                            result.message());
+  }
 
   friend std::ostream& operator<<(
       std::ostream& os, const Response& response) {
