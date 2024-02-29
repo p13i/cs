@@ -74,6 +74,8 @@ class Request {
     return found->second;
   }
 
+  std::string body() { return _body; }
+
  private:
   std::string _method;
   std::string _path;
