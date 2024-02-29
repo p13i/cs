@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 #include <functional>
+#include <optional>
 #include <sstream>
 #include <tuple>
 #include <vector>
@@ -13,6 +14,7 @@
 #include "cs/net/http/server.hh"
 #include "cs/net/http/web_app.hh"
 #include "cs/net/json/object.hh"
+#include "cs/net/json/parsers.hh"
 #include "cs/net/json/serialize.hh"
 #include "cs/profiling/time_it.hh"
 #include "cs/renderer/film.hh"
@@ -45,11 +47,34 @@ Response index(Request request) {
 }
 
 Response render(Request request) {
+  uint width = APP_SCREEN_WIDTH;
+  auto width_opt = request.get_query_param("width");
+  if (width_opt.has_value()) {
+    ASSIGN_OR_RETURN(width,
+                     cs::net::json::parsers::ParseFloat(
+                         width_opt.value()));
+  }
+
+  uint height = APP_SCREEN_HEIGHT;
+  auto height_opt = request.get_query_param("height");
+  if (height_opt.has_value()) {
+    ASSIGN_OR_RETURN(height,
+                     cs::net::json::parsers::ParseFloat(
+                         height_opt.value()));
+  }
+
+  uint num_frames = 1;
+  auto num_frames_opt =
+      request.get_query_param("num_frames");
+  if (num_frames_opt.has_value()) {
+    ASSIGN_OR_RETURN(num_frames,
+                     cs::net::json::parsers::ParseFloat(
+                         num_frames_opt.value()));
+  }
+
   // Build scene
-  std::tuple<unsigned int, unsigned int> film_dimensions(
-      APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT);
-  SceneAnimator animator(APP_ANIMATION_NUM_FRAMES,
-                         film_dimensions);
+  std::tuple<uint, uint> film_dimensions(width, height);
+  SceneAnimator animator(num_frames, film_dimensions);
   // Render out frames
   std::vector<Film> frames;
   const auto render_time_ms =
@@ -81,10 +106,11 @@ Response render(Request request) {
 
   // clang-format off
   std::stringstream ss;
-  ss << "<p>Ray-tracer rendered " << frames.size() << " frames in " << render_time_ms << " ms.</p>";
+  ss << "<p>Ray-tracer rendered " << frames.size() << " frames in "
+    << render_time_ms << " ms at " << width << "x" << height << "px.</p>";
   ss << R"html(
-<canvas id="canvas" width=")html" << APP_SCREEN_WIDTH
-  << R"html(" height=")html" << APP_SCREEN_HEIGHT 
+<canvas id="canvas" width=")html" << width
+  << R"html(" height=")html" << height 
   << R"html("></canvas>
 <p id="fps"></p>
 <script type="text/javascript">
@@ -156,12 +182,30 @@ Response json(Request request) {
                   ss.str());
 }
 
+// https://stackoverflow.com/a/63864750
+std::string NowAsISO8601TimeUTC() {
+  auto now = std::chrono::system_clock::now();
+  auto itt = std::chrono::system_clock::to_time_t(now);
+  std::ostringstream ss;
+  ss << std::put_time(gmtime(&itt), "%FT%TZ");
+  return ss.str();
+}
+
+Response log_(Request request) {
+  std::cout << NowAsISO8601TimeUTC() << " "
+            << request.body() << std::endl;
+  std::stringstream ss;
+  return Response(HTTP_200_OK, kContentTypeTextHtml,
+                  ss.str());
+}
+
 Result RunMyWebApp() {
   WebApp app;
   // Routes.
   OK_OR_RETURN(app.Register("GET", "/", index));
   OK_OR_RETURN(app.Register("GET", "/render/", render));
   OK_OR_RETURN(app.Register("GET", "/json/", json));
+  OK_OR_RETURN(app.Register("POST", "/log/", log_));
   // Run web app on host at port 8080.
   return app.RunServer("0.0.0.0", 8080);
 }
