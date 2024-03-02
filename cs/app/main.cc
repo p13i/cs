@@ -83,26 +83,29 @@ Response render(Request request) {
       });
 
   // Serialize first frame as a JavaScript 2D array.
-  std::stringstream images_js_ss;
-  images_js_ss << "[";
+  std::vector<Object*> frames_json;
   for (size_t i = 0; i < frames.size(); i++) {
     const Film film = frames.at(i);
-    images_js_ss << "[";
+    std::vector<Object*> film_json;
     for (size_t x = 0; x < film.width; x++) {
-      images_js_ss << "[";
+      std::vector<Object*> column_json;
+      column_json.reserve(film.height);
       for (size_t y = 0; y < film.height; y++) {
         const Pixel px = film.pixels[x][y];
-        // Convert from pixel's data type (uint8_t) to an
-        // int [https://stackoverflow.com/a/28414758]
-        images_js_ss << "[" << +px.r << ", " << +px.g
-                     << ", " << +px.b << ", " << +px.a
-                     << "],";
+        Object* pixel_json =
+            new Object(std::vector<Object*>{
+                new Object(static_cast<float>(px.r)),
+                new Object(static_cast<float>(px.g)),
+                new Object(static_cast<float>(px.b)),
+                new Object(static_cast<float>(px.a))});
+        column_json.push_back(pixel_json);
       }
-      images_js_ss << "],";
+      film_json.push_back(new Object(column_json));
     }
-    images_js_ss << "],";
+    frames_json.push_back(new Object(film_json));
   }
-  images_js_ss << "]";
+
+  Object* root_json = new Object(frames_json);
 
   // clang-format off
   std::stringstream ss;
@@ -114,7 +117,7 @@ Response render(Request request) {
   << R"html("></canvas>
 <p id="fps"></p>
 <script type="text/javascript">
-  const IMAGES = )html" << images_js_ss.str() << R"html(;
+  const IMAGES = )html" << root_json << R"html(;
   const FPS = )html" << APP_FRAME_RATE_FPS << R"html(;
   var i = 0;
   var oneSecondStartMs = 0;
