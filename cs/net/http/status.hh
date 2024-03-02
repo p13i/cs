@@ -33,6 +33,8 @@ static const Status HTTP_200_OK(200, "OK");
 static const Status HTTP_400_BAD_REQUEST(400,
                                          "BAD REQUEST");
 static const Status HTTP_404_NOT_FOUND(404, "NOT FOUND");
+static const Status HTTP_500_INTERNAL_SERVER_ERROR(
+    500, "INTERNAL SERVER ERROR");
 
 }  // namespace cs::net::http
 
