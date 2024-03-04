@@ -124,6 +124,21 @@ Response render(Request request) {
   << R"html(" height=")html" << height 
   << R"html("></canvas>
 <p id="fps"></p>
+<form action="/render/" method="GET">
+  <label for="width">Width:</label>
+  <input type="number" id="width" name="width" value=")html" << width
+  << R"html(">px
+  <br/>
+  <label for="height">Height:</label>
+  <input type="number" id="height" name="height" value=")html" << height
+  << R"html(">px
+  <br/>
+  <label for="num_frames">Number of frames:</label>
+  <br/>
+  <input type="number" id="num_frames" name="num_frames" value=")html" << num_frames
+  << R"html(">
+  <br/>
+  <input type="submit" value="Render">
 <script type="text/javascript">
   const IMAGES = )html" << root_json << R"html(;
   const FPS = )html" << APP_FRAME_RATE_FPS << R"html(;
@@ -171,6 +186,8 @@ Response render(Request request) {
 </script>
 )html";
   // clang-format on
+
+  delete root_json;
 
   return Response(HTTP_200_OK, kContentTypeTextHtml,
                   ss.str());
