@@ -30,12 +30,29 @@ class SceneAnimatorTest : public ::testing::Test {
   }
 };
 
-TEST_F(SceneAnimatorTest, At256x256) {
-  RenderTest(256, 256, 1);
-}
+#define RENDER_TEST(width, height, num_frames) \
+  TEST_F(SceneAnimatorTest, At##width##x##height) { \
+    RenderTest(width, height, num_frames); \
+  }
+
+RENDER_TEST(256, 256, 1);
+
+RENDER_TEST(255, 256, 1);
+
+RENDER_TEST(250, 256, 1);
+
+RENDER_TEST(240, 256, 1);
+
+RENDER_TEST(230, 255, 1);
+
+RENDER_TEST(225, 255, 1);
+
+RENDER_TEST(224, 255, 1);
+
+RENDER_TEST(223, 255, 1);
 
 #if 0
-TEST_F(SceneAnimatorTest, At128x128) {
-  RenderTest(128, 128, 1);
+TEST_F(SceneAnimatorTest, At240x256) {
+  RenderTest(240, 256, 1);
 }
 #endif

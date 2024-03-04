@@ -12,6 +12,7 @@
 #include "cs/numbers/map_value.hh"
 #include "cs/renderer/film.hh"
 #include "cs/shapes/sphere.hh"
+#include "cs/result/result.hh"
 
 using p3 = ::cs::geo::Point3;
 using v3 = ::cs::geo::Vector3;
@@ -20,6 +21,10 @@ using ::cs::geo::dist;
 using ::cs::numbers::map_value;
 using ::cs::renderer::Film;
 using ::cs::shapes::Sphere;
+using ::cs::result::Error;
+using ::cs::result::Ok;
+using ::cs::result::Result;
+using ::cs::result::ResultOr;
 
 namespace cs::renderer {
 class SphereRenderer {
@@ -31,7 +36,7 @@ class SphereRenderer {
   Sphere sphere_ =
       Sphere(/*center=*/p3(0, 0, 5), /*radius=*/1);
 
-  Film render() {
+  ResultOr<Film> render() {
     float min_distance =
         dist(focal_point_, sphere_.center) - sphere_.radius;
     float max_distance =
@@ -66,11 +71,17 @@ class SphereRenderer {
                 << " max_distance=" << max_distance << "\n";
           }
 #endif
-          ENSURE(distance >= min_distance);
-          ENSURE(distance <= max_distance);
+          if (!(distance >= min_distance)) {
+            return Error("distance < min_distance");
+          }
+          if (!(distance <= max_distance)) {
+            return Error("distance > max_distance");
+          }
           float rgb = map_value<float>(
               distance, min_distance, max_distance, 255, 0);
-          ENSURE(0 <= rgb && rgb <= 255.f);
+          if (!(0 <= rgb && rgb <= 255.f)) {
+            return Error("rgb out of bounds");
+          }
           film_.pixels[fx][fy] = Pixel(rgb, rgb, rgb, 255);
         } else {
           film_.pixels[fx][fy] = Pixel(0, 0, 0, 0);

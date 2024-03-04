@@ -92,6 +92,7 @@ cc_library(
         "//cs/numbers:clamp",
         "//cs/numbers:map_value",
         "//cs/shapes:sphere",
+        "//cs/result",
     ],
 )
 
