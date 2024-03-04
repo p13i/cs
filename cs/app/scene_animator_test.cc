@@ -30,9 +30,9 @@ class SceneAnimatorTest : public ::testing::Test {
   }
 };
 
-#define RENDER_TEST(width, height, num_frames) \
+#define RENDER_TEST(width, height, num_frames)      \
   TEST_F(SceneAnimatorTest, At##width##x##height) { \
-    RenderTest(width, height, num_frames); \
+    RenderTest(width, height, num_frames);          \
   }
 
 RENDER_TEST(256, 256, 1);

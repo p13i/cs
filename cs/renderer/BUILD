@@ -91,8 +91,8 @@ cc_library(
         "//cs/math:constants",
         "//cs/numbers:clamp",
         "//cs/numbers:map_value",
-        "//cs/shapes:sphere",
         "//cs/result",
+        "//cs/shapes:sphere",
     ],
 )
 

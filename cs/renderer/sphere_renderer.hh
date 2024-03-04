@@ -11,8 +11,8 @@
 #include "cs/geo/vector3.h"
 #include "cs/numbers/map_value.hh"
 #include "cs/renderer/film.hh"
-#include "cs/shapes/sphere.hh"
 #include "cs/result/result.hh"
+#include "cs/shapes/sphere.hh"
 
 using p3 = ::cs::geo::Point3;
 using v3 = ::cs::geo::Vector3;
@@ -20,11 +20,11 @@ using r3 = ::cs::geo::Ray3;
 using ::cs::geo::dist;
 using ::cs::numbers::map_value;
 using ::cs::renderer::Film;
-using ::cs::shapes::Sphere;
 using ::cs::result::Error;
 using ::cs::result::Ok;
 using ::cs::result::Result;
 using ::cs::result::ResultOr;
+using ::cs::shapes::Sphere;
 
 namespace cs::renderer {
 class SphereRenderer {
