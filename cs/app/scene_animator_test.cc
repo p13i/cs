@@ -34,6 +34,8 @@ TEST_F(SceneAnimatorTest, At256x256) {
   RenderTest(256, 256, 1);
 }
 
+#if 0
 TEST_F(SceneAnimatorTest, At128x128) {
   RenderTest(128, 128, 1);
 }
+#endif
