@@ -10,7 +10,6 @@
 
 #include "cs/net/http/status.hh"
 #include "cs/result/result.hh"
-#include "cs/sanity/ensure.hh"
 #include "cs/string/format.h"
 
 namespace cs::net::http {

@@ -6,8 +6,7 @@ cc_library(
     hdrs = ["matrix4x4.hh"],
     deps = [
         "//cs/numbers:in_range",
-        "//cs/sanity:ensure",
-        "//cs/sanity:error",
+        "//cs/result",
         "//cs/string:format",
     ],
 )
@@ -20,6 +19,6 @@ cc_library(
         "//cs/geo:cross",
         "//cs/geo:vector3",
         "//cs/linalg:matrix4x4",
-        "//cs/sanity:ensure",
+        "//cs/result",
     ],
 )

@@ -11,13 +11,15 @@ using v3 = ::cs::geo::Vector3;
 using r3 = ::cs::geo::Ray3;
 using ::cs::geo::dot;
 
-#include "cs/sanity/ensure.hh"
-
 bool cs::shapes::Plane::intersected_by(r3 ray, p3* atPoint,
                                        v3* atNormal) {
   v3 unit_normal(p3(a, b, c));  // p_n
-  ENSURE(unit_normal.is_unit());
-  ENSURE(ray.direction.is_unit());
+  if (!unit_normal.is_unit()) {
+    return false;
+  }
+  if (!ray.direction.is_unit()) {
+    return false;
+  }
   float v_d = dot(unit_normal, ray.direction);
   if (FloatsNear(v_d, 0)) {
     // Parallel

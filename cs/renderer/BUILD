@@ -12,7 +12,6 @@ cc_library(
     name = "pixel",
     hdrs = ["pixel.hh"],
     deps = [
-        "//cs/sanity:ensure",
     ],
 )
 
@@ -59,7 +58,6 @@ cc_library(
         "//cs/math:constants",
         "//cs/numbers:clamp",
         "//cs/numbers:map_value",
-        "//cs/sanity:ensure",
         "//cs/shapes:shape",
     ],
 )
@@ -93,7 +91,6 @@ cc_library(
         "//cs/math:constants",
         "//cs/numbers:clamp",
         "//cs/numbers:map_value",
-        "//cs/sanity:ensure",
         "//cs/shapes:sphere",
     ],
 )

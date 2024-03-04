@@ -1,8 +1,6 @@
 #ifndef CS_APP_TEXT_FONTS_MONO_HH
 #define CS_APP_TEXT_FONTS_MONO_HH
 
-#include "cs/sanity/ensure.hh"
-
 namespace cs::app::text::fonts {
 
 static int mono[26][8][8] = {{
@@ -243,8 +241,11 @@ static int mono[26][8][8] = {{
                               {0, 1, 1, 1, 1, 1, 1, 0}}};
 
 bool SampleCharacterPixel(char ascii_code, int x, int y) {
-  ENSURE(ascii_code >= 'A' && ascii_code <= 'Z');
-  return mono[ascii_code - 'A'][y][x] == 1;
+  if (ascii_code >= 'A' && ascii_code <= 'Z') {
+    return mono[ascii_code - 'A'][y][x] == 1;
+  } else {
+    return false;
+  }
 };
 
 }  // namespace cs::app::text::fonts

@@ -8,7 +8,6 @@
 #include <string>
 
 #include "cs/result/result.hh"
-#include "cs/sanity/ensure.hh"
 
 namespace cs::net::http {
 
@@ -107,7 +106,9 @@ Result ParsePath(std::string original_path,
     return read_to_qmark;
   }
   // Parse query params string
-  ENSURE(original_path.at(cursor) == '?');
+  if (original_path.at(cursor) != '?') {
+    return Error("expected ? at cursor");
+  }
   OK_OR_RETURN(IncrementCursor(original_path, &cursor));
   while (cursor < original_path.size()) {
     std::string name;
@@ -121,7 +122,9 @@ Result ParsePath(std::string original_path,
     if (cursor >= original_path.size()) {
       break;
     }
-    ENSURE(original_path.at(cursor) == '&');
+    if (original_path.at(cursor) != '&') {
+      return Error("Expected & at cursor.");
+    }
     OK_OR_RETURN(IncrementCursor(original_path, &cursor));
   }
   return Ok();

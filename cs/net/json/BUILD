@@ -5,7 +5,6 @@ cc_library(
     hdrs = ["object.hh"],
     deps = [
         "//cs/result",
-        "//cs/sanity:ensure",
         "//cs/string:format",
     ],
 )
@@ -27,7 +26,6 @@ cc_library(
     deps = [
         "//cs/net/json:object",
         "//cs/result",
-        "//cs/sanity:ensure",
         "//cs/string:format",
     ],
 )
@@ -50,7 +48,6 @@ cc_library(
     deps = [
         "//cs/net/json:object",
         "//cs/result",
-        "//cs/sanity:ensure",
         "//cs/string:format",
     ],
 )

@@ -11,7 +11,6 @@
 #include "cs/geo/vector3.h"
 #include "cs/numbers/map_value.hh"
 #include "cs/renderer/film.hh"
-#include "cs/sanity/ensure.hh"
 #include "cs/shapes/sphere.hh"
 
 using p3 = ::cs::geo::Point3;

@@ -6,7 +6,6 @@
 #include "cs/geo/cross.hh"
 #include "cs/geo/vector3.h"
 #include "cs/linalg/matrix4x4.hh"
-#include "cs/sanity/ensure.hh"
 
 using m4x4 = ::cs::linalg::Matrix4x4;
 using v3 = ::cs::geo::Vector3;
@@ -108,7 +107,8 @@ Transform LookAt(p3 pos, p3 look, v3 up) {
   cameraToWorld.data_[1][2] = dir.y;
   cameraToWorld.data_[2][2] = dir.z;
   cameraToWorld.data_[3][2] = 0.;
-  return Transform(cameraToWorld.inverse(), cameraToWorld);
+  return Transform(cameraToWorld.inverse().value(),
+                   cameraToWorld);
 }
 
 }  // namespace cs::linalg::transforms

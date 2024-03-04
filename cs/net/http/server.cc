@@ -9,8 +9,6 @@
 #include "cs/net/http/request.hh"
 #include "cs/profiling/time_it.hh"
 #include "cs/result/result.hh"
-#include "cs/sanity/ensure.hh"
-#include "cs/sanity/error.hh"
 
 // Based on: https://github.com/OsasAzamegbe/http-server
 namespace {
@@ -40,10 +38,14 @@ Server::~Server() { closeServer(); }
 
 Result Server::startServer() {
   _socket = socket(AF_INET, SOCK_STREAM, 0);
-  ENSURE(_socket >= 0);
+  if (_socket < 0) {
+    return Error("Failed to get socket.");
+  }
 
-  ENSURE(bind(_socket, (sockaddr *)&_socket_address,
-              _socket_address_length) >= 0);
+  if (bind(_socket, (sockaddr *)&_socket_address,
+           _socket_address_length) < 0) {
+    return Error("Failed to bind socket.");
+  }
 
   return Ok();
 }
@@ -56,7 +58,9 @@ Result Server::closeServer() {
 
 Result Server::startListening(
     std::function<Response(Request)> request_handler) {
-  ENSURE(listen(_socket, 20) >= 0);
+  if (listen(_socket, 20) < 0) {
+    return Error("Failed to listen on socket.");
+  }
 
   std::cout << "Listening on "
             << inet_ntoa(_socket_address.sin_addr) << ":"
@@ -68,24 +72,28 @@ Result Server::startListening(
                &_socket_address_length);
 
     Response response;
-    bool success = false;
+    Result result = Ok();
     [[maybe_unused]] unsigned int processing_time_ms =
         cs::profiling::time_it([&response, request_handler,
-                                this, &success]() {
-          ENSURE(_response_socket >= 0);
+                                this, &result]() {
+          if (_response_socket < 0) {
+            result = Error("Failed to accept connection.");
+            return;
+          }
 
           char buffer[BUFFER_SIZE] = {0};
           int bytesReceived =
               read(_response_socket, buffer, BUFFER_SIZE);
 
-          ENSURE(bytesReceived >= 0);
+          if (bytesReceived < 0) {
+            result = Error("Failed to read from socket.");
+            return;
+          }
 
           Request request;
           Result parse_result = buffer >> request;
           if (!parse_result.ok()) {
-            success = false;
-            std::cerr << parse_result.message()
-                      << std::endl;
+            result = parse_result;
             return;
           }
 
@@ -98,10 +106,10 @@ Result Server::startListening(
 #endif  // VERBOSE_LOG
 
           response = request_handler(request);
-          success = true;
+          result = Ok();
         });
 
-    if (success) {
+    if (result.ok()) {
 #define APPEND_SERVER_STATS false
 #if APPEND_SERVER_STATS
       std::stringstream ss;

@@ -1,11 +1,14 @@
 #include "cs/linalg/matrix4x4.hh"
 
 #include "cs/numbers/in_range.hh"
-#include "cs/sanity/ensure.hh"
-#include "cs/sanity/error.hh"
+#include "cs/result/result.hh"
 
 using ::cs::linalg::Matrix4x4;
 using ::cs::numbers::in_range;
+using ::cs::result::Error;
+using ::cs::result::Ok;
+using ::cs::result::Result;
+using ::cs::result::ResultOr;
 
 #include <memory.h>
 #include <stdint.h>
@@ -14,28 +17,34 @@ using ::cs::numbers::in_range;
 
 namespace {
 
-void EnsureIndexArgs(uint8_t x, uint8_t y) {
-  ENSURE(in_range<uint8_t>(x, 0, 4));
-  ENSURE(in_range<uint8_t>(y, 0, 4));
+Result EnsureIndexArgs(uint8_t x, uint8_t y) {
+  if (!in_range<uint8_t>(x, 0, 4)) {
+    return Error("x is out of range");
+  }
+  if (!in_range<uint8_t>(y, 0, 4)) {
+    return Error("y is out of range");
+  }
+  return Ok();
 }
 
 }  // namespace
 
-float cs::linalg::Matrix4x4::get(uint8_t x,
-                                 uint8_t y) const {
-  EnsureIndexArgs(x, y);
+ResultOr<float> cs::linalg::Matrix4x4::get(
+    uint8_t x, uint8_t y) const {
+  OK_OR_RETURN(EnsureIndexArgs(x, y));
   return data_[x][y];
 }
 
-void cs::linalg::Matrix4x4::set(uint8_t x, uint8_t y,
-                                float datum) {
-  EnsureIndexArgs(x, y);
+Result cs::linalg::Matrix4x4::set(uint8_t x, uint8_t y,
+                                  float datum) {
+  OK_OR_RETURN(EnsureIndexArgs(x, y));
   data_[x][y] = datum;
+  return Ok();
 }
 
 // Pulled from PBRT:
 // https://github.com/mmp/pbrt-v3/blob/aaa552a4b9cbf9dccb71450f47b268e0ed6370e2/src/core/transform.cpp#L82-L136
-Matrix4x4 cs::linalg::Matrix4x4::inverse() const {
+ResultOr<Matrix4x4> cs::linalg::Matrix4x4::inverse() const {
   int indxc[4], indxr[4];
   int ipiv[4] = {0, 0, 0, 0};
   float minv[4][4];
@@ -54,7 +63,7 @@ Matrix4x4 cs::linalg::Matrix4x4::inverse() const {
               icol = k;
             }
           } else if (ipiv[k] > 1) {
-            ERROR("Singular matrix in MatrixInvert");
+            return Error("Singular matrix in MatrixInvert");
           }
         }
       }
@@ -68,7 +77,7 @@ Matrix4x4 cs::linalg::Matrix4x4::inverse() const {
     indxr[i] = irow;
     indxc[i] = icol;
     if (minv[icol][icol] == 0.f) {
-      ERROR("Singular matrix in MatrixInvert");
+      return Error("Singular matrix in MatrixInvert");
     }
 
     // Set $m[icol][icol]$ to one by scaling row _icol_

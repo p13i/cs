@@ -3,8 +3,11 @@
 
 #include <stdint.h>
 
+#include "cs/result/result.hh"
 #include "cs/string/format.h"
 
+using ::cs::result::Result;
+using ::cs::result::ResultOr;
 using ::cs::string::format;
 
 namespace cs::linalg {
@@ -39,12 +42,12 @@ struct Matrix4x4 {
   }
   // Gets the value at x, y. x indexes into columns, y into
   // the rows
-  float get(uint8_t x, uint8_t y) const;
+  ResultOr<float> get(uint8_t x, uint8_t y) const;
   // Sets the value at x, y.
-  void set(uint8_t x, uint8_t y, float datum);
+  Result set(uint8_t x, uint8_t y, float datum);
 
   // Inverse of matrix
-  Matrix4x4 inverse() const;
+  ResultOr<Matrix4x4> inverse() const;
 
   // Transpose of matrix
   Matrix4x4 T() const;
@@ -58,10 +61,10 @@ struct Matrix4x4 {
 [ %f, %f, %f, %f ]
 [ %f, %f, %f, %f ]
 [ %f, %f, %f, %f ] ])",
-      m.get(0, 0), m.get(0, 1), m.get(0, 2), m.get(0, 3),
-      m.get(1, 0), m.get(1, 1), m.get(1, 2), m.get(1, 3),
-      m.get(2, 0), m.get(2, 1), m.get(2, 2), m.get(2, 3),
-      m.get(3, 0), m.get(3, 1), m.get(3, 2), m.get(3, 3));;
+      m.get(0, 0).value(), m.get(0, 1).value(), m.get(0, 2).value(), m.get(0, 3).value(),
+      m.get(1, 0).value(), m.get(1, 1).value(), m.get(1, 2).value(), m.get(1, 3).value(),
+      m.get(2, 0).value(), m.get(2, 1).value(), m.get(2, 2).value(), m.get(2, 3).value(),
+      m.get(3, 0).value(), m.get(3, 1).value(), m.get(3, 2).value(), m.get(3, 3).value());;
     // clang-format on
   }
 };

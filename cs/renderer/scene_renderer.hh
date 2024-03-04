@@ -15,7 +15,6 @@
 #include "cs/numbers/map_value.hh"
 #include "cs/renderer/film.hh"
 #include "cs/renderer/scene.hh"
-#include "cs/sanity/ensure.hh"
 
 using p3 = ::cs::geo::Point3;
 using v3 = ::cs::geo::Vector3;
@@ -39,10 +38,7 @@ struct Camera {
       : w2c_(w2c),
         pixels_per_unit_(pixels_per_unit),
         focal_length_(focal_length),
-        film_(film) {
-    ENSURE(pixels_per_unit_ > 0);
-    ENSURE(focal_length_ > 0);
-  }
+        film_(film) {}
 
   friend std::ostream& operator<<(std::ostream& os,
                                   const Camera& camera) {

@@ -9,8 +9,6 @@ cc_library(
         ":response",
         "//cs/profiling:time_it",
         "//cs/result",
-        "//cs/sanity:ensure",
-        "//cs/sanity:error",
     ],
 )
 
@@ -20,8 +18,6 @@ cc_library(
     hdrs = ["request.hh"],
     deps = [
         "//cs/result",
-        "//cs/sanity:ensure",
-        "//cs/sanity:error",
     ],
 )
 
@@ -32,8 +28,6 @@ cc_library(
     deps = [
         ":status",
         "//cs/result",
-        "//cs/sanity:ensure",
-        "//cs/sanity:error",
         "//cs/string:format",
     ],
 )

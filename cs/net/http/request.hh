@@ -10,7 +10,6 @@
 #include <string>
 
 #include "cs/result/result.hh"
-#include "cs/sanity/ensure.hh"
 
 namespace cs::net::http {
 

@@ -23,10 +23,19 @@ cc_library(
         "//cs/profiling:time_it",
         "//cs/renderer:rainbow",
         "//cs/renderer:scene_renderer",
-        "//cs/sanity:ensure",
         "//cs/shapes:plane",
         "//cs/shapes:shape",
         "//cs/shapes:sphere",
+    ],
+)
+
+cc_test(
+    name = "scene_animator_test",
+    srcs = ["scene_animator_test.cc"],
+    deps = [
+        "//cs/app:scene_animator",
+        "//cs/result",
+        "@googletest//:gtest_main",
     ],
 )
 

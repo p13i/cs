@@ -47,7 +47,6 @@ cc_library(
         ":point3",
         ":vector3",
         "//cs/math:constants",
-        "//cs/sanity:ensure",
     ],
 )
 

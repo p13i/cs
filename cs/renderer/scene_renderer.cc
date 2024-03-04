@@ -16,7 +16,6 @@
 #include "cs/numbers/map_value.hh"
 #include "cs/renderer/film.hh"
 #include "cs/renderer/scene.hh"
-#include "cs/sanity/ensure.hh"
 #include "cs/shapes/shape.hh"
 
 using p2 = ::cs::geo::Point2;
@@ -39,7 +38,7 @@ Film cs::renderer::SceneRenderer::render() {
   Transform w2c = camera_.w2c_;
   Transform c2w = w2c.inverse();
   const p3 focal_point_in_world =
-      c2w(p3(0, 0, -1 * camera_.focal_length_));
+      c2w(p3(0, 0, -1 * camera_.focal_length_)).value();
   for (unsigned int film_x = 0; film_x < width; film_x++) {
     for (unsigned int film_y = 0; film_y < height;
          film_y++) {
@@ -48,7 +47,7 @@ Film cs::renderer::SceneRenderer::render() {
           p2(-1 * x_units / 2.f, y_units / 2.f),
           p2(x_units / 2.f, -1 * y_units / 2.f));
       p3 film_point_in_world =
-          c2w(p3(film_point.x, film_point.y, 0));
+          c2w(p3(film_point.x, film_point.y, 0)).value();
       r3 ray(focal_point_in_world, film_point_in_world);
       p3 intersection_point;
       v3 normal;
@@ -56,7 +55,8 @@ Film cs::renderer::SceneRenderer::render() {
                                 &normal)) {
         // Compute the luminance HACK
         float unit_dot_prod = dot(
-            (c2w(p3(0, 0, 0)) - intersection_point).unit(),
+            (c2w(p3(0, 0, 0)).value() - intersection_point)
+                .unit(),
             normal.unit());
         float luminance =
             map_value<float>(unit_dot_prod, 0, 1, 0, 255);

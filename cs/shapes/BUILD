@@ -11,7 +11,6 @@ cc_library(
         "//cs/geo:ray3",
         "//cs/geo:vector3",
         "//cs/precision:floats",
-        "//cs/sanity:ensure",
     ],
 )
 

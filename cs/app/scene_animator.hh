@@ -14,7 +14,6 @@
 #include "cs/renderer/film.hh"
 #include "cs/renderer/scene.hh"
 #include "cs/renderer/scene_renderer.hh"
-#include "cs/sanity/ensure.hh"
 #include "cs/shapes/plane.hh"
 #include "cs/shapes/shape.hh"
 #include "cs/shapes/sphere.hh"

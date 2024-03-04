@@ -11,7 +11,6 @@
 #include <vector>
 
 #include "cs/result/result.hh"
-#include "cs/sanity/ensure.hh"
 #include "cs/string/format.h"
 
 namespace cs::net::json {
@@ -60,28 +59,17 @@ class Object {
 
   Type type() { return _type; }
 
-  bool as_bool() const {
-    ENSURE(_type == Type::BOOLEAN);
-    return _bool_value;
-  }
+  bool as_bool() const { return _bool_value; }
 
-  float as_number() const {
-    ENSURE(_type == Type::NUMBER);
-    return _number_value;
-  }
+  float as_number() const { return _number_value; }
 
-  std::string as_string() const {
-    ENSURE(_type == Type::STRING);
-    return _string_value;
-  }
+  std::string as_string() const { return _string_value; }
 
   std::vector<Object*> as_array() const {
-    ENSURE(_type == Type::ARRAY);
     return _array_value;
   }
 
   std::map<std::string, Object*> as_map() const {
-    ENSURE(_type == Type::MAP);
     return _map_value;
   }
 

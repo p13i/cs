@@ -7,6 +7,4 @@
 #include <sstream>
 #include <string>
 
-#include "cs/sanity/ensure.hh"
-
 namespace cs::net::http {}  // namespace cs::net::http

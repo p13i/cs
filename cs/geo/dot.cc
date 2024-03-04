@@ -3,7 +3,6 @@
 #include "cs/geo/point3.h"
 #include "cs/geo/vector3.h"
 #include "cs/math/constants.h"
-#include "cs/sanity/ensure.hh"
 
 using p3 = ::cs::geo::Point3;
 using v3 = ::cs::geo::Vector3;
