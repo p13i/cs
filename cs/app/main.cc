@@ -42,6 +42,14 @@ Response index(Request request) {
   ss << "<p>To code this app, I only used standard library "
         "methods (like `std::chrono` or `std::vector`) for "
         "this web app framework.</p>";
+  // Print sitemap of routes available.
+  ss << "<h2>Routes</h2>";
+  ss << "<ul>";
+  ss << "<li><a href=\"/\">Home</a></li>";
+  ss << "<li><a href=\"/render/\">Render</a></li>";
+  ss << "<li><a href=\"/json/\">JSON</a></li>";
+  ss << "<li><a href=\"/log/\">Log (POST only)</a></li>";
+  ss << "</ul>";
   return Response(HTTP_200_OK, kContentTypeTextHtml,
                   ss.str());
 }
