@@ -124,14 +124,18 @@ struct SceneAnimator {
   void DrawString(Film* film, int* xStart, int yStart,
                   std::string str, int scale = 1) {
     for (char ch : str) {
-      for (int x = 0; x < 8; x++) {
-        for (int y = 0; y < 8; y++) {
+      for (uint x = 0; x < 8; x++) {
+        for (uint y = 0; y < 8; y++) {
           bool value =
               cs::app::text::fonts::SampleCharacterPixel(
                   ch, x, y);
           char rgba = value ? 255 : 0;
-          int film_x = *xStart + x;
-          int film_y = yStart + y;
+          uint film_x = *xStart + x;
+          uint film_y = yStart + y;
+          if (film_x < 0 || film_x >= film->width ||
+              film_y < 0 || film_y >= film->height) {
+            continue;
+          }
           film->pixels[film_x][film_y] =
               renderer::Pixel(rgba, rgba, rgba, rgba);
         }
