@@ -57,6 +57,18 @@ class Object {
   Object(std::map<std::string, Object*> value)
       : _type(Type::MAP), _map_value(value) {}
 
+  ~Object() {
+    if (_type == Type::ARRAY) {
+      for (auto* obj : _array_value) {
+        delete obj;
+      }
+    } else if (_type == Type::MAP) {
+      for (auto& [key, obj] : _map_value) {
+        delete obj;
+      }
+    }
+  }
+
   Type type() { return _type; }
 
   bool as_bool() const { return _bool_value; }

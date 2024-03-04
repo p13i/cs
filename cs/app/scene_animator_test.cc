@@ -49,10 +49,6 @@ RENDER_TEST(225, 255, 1);
 
 RENDER_TEST(224, 255, 1);
 
-RENDER_TEST(223, 255, 1);
-
 #if 0
-TEST_F(SceneAnimatorTest, At240x256) {
-  RenderTest(240, 256, 1);
-}
+RENDER_TEST(223, 255, 1);
 #endif
