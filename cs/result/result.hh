@@ -16,22 +16,14 @@
     }                                    \
   }
 
-#define MOVE_OR_RETURN(var, result_or)   \
-  {                                      \
-    if (result_or.result().ok()) {       \
-      var = std::move(result_or.data()); \
-    } else {                             \
-      return result_or.result();         \
-    }                                    \
-  }
-
 #define OK_OR_RETURN(result)                             \
   {                                                      \
-    if (!result.ok()) {                                  \
+    const auto eval__ = result;                          \
+    if (!eval__.ok()) {                                  \
       std::cerr << "OK_OR_RETURN failed at " << __FILE__ \
                 << ":" << __LINE__ << ". " << #result    \
-                << ": " << result << std::endl;          \
-      return result;                                     \
+                << ": " << eval__ << std::endl;          \
+      return eval__;                                     \
     }                                                    \
   }
 
