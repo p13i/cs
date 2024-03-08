@@ -222,9 +222,7 @@ std::string NowAsISO8601TimeUTC() {
 Response log_(Request request) {
   std::cout << NowAsISO8601TimeUTC() << " "
             << request.body() << std::endl;
-  std::stringstream ss;
-  return Response(HTTP_200_OK, kContentTypeTextHtml,
-                  ss.str());
+  return Response(HTTP_200_OK, kContentTypeTextHtml, "");
 }
 
 Result RunMyWebApp() {
