@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "cs/db/query_view.hh"
+#include "cs/db/table.hh"
 #include "cs/net/json/object.hh"
 #include "cs/net/json/parsers.hh"
 #include "cs/net/json/serialize.hh"
@@ -21,21 +22,6 @@ using ::cs::result::Ok;
 using ::cs::result::Result;
 using ::cs::result::ResultOr;
 }  // namespace
-
-template <typename DataType>
-class Table {
-  typedef std::vector<DataType> Ts;
-
- private:
-  Ts _values;
-
- public:
-  Table() {}
-  Table(const Ts& values) : _values(values) {}
-  QueryView<DataType> query_view() {
-    return QueryView<DataType>(_values);
-  }
-};
 
 struct User {
  public:

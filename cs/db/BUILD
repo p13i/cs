@@ -3,6 +3,7 @@ cc_binary(
     srcs = ["main.cc"],
     deps = [
         "//cs/db:query_view",
+        "//cs/db:table",
         "//cs/net/json:object",
         "//cs/net/json:parsers",
         "//cs/net/json:serialize",
@@ -14,6 +15,15 @@ cc_library(
     name = "query_view",
     hdrs = ["query_view.hh"],
     deps = [
+        "//cs/result",
+    ],
+)
+
+cc_library(
+    name = "table",
+    hdrs = ["table.hh"],
+    deps = [
+        "//cs/db:query_view",
         "//cs/result",
     ],
 )
