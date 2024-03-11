@@ -7,10 +7,6 @@ cc_binary(
         "//cs/db:query_view",
         "//cs/db:table",
         "//cs/db/models:user",
-        "//cs/net/json:object",
-        "//cs/net/json:parsers",
-        "//cs/net/json:serialize",
-        "//cs/result",
     ],
 )
 
