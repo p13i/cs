@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 
+#include "cs/db/query_view.hh"
 #include "cs/net/json/object.hh"
 #include "cs/net/json/parsers.hh"
 #include "cs/net/json/serialize.hh"
@@ -20,38 +21,6 @@ using ::cs::result::Ok;
 using ::cs::result::Result;
 using ::cs::result::ResultOr;
 }  // namespace
-
-template <typename DataType>
-class QueryView {
-  typedef std::vector<DataType> Ts;
-
- public:
-  QueryView(const Ts& values) : _values(values) {}
-
-  Ts values() { return _values; }
-
-  QueryView Where(std::function<bool(DataType)> lambda) {
-    Ts matching;
-    for (const auto& item : _values) {
-      if (lambda(item)) {
-        matching.push_back(item);
-      }
-    }
-    return matching;
-  }
-
-  QueryView OrderBy(
-      std::function<bool(DataType, DataType)> comparator) {
-    Ts sorted(_values);
-    std::sort(sorted.begin(), sorted.end(), comparator);
-    return sorted;
-  }
-  DataType First() { return _values[0]; }
-  bool Any() { return _values.size() > 0; }
-
- private:
-  Ts _values;
-};
 
 template <typename DataType>
 class Table {
