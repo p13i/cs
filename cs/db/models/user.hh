@@ -1,15 +1,11 @@
 #ifndef CS_DB_MODELS_USER_HH
 #define CS_DB_MODELS_USER_HH
 
-#include <fstream>
-#include <functional>
 #include <iostream>
 #include <map>
 #include <string>
 #include <vector>
 
-#include "cs/db/query_view.hh"
-#include "cs/db/table.hh"
 #include "cs/net/json/object.hh"
 #include "cs/net/json/parsers.hh"
 #include "cs/net/json/serialize.hh"
