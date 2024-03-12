@@ -9,6 +9,7 @@
 
 #include "cs/app/scene1.hh"
 #include "cs/app/scene_animator.hh"
+#include "cs/db/table.hh"
 #include "cs/net/http/request.hh"
 #include "cs/net/http/response.hh"
 #include "cs/net/http/server.hh"
@@ -219,7 +220,34 @@ std::string NowAsISO8601TimeUTC() {
   return ss.str();
 }
 
-Response log_(Request request) {
+struct LogRecord {
+  std::string time;
+  std::string message;
+};
+
+static cs::db::Table cs_log_table =
+    cs::db::Table<LogRecord>();
+
+Response GetLogs(Request request) {
+  auto logs = cs_log_table.query_view().values();
+  std::stringstream ss;
+  ss << "<h1>Logs</h1>";
+  for (const auto& log : logs) {
+    ss << "<p>" << log.time << " " << log.message << "</p>";
+  }
+  return Response(HTTP_200_OK, kContentTypeTextHtml,
+                  ss.str());
+}
+
+Response CreateLog(Request request) {
+  auto now = NowAsISO8601TimeUTC();
+  auto message = request.body();
+
+  // Save to database.
+  LogRecord record{now, message};
+  cs_log_table.Insert(record);
+
+  // Write to console.
   std::cout << NowAsISO8601TimeUTC() << " "
             << request.body() << std::endl;
   return Response(HTTP_200_OK, kContentTypeTextHtml, "");
@@ -231,7 +259,8 @@ Result RunMyWebApp() {
   OK_OR_RETURN(app.Register("GET", "/", index));
   OK_OR_RETURN(app.Register("GET", "/render/", render));
   OK_OR_RETURN(app.Register("GET", "/json/", json));
-  OK_OR_RETURN(app.Register("POST", "/log/", log_));
+  OK_OR_RETURN(app.Register("GET", "/log/", GetLogs));
+  OK_OR_RETURN(app.Register("POST", "/log/", CreateLog));
   // Run web app on host at port 8080.
   return app.RunServer("0.0.0.0", 8080);
 }

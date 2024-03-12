@@ -19,7 +19,23 @@ def check_url(url, expected_json):
     except Exception as e:
         print(f"Error: {e}")
 
+def ProbeCreateLog():
+    method = "POST"
+    url = "https://cs.p13i.io/log/"
+    data = urllib.parse.urlencode({"message":"my-message"}).encode()
+    try:
+        with urllib.request.urlopen(url, data=data) as response:
+            assert response.status == 200, "The URL did not return a 200 status code."
+            print("Wrote log message.")
+            return True
+    except Exception as e:
+        print(f"Error: {e}")
+        return False
+
+
 if __name__ == "__main__":
     url = "https://cs.p13i.io/json/"
     expected_json = {"key": "value", "key2": [True, False, "hello", 1.4]}
     check_url(url, expected_json)
+
+    ProbeCreateLog()

@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "cs/db/query_view.hh"
+#include "cs/result/result.hh"
 
 namespace cs::db {
 template <typename DataType>
@@ -23,6 +24,10 @@ class Table {
   Table(const Ts& values) : _values(values) {}
   QueryView<DataType> query_view() {
     return QueryView<DataType>(_values);
+  }
+  Result Insert(const DataType& value) {
+    _values.push_back(value);
+    return Ok();
   }
 };
 }  // namespace cs::db

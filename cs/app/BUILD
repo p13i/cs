@@ -71,6 +71,7 @@ cc_binary(
     deps = [
         "//cs/app:scene1",
         "//cs/app:scene_animator",
+        "//cs/db:table",
         "//cs/net/http:request",
         "//cs/net/http:response",
         "//cs/net/http:web_app",
