@@ -26,3 +26,21 @@ cc_library(
         "//cs/result",
     ],
 )
+
+cc_library(
+    name = "database",
+    hdrs = ["database.hh"],
+    deps = [
+        "//cs/db:table",
+        "//cs/result",
+    ],
+)
+
+cc_library(
+    name = "in_memory_database",
+    srcs = ["in_memory_database.cc"],
+    hdrs = ["in_memory_database.hh"],
+    deps = [
+        "//cs/db:database",
+    ],
+)
