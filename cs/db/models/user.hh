@@ -11,6 +11,7 @@
 #include "cs/net/json/serialize.hh"
 #include "cs/result/result.hh"
 
+namespace cs::db::models {
 namespace {
 using ::cs::net::json::Object;
 using ::cs::net::json::SearializeObject;
@@ -83,5 +84,6 @@ struct User {
   std::string email_;
   std::string full_name_;
 };
+}  // namespace cs::db::models
 
 #endif  // CS_DB_MODELS_USER_HH
