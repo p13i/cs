@@ -5,6 +5,9 @@
 #include "cs/db/query_view.hh"
 #include "cs/db/table.hh"
 
+using ::cs::db::Table;
+using ::cs::db::models::User;
+
 int main() {
   // Fake data.
   std::vector<User> users{

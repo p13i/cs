@@ -10,6 +10,7 @@
 
 #include "cs/db/query_view.hh"
 
+namespace cs::db {
 template <typename DataType>
 class Table {
   typedef std::vector<DataType> Ts;
@@ -24,5 +25,6 @@ class Table {
     return QueryView<DataType>(_values);
   }
 };
+}  // namespace cs::db
 
 #endif  // CS_DB_TABLE_HH
