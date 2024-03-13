@@ -79,7 +79,7 @@ TEST_F(SerializeTest, WithIndent) {
   cs::net::json::SearializeObject(ss, object, 4);
   std::string actual = ss.str();
   std::string expected =
-R"json({
+      R"json({
     "key": "value",
     "key2": [
         true,
