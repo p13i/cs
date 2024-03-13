@@ -24,9 +24,10 @@
 
 using ::cs::app::SceneAnimator;
 using ::cs::net::http::HTTP_200_OK;
+using ::cs::net::http::HTTP_400_BAD_REQUEST;
 using ::cs::net::http::HTTP_404_NOT_FOUND;
+using ::cs::net::http::kContentTypeApplicationJson;
 using ::cs::net::http::kContentTypeTextHtml;
-using ::cs::net::http::kContentTypeTextJson;
 using ::cs::net::http::Request;
 using ::cs::net::http::Response;
 using ::cs::net::http::WebApp;
@@ -207,7 +208,7 @@ Response json(Request request) {
   std::stringstream ss;
   cs::net::json::SearializeObject(ss, object, 4);
   delete object;
-  return Response(HTTP_200_OK, kContentTypeTextJson,
+  return Response(HTTP_200_OK, kContentTypeApplicationJson,
                   ss.str());
 }
 
@@ -242,6 +243,18 @@ Response GetLogs(Request request) {
 Response CreateLog(Request request) {
   auto now = NowAsISO8601TimeUTC();
   auto message = request.body();
+
+  if (request.headers()["content-type"] ==
+      kContentTypeApplicationJson) {
+    Object* object;
+    uint cursor = 0;
+    ASSIGN_OR_RETURN(object,
+                     cs::net::json::parsers::ParseObject(
+                         message, &cursor));
+    std::stringstream ss;
+    cs::net::json::SearializeObject(ss, object, 4, 0);
+    message = ss.str();
+  }
 
   // Save to database.
   LogRecord record{now, message};
