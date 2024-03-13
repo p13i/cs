@@ -50,7 +50,7 @@ Response index(Request request) {
   ss << "<li><a href=\"/\">Home</a></li>";
   ss << "<li><a href=\"/render/\">Render</a></li>";
   ss << "<li><a href=\"/json/\">JSON</a></li>";
-  ss << "<li><a href=\"/log/\">Log (POST only)</a></li>";
+  ss << "<li><a href=\"/log/\">Log</a></li>";
   ss << "</ul>";
   return Response(HTTP_200_OK, kContentTypeTextHtml,
                   ss.str());
