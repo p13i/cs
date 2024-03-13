@@ -16,7 +16,8 @@ namespace cs::net::http {
 
 const std::string kContentTypeTextPlain = "text/plain";
 const std::string kContentTypeTextHtml = "text/html";
-const std::string kContentTypeTextJson = "text/json";
+const std::string kContentTypeApplicationJson =
+    "application/json";
 
 namespace {
 using ::cs::result::Error;
