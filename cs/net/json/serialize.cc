@@ -22,7 +22,8 @@ std::ostream& WriteIndent(std::ostream& os, uint indent) {
 
 std::ostream& SerializeObject(std::ostream& os,
                               const Object* object) {
-  return SerializeObjectPrettyPrintRecurse(os, object, 0, 0);
+  return SerializeObjectPrettyPrintRecurse(os, object, 0,
+                                           0);
 }
 
 std::ostream& SerializeObjectPrettyPrintRecurse(

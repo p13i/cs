@@ -76,10 +76,12 @@ TEST_F(SerializeTest, WithIndent) {
                        new Object(1.4f),
                    })}});
   std::stringstream ss;
-  cs::net::json::SerializeObjectPrettyPrintRecurse(ss, object, 4, 0);
+  cs::net::json::SerializeObjectPrettyPrintRecurse(
+      ss, object, 4, 0);
   std::string actual = ss.str();
   std::string expected =
-      R"json({
+      // clang-format off
+R"json({
     "key": "value",
     "key2": [
         true,
@@ -88,5 +90,6 @@ TEST_F(SerializeTest, WithIndent) {
         1.4
     ]
 })json";
+  // clang-format on
   ASSERT_THAT(actual, StrEq(expected));
 }

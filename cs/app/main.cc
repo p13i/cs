@@ -253,7 +253,8 @@ Response CreateLog(Request request) {
     uint cursor = 0;
     ASSIGN_OR_RETURN(object, ParseObject(message, &cursor));
     std::stringstream ss;
-    cs::net::json::SerializeObjectPrettyPrintRecurse(ss, object, /*indent=*/4, 0);
+    cs::net::json::SerializeObjectPrettyPrintRecurse(
+        ss, object, /*indent=*/4, 0);
     message = ss.str();
   }
 
