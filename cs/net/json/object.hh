@@ -27,7 +27,7 @@ class Object;
 
 // JSON serialization algorithm.
 std::ostream& SerializeObject(std::ostream& os,
-                               const Object* object);
+                              const Object* object);
 
 enum class Type : uint {
   UNSET = 0,

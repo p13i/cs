@@ -21,14 +21,14 @@ std::ostream& WriteIndent(std::ostream& os, uint indent) {
 }  // namespace
 
 std::ostream& SerializeObject(std::ostream& os,
-                               const Object* object) {
+                              const Object* object) {
   return SerializeObject(os, object, 0);
 }
 
 std::ostream& SerializeObject(std::ostream& os,
-                               const Object* object,
-                               uint indent,
-                               uint initial_indent) {
+                              const Object* object,
+                              uint indent,
+                              uint initial_indent) {
   if (object->_type == Type::BOOLEAN) {
     if (object->as_bool()) {
       os << "true";
@@ -56,7 +56,7 @@ std::ostream& SerializeObject(std::ostream& os,
       }
       WriteIndent(os, initial_indent + indent);
       SerializeObject(os, elem, indent,
-                       initial_indent + indent);
+                      initial_indent + indent);
     }
     if (indent > 0) {
       os << std::endl;
@@ -85,7 +85,7 @@ std::ostream& SerializeObject(std::ostream& os,
         os << " ";
       }
       SerializeObject(os, kv.second, indent,
-                       initial_indent + indent);
+                      initial_indent + indent);
     }
     if (indent > 0) {
       os << std::endl;
