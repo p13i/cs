@@ -8,7 +8,7 @@ namespace cs::net::json {
 
 std::ostream& operator<<(std::ostream& os,
                          const Object* object) {
-  return SearializeObject(os, object, 0);
+  return SerializeObject(os, object, 0);
 }
 
 namespace {
@@ -20,12 +20,12 @@ std::ostream& WriteIndent(std::ostream& os, uint indent) {
 }
 }  // namespace
 
-std::ostream& SearializeObject(std::ostream& os,
+std::ostream& SerializeObject(std::ostream& os,
                                const Object* object) {
-  return SearializeObject(os, object, 0);
+  return SerializeObject(os, object, 0);
 }
 
-std::ostream& SearializeObject(std::ostream& os,
+std::ostream& SerializeObject(std::ostream& os,
                                const Object* object,
                                uint indent,
                                uint initial_indent) {
@@ -55,7 +55,7 @@ std::ostream& SearializeObject(std::ostream& os,
         first = false;
       }
       WriteIndent(os, initial_indent + indent);
-      SearializeObject(os, elem, indent,
+      SerializeObject(os, elem, indent,
                        initial_indent + indent);
     }
     if (indent > 0) {
@@ -84,7 +84,7 @@ std::ostream& SearializeObject(std::ostream& os,
       if (indent > 0) {
         os << " ";
       }
-      SearializeObject(os, kv.second, indent,
+      SerializeObject(os, kv.second, indent,
                        initial_indent + indent);
     }
     if (indent > 0) {

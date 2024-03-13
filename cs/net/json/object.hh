@@ -26,7 +26,7 @@ using ::cs::string::format;
 class Object;
 
 // JSON serialization algorithm.
-std::ostream& SearializeObject(std::ostream& os,
+std::ostream& SerializeObject(std::ostream& os,
                                const Object* object);
 
 enum class Type : uint {

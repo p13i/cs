@@ -9,10 +9,10 @@ namespace cs::net::json {
 std::ostream& operator<<(std::ostream& os,
                          const Object* object);
 
-std::ostream& SearializeObject(std::ostream& os,
+std::ostream& SerializeObject(std::ostream& os,
                                const Object* object);
 
-std::ostream& SearializeObject(std::ostream& os,
+std::ostream& SerializeObject(std::ostream& os,
                                const Object* object,
                                uint indent = 0,
                                uint initial_indent = 0);

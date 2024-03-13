@@ -14,7 +14,7 @@
 namespace cs::db::models {
 namespace {
 using ::cs::net::json::Object;
-using ::cs::net::json::SearializeObject;
+using ::cs::net::json::SerializeObject;
 using ::cs::net::json::Type;
 using ::cs::net::json::parsers::ParseObject;
 using ::cs::result::Error;
@@ -39,7 +39,7 @@ struct User {
         {"email", new Object(email_)},
         {"full_name", new Object(full_name_)},
     });
-    SearializeObject(ss, obj, 0, 0);
+    SerializeObject(ss, obj, 0, 0);
     return ss.str();
   }
 
