@@ -32,6 +32,7 @@ using ::cs::net::http::Request;
 using ::cs::net::http::Response;
 using ::cs::net::http::WebApp;
 using ::cs::net::json::Object;
+using ::cs::net::json::parsers::ParseObject;
 using ::cs::renderer::Film;
 using ::cs::renderer::Pixel;
 using ::cs::result::Error;
@@ -248,9 +249,7 @@ Response CreateLog(Request request) {
       kContentTypeApplicationJson) {
     Object* object;
     uint cursor = 0;
-    ASSIGN_OR_RETURN(object,
-                     cs::net::json::parsers::ParseObject(
-                         message, &cursor));
+    ASSIGN_OR_RETURN(object, ParseObject(message, &cursor));
     std::stringstream ss;
     cs::net::json::SerializeObject(ss, object, 4, 0);
     message = ss.str();
