@@ -52,6 +52,11 @@ class Object {
       : _type(Type::NUMBER), _number_value(number) {}
   Object(std::string value)
       : _type(Type::STRING), _string_value(value) {}
+  Object(std::vector<float> value) : _type(Type::ARRAY) {
+    for (auto number : value) {
+      _array_value.push_back(new Object(number));
+    }
+  }
   Object(std::vector<Object*> value)
       : _type(Type::ARRAY), _array_value(value) {}
   Object(std::map<std::string, Object*> value)

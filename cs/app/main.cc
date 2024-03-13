@@ -110,12 +110,10 @@ Response render(Request request) {
       column_json.reserve(film.height);
       for (size_t y = 0; y < film.height; y++) {
         const Pixel px = film.pixels[x][y];
-        Object* pixel_json =
-            new Object(std::vector<Object*>{
-                new Object(static_cast<float>(px.r)),
-                new Object(static_cast<float>(px.g)),
-                new Object(static_cast<float>(px.b)),
-                new Object(static_cast<float>(px.a))});
+        std::vector<float> rgba = {
+            static_cast<float>(px.r), static_cast<float>(px.g),
+            static_cast<float>(px.b), static_cast<float>(px.a)};
+        Object* pixel_json = new Object(rgba);
         column_json.push_back(pixel_json);
       }
       film_json.push_back(new Object(column_json));
