@@ -25,7 +25,8 @@ class Table {
   QueryView<DataType> query_view() {
     return QueryView<DataType>(_values);
   }
-  Result Insert(const DataType& value) {
+
+  Result INSERT(const DataType& value) {
     _values.push_back(value);
     return Ok();
   }

@@ -20,10 +20,10 @@ int main() {
 
   // Query the table.
   auto view = table.query_view()
-                  .Where([](User u) {
+                  .WHERE([](User u) {
                     return u.full_name().size() > 1;
                   })
-                  .OrderBy([](User a, User b) {
+                  .ORDER_BY([](User a, User b) {
                     return a.id() > b.id();
                   });
 

@@ -231,6 +231,8 @@ static cs::db::Table cs_log_table =
     cs::db::Table<LogRecord>();
 
 Response GetLogs(Request request) {
+  OK_OR_RETURN(cs_log_table.INSERT(
+      {NowAsISO8601TimeUTC(), "GET /log/"}));
   auto logs = cs_log_table.query_view().values();
   std::stringstream ss;
   ss << "<h1>Logs</h1>";
@@ -256,8 +258,7 @@ Response CreateLog(Request request) {
   }
 
   // Save to database.
-  LogRecord record{now, message};
-  cs_log_table.Insert(record);
+  cs_log_table.INSERT({now, message});
 
   // Write to console.
   std::cout << NowAsISO8601TimeUTC() << " "
