@@ -244,9 +244,9 @@ Response GetLogs(Request request) {
 }
 
 Response CreateLog(Request request) {
-  auto now = NowAsISO8601TimeUTC();
-  auto message = request.body();
+  std::string now = NowAsISO8601TimeUTC();
 
+  std::string message;
   if (request.headers()["content-type"] ==
       kContentTypeApplicationJson) {
     Object* object;
@@ -256,6 +256,8 @@ Response CreateLog(Request request) {
     cs::net::json::SerializeObjectPrettyPrintRecurse(
         ss, object, /*indent=*/4, 0);
     message = ss.str();
+  } else {
+    message = request.body();
   }
 
   // Save to database.
