@@ -50,9 +50,33 @@ std::string NowAsISO8601TimeUTC() {
   return ss.str();
 }
 
+struct LogRecord {
+  std::string time;
+  std::string message;
+};
+
+static cs::db::Table cs_log_table =
+    cs::db::Table<LogRecord>();
+
+struct AppLogger {
+  // Overload << operator for ostream
+  template <typename T>
+  void operator<<(const T& t) {
+    // Write to console and the logs table.
+    std::cout << t << std::endl;
+    std::stringstream ss;
+    ss << t << std::endl;
+    cs_log_table.INSERT({NowAsISO8601TimeUTC(), ss.str()});
+  }
+};
+
+static AppLogger app_log;
+
 }  // namespace
 
 Response index(Request request) {
+  app_log << request;
+
   std::stringstream ss;
   ss << "<h1>Welcome to my website!</h1>";
   ss << "<p>To code this app, I only used standard library "
@@ -71,6 +95,8 @@ Response index(Request request) {
 }
 
 Response render(Request request) {
+  app_log << request;
+
   float width;
   ASSIGN_OR_RETURN(
       width, cs::net::json::parsers::ParseFloat(
@@ -220,17 +246,9 @@ Response json(Request request) {
                   ss.str());
 }
 
-struct LogRecord {
-  std::string time;
-  std::string message;
-};
-
-static cs::db::Table cs_log_table =
-    cs::db::Table<LogRecord>();
-
 Response GetLogs(Request request) {
-  OK_OR_RETURN(cs_log_table.INSERT(
-      {NowAsISO8601TimeUTC(), "GET /log/"}));
+  app_log << request;
+
   auto logs = cs_log_table.query_view().values();
   std::stringstream ss;
   ss << "<h1>Logs</h1>";
@@ -242,6 +260,8 @@ Response GetLogs(Request request) {
 }
 
 Response CreateLog(Request request) {
+  app_log << request;
+
   std::string now = NowAsISO8601TimeUTC();
 
   std::string message;
