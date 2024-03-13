@@ -39,7 +39,7 @@ struct User {
         {"email", new Object(email_)},
         {"full_name", new Object(full_name_)},
     });
-    SearializeObject(ss, obj);
+    SearializeObject(ss, obj, 0, 0);
     return ss.str();
   }
 

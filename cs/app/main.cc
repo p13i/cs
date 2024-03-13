@@ -205,7 +205,7 @@ Response json(Request request) {
                        new Object(1.4f),
                    })}});
   std::stringstream ss;
-  ss << object;
+  cs::net::json::SearializeObject(ss, object, 4);
   delete object;
   return Response(HTTP_200_OK, kContentTypeTextJson,
                   ss.str());

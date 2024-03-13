@@ -64,3 +64,29 @@ TEST_F(SerializeTest, ExampleMap) {
   ASSERT_THAT(array[1]->as_bool(), IsFalse());
   ASSERT_THAT(array[2]->type(), Eq(Type::STRING));
 }
+
+TEST_F(SerializeTest, WithIndent) {
+  Object* object =
+      new Object(std::map<std::string, Object*>{
+          {"key", new Object(std::string("value"))},
+          {"key2", new Object(std::vector<Object*>{
+                       new Object(true),
+                       new Object(false),
+                       new Object(std::string("hello")),
+                       new Object(1.4f),
+                   })}});
+  std::stringstream ss;
+  cs::net::json::SearializeObject(ss, object, 4);
+  std::string actual = ss.str();
+  std::string expected =
+R"json({
+    "key": "value",
+    "key2": [
+        true,
+        false,
+        "hello",
+        1.4
+    ]
+})json";
+  ASSERT_THAT(actual, StrEq(expected));
+}
