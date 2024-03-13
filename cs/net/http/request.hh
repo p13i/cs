@@ -75,6 +75,10 @@ class Request {
 
   std::string body() { return _body; }
 
+  std::map<std::string, std::string> headers() {
+    return _headers;
+  }
+
  private:
   std::string _method;
   std::string _path;
