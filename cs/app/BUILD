@@ -1,6 +1,6 @@
-package(default_visibility = ["//visibility:public"])
-
 load("@emsdk//emscripten_toolchain:wasm_rules.bzl", "wasm_cc_binary")
+
+package(default_visibility = ["//visibility:public"])
 
 cc_library(
     name = "fps_counter",
