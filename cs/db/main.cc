@@ -4,7 +4,6 @@
 #include "cs/db/models/user.hh"
 #include "cs/db/query_view.hh"
 #include "cs/db/table.hh"
-#include "cs/net/json/serialize.hh"
 
 using ::cs::db::Table;
 using ::cs::db::models::User;
@@ -30,8 +29,6 @@ int main() {
 
   // Print results.
   for (const auto& user : view.values()) {
-    ::cs::net::json::SearializeObject(std::cout, user, 0,
-                                      0);
-    std::cout << std::endl;
+    std::cout << user << std::endl;
   }
 }
