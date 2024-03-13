@@ -155,6 +155,10 @@ Result Request::Parse(std::string str) {
     std::string name;
     OK_OR_RETURN(ReadWord(str, &cursor, &name, ":"));
     OK_OR_RETURN(IncrementCursor(str, &cursor));
+    if (str.at(cursor) != ' ') {
+      return Error("Expected space after colon.");
+    }
+    OK_OR_RETURN(IncrementCursor(str, &cursor));
     std::string value;
     OK_OR_RETURN(ReadWord(str, &cursor, &value, "\n"));
     OK_OR_RETURN(ReadThroughNewline(str, &cursor));
