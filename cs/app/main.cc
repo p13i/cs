@@ -39,6 +39,19 @@ using ::cs::result::Error;
 using ::cs::result::Ok;
 using ::cs::result::Result;
 
+namespace {
+
+// https://stackoverflow.com/a/63864750
+std::string NowAsISO8601TimeUTC() {
+  auto now = std::chrono::system_clock::now();
+  auto itt = std::chrono::system_clock::to_time_t(now);
+  std::ostringstream ss;
+  ss << std::put_time(gmtime(&itt), "%FT%TZ");
+  return ss.str();
+}
+
+}  // namespace
+
 Response index(Request request) {
   std::stringstream ss;
   ss << "<h1>Welcome to my website!</h1>";
@@ -58,30 +71,24 @@ Response index(Request request) {
 }
 
 Response render(Request request) {
-  uint width = APP_SCREEN_WIDTH;
-  auto width_opt = request.get_query_param("width");
-  if (width_opt.has_value()) {
-    ASSIGN_OR_RETURN(width,
-                     cs::net::json::parsers::ParseFloat(
-                         width_opt.value()));
-  }
+  float width;
+  ASSIGN_OR_RETURN(
+      width, cs::net::json::parsers::ParseFloat(
+                 request.get_query_param("width").value_or(
+                     std::to_string(APP_SCREEN_WIDTH))));
 
-  uint height = APP_SCREEN_HEIGHT;
-  auto height_opt = request.get_query_param("height");
-  if (height_opt.has_value()) {
-    ASSIGN_OR_RETURN(height,
-                     cs::net::json::parsers::ParseFloat(
-                         height_opt.value()));
-  }
+  float height;
+  ASSIGN_OR_RETURN(
+      height,
+      cs::net::json::parsers::ParseFloat(
+          request.get_query_param("height").value_or(
+              std::to_string(APP_SCREEN_HEIGHT))));
 
-  uint num_frames = 1;
-  auto num_frames_opt =
-      request.get_query_param("num_frames");
-  if (num_frames_opt.has_value()) {
-    ASSIGN_OR_RETURN(num_frames,
-                     cs::net::json::parsers::ParseFloat(
-                         num_frames_opt.value()));
-  }
+  float num_frames;
+  ASSIGN_OR_RETURN(num_frames,
+                   cs::net::json::parsers::ParseFloat(
+                       request.get_query_param("num_frames")
+                           .value_or(std::to_string(1))));
 
   // Build scene
   std::tuple<uint, uint> film_dimensions(width, height);
@@ -211,15 +218,6 @@ Response json(Request request) {
   delete object;
   return Response(HTTP_200_OK, kContentTypeApplicationJson,
                   ss.str());
-}
-
-// https://stackoverflow.com/a/63864750
-std::string NowAsISO8601TimeUTC() {
-  auto now = std::chrono::system_clock::now();
-  auto itt = std::chrono::system_clock::to_time_t(now);
-  std::ostringstream ss;
-  ss << std::put_time(gmtime(&itt), "%FT%TZ");
-  return ss.str();
 }
 
 struct LogRecord {

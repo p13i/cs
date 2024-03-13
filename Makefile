@@ -60,3 +60,6 @@ test-json:
 
 probe:
 	bazel run //cs/app:prober
+
+watch:
+	watch -n0 "make build"
