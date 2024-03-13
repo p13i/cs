@@ -207,7 +207,7 @@ Response json(Request request) {
                        new Object(1.4f),
                    })}});
   std::stringstream ss;
-  cs::net::json::SerializeObject(ss, object, 4);
+  cs::net::json::SerializeObject(ss, object);
   delete object;
   return Response(HTTP_200_OK, kContentTypeApplicationJson,
                   ss.str());
@@ -253,7 +253,7 @@ Response CreateLog(Request request) {
     uint cursor = 0;
     ASSIGN_OR_RETURN(object, ParseObject(message, &cursor));
     std::stringstream ss;
-    cs::net::json::SerializeObject(ss, object, 4, 0);
+    cs::net::json::SerializeObjectPrettyPrintRecurse(ss, object, /*indent=*/4, 0);
     message = ss.str();
   }
 

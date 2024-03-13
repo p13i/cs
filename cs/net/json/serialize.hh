@@ -11,11 +11,12 @@ std::ostream& operator<<(std::ostream& os,
 
 std::ostream& SerializeObject(std::ostream& os,
                               const Object* object);
+                              
+std::ostream& SerializeObjectPrettyPrintRecurse(
+    std::ostream& os, const Object* object, uint indent,
+    uint initial_indent);
 
-std::ostream& SerializeObject(std::ostream& os,
-                              const Object* object,
-                              uint indent = 0,
-                              uint initial_indent = 0);
+
 }  // namespace cs::net::json
 
 #endif  // CS_NET_JSON_SERIALIZE_HH

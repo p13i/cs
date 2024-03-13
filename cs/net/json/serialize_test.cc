@@ -76,7 +76,7 @@ TEST_F(SerializeTest, WithIndent) {
                        new Object(1.4f),
                    })}});
   std::stringstream ss;
-  cs::net::json::SerializeObject(ss, object, 4);
+  cs::net::json::SerializeObjectPrettyPrintRecurse(ss, object, 4, 0);
   std::string actual = ss.str();
   std::string expected =
       R"json({

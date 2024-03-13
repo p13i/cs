@@ -8,7 +8,7 @@ namespace cs::net::json {
 
 std::ostream& operator<<(std::ostream& os,
                          const Object* object) {
-  return SerializeObject(os, object, 0);
+  return SerializeObject(os, object);
 }
 
 namespace {
@@ -22,13 +22,12 @@ std::ostream& WriteIndent(std::ostream& os, uint indent) {
 
 std::ostream& SerializeObject(std::ostream& os,
                               const Object* object) {
-  return SerializeObject(os, object, 0);
+  return SerializeObjectPrettyPrintRecurse(os, object, 0, 0);
 }
 
-std::ostream& SerializeObject(std::ostream& os,
-                              const Object* object,
-                              uint indent,
-                              uint initial_indent) {
+std::ostream& SerializeObjectPrettyPrintRecurse(
+    std::ostream& os, const Object* object, uint indent,
+    uint initial_indent) {
   if (object->_type == Type::BOOLEAN) {
     if (object->as_bool()) {
       os << "true";
@@ -55,8 +54,8 @@ std::ostream& SerializeObject(std::ostream& os,
         first = false;
       }
       WriteIndent(os, initial_indent + indent);
-      SerializeObject(os, elem, indent,
-                      initial_indent + indent);
+      SerializeObjectPrettyPrintRecurse(
+          os, elem, indent, initial_indent + indent);
     }
     if (indent > 0) {
       os << std::endl;
@@ -84,8 +83,8 @@ std::ostream& SerializeObject(std::ostream& os,
       if (indent > 0) {
         os << " ";
       }
-      SerializeObject(os, kv.second, indent,
-                      initial_indent + indent);
+      SerializeObjectPrettyPrintRecurse(
+          os, kv.second, indent, initial_indent + indent);
     }
     if (indent > 0) {
       os << std::endl;
