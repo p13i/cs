@@ -32,6 +32,7 @@ using ::cs::net::http::Request;
 using ::cs::net::http::Response;
 using ::cs::net::http::WebApp;
 using ::cs::net::json::Object;
+using ::cs::net::json::parsers::ParseFloat;
 using ::cs::net::json::parsers::ParseObject;
 using ::cs::renderer::Film;
 using ::cs::renderer::Pixel;
@@ -99,22 +100,21 @@ Response render(Request request) {
 
   float width;
   ASSIGN_OR_RETURN(
-      width, cs::net::json::parsers::ParseFloat(
-                 request.get_query_param("width").value_or(
-                     std::to_string(APP_SCREEN_WIDTH))));
+      width,
+      ParseFloat(request.get_query_param("width").value_or(
+          std::to_string(APP_SCREEN_WIDTH))));
 
   float height;
   ASSIGN_OR_RETURN(
       height,
-      cs::net::json::parsers::ParseFloat(
-          request.get_query_param("height").value_or(
-              std::to_string(APP_SCREEN_HEIGHT))));
+      ParseFloat(request.get_query_param("height").value_or(
+          std::to_string(APP_SCREEN_HEIGHT))));
 
   float num_frames;
-  ASSIGN_OR_RETURN(num_frames,
-                   cs::net::json::parsers::ParseFloat(
-                       request.get_query_param("num_frames")
-                           .value_or(std::to_string(1))));
+  ASSIGN_OR_RETURN(
+      num_frames,
+      ParseFloat(request.get_query_param("num_frames")
+                     .value_or(std::to_string(1))));
 
   // Build scene
   std::tuple<uint, uint> film_dimensions(width, height);
@@ -230,6 +230,12 @@ Response render(Request request) {
 }
 
 Response json(Request request) {
+  float indent;
+  ASSIGN_OR_RETURN(
+      indent,
+      ParseFloat(request.get_query_param("indent").value_or(
+          std::to_string(0))));
+
   Object* object =
       new Object(std::map<std::string, Object*>{
           {"key", new Object(std::string("value"))},
@@ -240,7 +246,8 @@ Response json(Request request) {
                        new Object(1.4f),
                    })}});
   std::stringstream ss;
-  cs::net::json::SerializeObject(ss, object);
+  cs::net::json::SerializeObjectPrettyPrintRecurse(
+      ss, object, static_cast<uint>(indent), 0);
   delete object;
   return Response(HTTP_200_OK, kContentTypeApplicationJson,
                   ss.str());
