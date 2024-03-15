@@ -260,7 +260,7 @@ Response GetLogs(Request request) {
   std::stringstream ss;
   ss << "<h1>Logs</h1>";
   for (const auto& log : logs) {
-    ss << "<p>" << log.time << " " << log.message << "</p>";
+    ss << "<li><code>" << log.time << " " << log.message << "</code></li>";
   }
   return Response(HTTP_200_OK, kContentTypeTextHtml,
                   ss.str());
