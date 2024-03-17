@@ -105,7 +105,7 @@ Response render(Request request) {
           std::to_string(APP_SCREEN_WIDTH))));
 
   uint width = static_cast<uint>(width_f);
-  if (width < 2>) {
+  if (width < 2) {
     return Error("Width must be at least 2 pixels.");
   }
 
