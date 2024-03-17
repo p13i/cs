@@ -98,23 +98,38 @@ Response index(Request request) {
 Response render(Request request) {
   app_log << request;
 
-  float width;
+  float width_f;
   ASSIGN_OR_RETURN(
-      width,
+      width_f,
       ParseFloat(request.get_query_param("width").value_or(
           std::to_string(APP_SCREEN_WIDTH))));
 
-  float height;
+  uint width = static_cast<uint>(width_f);
+  if (width < 2>) {
+    return Error("Width must be at least 2 pixels.");
+  }
+
+  float height_f;
   ASSIGN_OR_RETURN(
-      height,
+      height_f,
       ParseFloat(request.get_query_param("height").value_or(
           std::to_string(APP_SCREEN_HEIGHT))));
 
-  float num_frames;
+  uint height = static_cast<uint>(height_f);
+  if (height < 2) {
+    return Error("Height must be at least 2 pixels.");
+  }
+
+  float num_frames_f;
   ASSIGN_OR_RETURN(
-      num_frames,
+      num_frames_f,
       ParseFloat(request.get_query_param("num_frames")
                      .value_or(std::to_string(1))));
+
+  uint num_frames = static_cast<uint>(num_frames_f);
+  if (num_frames < 1) {
+    return Error("Number of frames must be at least 1.");
+  }
 
   // Build scene
   std::tuple<uint, uint> film_dimensions(width, height);
