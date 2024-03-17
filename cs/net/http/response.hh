@@ -42,8 +42,9 @@ class Response {
       _status = HTTP_400_BAD_REQUEST;
     }
     _content_type = kContentTypeTextPlain;
-    // _body = cs::string::format("%s: %s", _status.str(),
-    //                            result.message());
+    std::stringstream ss;
+    ss << _status << ": " << result.message();
+    _body = ss.str();
   }
 
   friend std::ostream& operator<<(
