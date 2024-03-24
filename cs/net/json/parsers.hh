@@ -29,6 +29,8 @@ Result operator>>(std::string str, Object* object);
 ResultOr<Object*> ParseObject(std::string str,
                               uint* cursor);
 
+ResultOr<Object*> ParseObject(std::string str);
+
 ResultOr<std::map<std::string, Object*>> ParseMap(
     std::string str, uint* cursor);
 
