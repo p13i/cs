@@ -89,6 +89,13 @@ class ResultOr : public Result {
   Data data() const { return _data; }
   Data value() const { return _data; }
   Result result() const { return _result; }
+  template <typename T>
+  ResultOr<T> value_or(T default_value) const {
+    if (ok()) {
+      return _data;
+    }
+    return default_value;
+  }
 
   friend std::ostream& operator<<(
       std::ostream& os, const ResultOr<Data>& result) {
