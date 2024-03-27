@@ -65,4 +65,4 @@ watch:
 	watch -n0 "make build"
 
 watch-probe:
-	watch -n0 "sleep 5 && make probe;"
+	watch -n 10 "make probe"
