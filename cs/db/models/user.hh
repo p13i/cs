@@ -70,6 +70,7 @@ struct User {
         {"full_name", new Object(full_name_)},
     });
     SerializeObject(ss, obj);
+    delete obj;
     return ss.str();
   }
 };
