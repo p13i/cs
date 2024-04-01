@@ -97,6 +97,8 @@ class ResultOr : public Result {
     return default_value;
   }
 
+  Data operator->() { return _data; }
+
   friend std::ostream& operator<<(
       std::ostream& os, const ResultOr<Data>& result) {
     return os << "ResultOr("
