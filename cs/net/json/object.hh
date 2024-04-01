@@ -45,6 +45,7 @@ enum class Type : uint {
  */
 class Object {
  public:
+  typedef std::map<std::string, Object*> KVMap;
   Object() : _type(Type::UNSET) {}
   Object(bool value)
       : _type(Type::BOOLEAN), _bool_value(value) {}
@@ -59,8 +60,46 @@ class Object {
   }
   Object(std::vector<Object*> value)
       : _type(Type::ARRAY), _array_value(value) {}
-  Object(std::map<std::string, Object*> value)
+  Object(KVMap value)
       : _type(Type::MAP), _map_value(value) {}
+
+  template <typename T>
+  T as(T instance);
+
+  float as(float instance) const {
+    if (_type != Type::NUMBER) {
+      return NAN;
+    }
+    return _number_value;
+  }
+
+  bool as(bool instance) const {
+    if (_type != Type::BOOLEAN) {
+      return false;
+    }
+    return _bool_value;
+  }
+
+  std::string as(std::string instance) const {
+    if (_type != Type::STRING) {
+      return "";
+    }
+    return _string_value;
+  }
+
+  std::string as(char* instance) const {
+    if (_type != Type::STRING) {
+      return "";
+    }
+    return _string_value;
+  }
+
+  KVMap as(KVMap instance) const {
+    if (_type != Type::MAP) {
+      return {};
+    }
+    return _map_value;
+  }
 
   ~Object() {
     if (_type == Type::ARRAY) {
@@ -76,11 +115,19 @@ class Object {
 
   Type type() { return _type; }
 
-  bool as_bool() const { return _bool_value; }
+  bool as_bool() const { return this->as(bool()); }
 
-  float as_number() const { return _number_value; }
+  float as_number() const { return this->as(float()); }
 
-  std::string as_string() const { return _string_value; }
+  std::string as_string() const {
+    return this->as(std::string());
+  }
+
+  std::string str() const {
+    std::stringstream ss;
+    SerializeObject(ss, this);
+    return ss.str();
+  }
 
   std::vector<Object*> as_array() const {
     return _array_value;
@@ -88,6 +135,38 @@ class Object {
 
   std::map<std::string, Object*> as_map() const {
     return _map_value;
+  }
+
+  bool has_key(const std::string& key) {
+    if (_type != Type::MAP) {
+      return false;
+    }
+    return _map_value.find(key) != _map_value.end();
+  }
+
+  ResultOr<Object*> get(const std::string& key) const {
+    if (_type != Type::MAP) {
+      return Error("Object is not a map.");
+    }
+    if (_map_value.find(key) == _map_value.end()) {
+      return Error(format("Key not found: %s", key));
+    }
+    return _map_value.at(key);
+  }
+
+  template <typename T>
+  ResultOr<T> get_as(const std::string& key, T instance) {
+    if (_type != Type::MAP) {
+      return Error("Object is not a map.");
+    }
+    if (_map_value.find(key) == _map_value.end()) {
+      return Error(format("Key not found: %s", key));
+    }
+    return _map_value.at(key)->as<T>(instance);
+  }
+
+  ResultOr<Object*> operator[](const std::string& key) {
+    return get(key);
   }
 
   Type _type;

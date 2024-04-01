@@ -24,24 +24,18 @@ using ::cs::result::ResultOr;
 }  // namespace
 
 struct User {
+ private:
+  float id_;
+  std::string email_;
+  std::string full_name_;
+
  public:
   User() {}
-  User(int id, std::string email, std::string full_name)
+  User(float id, std::string email, std::string full_name)
       : id_(id), email_(email), full_name_(full_name) {}
-  int id() const { return id_; }
+  float id() const { return id_; }
   std::string email() const { return email_; }
   std::string full_name() const { return full_name_; }
-
-  std::string Serialize() {
-    std::stringstream ss;
-    auto obj = new Object({
-        {"id", new Object(static_cast<float>(id_))},
-        {"email", new Object(email_)},
-        {"full_name", new Object(full_name_)},
-    });
-    SerializeObject(ss, obj);
-    return ss.str();
-  }
 
   friend std::ostream& operator<<(std::ostream& os,
                                   const User& user) {
@@ -50,39 +44,34 @@ struct User {
               << ", full_name=" << user.full_name_ << "}";
   }
 
+  friend Result operator>>(std::istream& is, User& user) {
+    std::stringstream ss;
+    ss << is.rdbuf();
+    return user.Parse(ss.str());
+  }
+
   Result Parse(std::string str) {
     Object* object;
-    uint cursor = 0;
-    ASSIGN_OR_RETURN(object, ParseObject(str, &cursor));
-    if (object->type() != Type::MAP) {
-      return Error("Failed to parse string into map.");
-    }
-    auto map = object->as_map();
-    // Load id
-    if (map.find("id") == map.end() ||
-        map["id"]->type() != Type::NUMBER) {
-      return Error("Failed to parse id as float.");
-    }
-    id_ = map["id"]->as_number();
-    // load email
-    if (map.find("email") == map.end() ||
-        map["email"]->type() != Type::STRING) {
-      return Error("Failed to parse email as string.");
-    }
-    email_ = map["email"]->as_string();
-    // load full_name
-    if (map.find("full_name") == map.end() ||
-        map["full_name"]->type() != Type::STRING) {
-      return Error("Failed to parse full_name as string.");
-    }
-    full_name_ = map["full_name"]->as_string();
+    ASSIGN_OR_RETURN(object, ParseObject(str));
+    ASSIGN_OR_RETURN(id_, object->get_as("id", float()));
+    ASSIGN_OR_RETURN(
+        email_, object->get_as("email", std::string()));
+    ASSIGN_OR_RETURN(
+        full_name_,
+        object->get_as("full_name", std::string()));
     return Ok();
   }
 
- private:
-  int id_;
-  std::string email_;
-  std::string full_name_;
+  std::string Serialize() {
+    std::stringstream ss;
+    auto obj = new Object({
+        {"id", new Object(id_)},
+        {"email", new Object(email_)},
+        {"full_name", new Object(full_name_)},
+    });
+    SerializeObject(ss, obj);
+    return ss.str();
+  }
 };
 }  // namespace cs::db::models
 
