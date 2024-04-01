@@ -326,11 +326,11 @@ ResultOr<Object*> ParseObject(std::string str,
     } else if (c == '+' || c == '-' || c == '.' ||
                ('0' <= c && c <= '9')) {
       // Parse float
-      ASSIGN_OR_RETURN(object->_float_value,
+      ASSIGN_OR_RETURN(object->_number_value,
                        ParseFloat(str, cursor));
       object->_type = Type::NUMBER;
       std::cout << "ParseFloat returned "
-                << object->_float_value << std::endl;
+                << object->_number_value << std::endl;
       break;
     } else if (c == '"') {
       // Parse string
