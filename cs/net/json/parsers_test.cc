@@ -171,7 +171,7 @@ TEST_F(ParseArrayTest, ArrayWithOneElement) {
   ASSERT_THAT(result.ok(), IsTrue()) << result;
   auto array = result.value();
   EXPECT_THAT(array.size(), Eq(1));
-  EXPECT_THAT(array.at(0)->type(), Eq(Type::NUMBER));
+  EXPECT_THAT(array.at(0)->type(), Eq(Type::FLOAT));
   EXPECT_THAT(array.at(0)->as_number(), FloatEq(1));
   EXPECT_THAT(_cursor, Eq(3));
 }
@@ -182,9 +182,9 @@ TEST_F(ParseArrayTest, ArrayWithTwoElements) {
   EXPECT_THAT(result.value()->type(), Eq(Type::ARRAY));
   auto array = result.value()->as_array();
   EXPECT_THAT(array.size(), Eq(2));
-  EXPECT_THAT(array.at(0)->type(), Eq(Type::NUMBER));
+  EXPECT_THAT(array.at(0)->type(), Eq(Type::FLOAT));
   EXPECT_THAT(array.at(0)->as_number(), FloatEq(1));
-  EXPECT_THAT(array.at(1)->type(), Eq(Type::NUMBER));
+  EXPECT_THAT(array.at(1)->type(), Eq(Type::FLOAT));
   EXPECT_THAT(array.at(1)->as_number(), FloatEq(2));
   EXPECT_THAT(_cursor, Eq(5));
 }
@@ -201,7 +201,7 @@ TEST_F(ParseArrayTest,
   EXPECT_THAT(array->as_array().at(0)->as_string(),
               StrEq("abc"));
   EXPECT_THAT(array->as_array().at(1)->type(),
-              Eq(Type::NUMBER));
+              Eq(Type::FLOAT));
   EXPECT_THAT(array->as_array().at(1)->as_number(),
               FloatEq(1.1));
   EXPECT_THAT(array->as_array().at(2)->type(),
@@ -220,16 +220,16 @@ TEST_F(ParseArrayTest, NestedArray) {
 
   auto subArray1 = array->as_array().at(0)->as_array();
   EXPECT_EQ(subArray1.size(), 2);
-  EXPECT_EQ(subArray1.at(0)->type(), Type::NUMBER);
+  EXPECT_EQ(subArray1.at(0)->type(), Type::FLOAT);
   EXPECT_FLOAT_EQ(subArray1.at(0)->as_number(), 1);
-  EXPECT_EQ(subArray1.at(1)->type(), Type::NUMBER);
+  EXPECT_EQ(subArray1.at(1)->type(), Type::FLOAT);
   EXPECT_FLOAT_EQ(subArray1.at(1)->as_number(), 2);
 
   auto subArray2 = array->as_array().at(1)->as_array();
   EXPECT_EQ(subArray2.size(), 2);
-  EXPECT_EQ(subArray2.at(0)->type(), Type::NUMBER);
+  EXPECT_EQ(subArray2.at(0)->type(), Type::FLOAT);
   EXPECT_FLOAT_EQ(subArray2.at(0)->as_number(), 3);
-  EXPECT_EQ(subArray2.at(1)->type(), Type::NUMBER);
+  EXPECT_EQ(subArray2.at(1)->type(), Type::FLOAT);
   EXPECT_FLOAT_EQ(subArray2.at(1)->as_number(), 4);
 
   EXPECT_EQ(_cursor, 13);
@@ -252,7 +252,7 @@ TEST_F(ParseMapTest, MapWithOneElement) {
   EXPECT_THAT(map->type(), Eq(Type::MAP));
   EXPECT_THAT(map->as_map().size(), Eq(1));
   EXPECT_THAT(map->as_map().at("a")->type(),
-              Eq(Type::NUMBER));
+              Eq(Type::FLOAT));
   EXPECT_THAT(map->as_map().at("a")->as_number(),
               FloatEq(1));
   EXPECT_THAT(_cursor, Eq(7));
@@ -265,11 +265,11 @@ TEST_F(ParseMapTest, MapWithTwoElements) {
   EXPECT_THAT(map->type(), Eq(Type::MAP));
   EXPECT_THAT(map->as_map().size(), Eq(2));
   EXPECT_THAT(map->as_map().at("a")->type(),
-              Eq(Type::NUMBER));
+              Eq(Type::FLOAT));
   EXPECT_THAT(map->as_map().at("a")->as_number(),
               FloatEq(1));
   EXPECT_THAT(map->as_map().at("b")->type(),
-              Eq(Type::NUMBER));
+              Eq(Type::FLOAT));
   EXPECT_THAT(map->as_map().at("b")->as_number(),
               FloatEq(2));
   EXPECT_THAT(_cursor, Eq(13));
@@ -288,7 +288,7 @@ TEST_F(ParseMapTest,
   EXPECT_THAT(map->as_map().at("a")->as_string(),
               StrEq("abc"));
   EXPECT_THAT(map->as_map().at("b")->type(),
-              Eq(Type::NUMBER));
+              Eq(Type::FLOAT));
   EXPECT_THAT(map->as_map().at("b")->as_number(),
               FloatEq(1.1));
   EXPECT_THAT(map->as_map().at("c")->type(),
@@ -308,11 +308,11 @@ TEST_F(ParseMapTest, NestedMap) {
   EXPECT_THAT(nestedMap->type(), Eq(Type::MAP));
   EXPECT_THAT(nestedMap->as_map().size(), Eq(2));
   EXPECT_THAT(nestedMap->as_map().at("b")->type(),
-              Eq(Type::NUMBER));
+              Eq(Type::FLOAT));
   EXPECT_THAT(nestedMap->as_map().at("b")->as_number(),
               FloatEq(1));
   EXPECT_THAT(nestedMap->as_map().at("c")->type(),
-              Eq(Type::NUMBER));
+              Eq(Type::FLOAT));
   EXPECT_THAT(nestedMap->as_map().at("c")->as_number(),
               FloatEq(2));
   EXPECT_THAT(_cursor, Eq(19));
@@ -328,15 +328,15 @@ TEST_F(ParseMapTest, MapWithArray) {
   EXPECT_THAT(array->type(), Eq(Type::ARRAY));
   EXPECT_THAT(array->as_array().size(), Eq(3));
   EXPECT_THAT(array->as_array().at(0)->type(),
-              Eq(Type::NUMBER));
+              Eq(Type::FLOAT));
   EXPECT_THAT(array->as_array().at(0)->as_number(),
               FloatEq(1));
   EXPECT_THAT(array->as_array().at(1)->type(),
-              Eq(Type::NUMBER));
+              Eq(Type::FLOAT));
   EXPECT_THAT(array->as_array().at(1)->as_number(),
               FloatEq(2));
   EXPECT_THAT(array->as_array().at(2)->type(),
-              Eq(Type::NUMBER));
+              Eq(Type::FLOAT));
   EXPECT_THAT(array->as_array().at(2)->as_number(),
               FloatEq(3));
   EXPECT_THAT(_cursor, Eq(13));
@@ -356,15 +356,15 @@ TEST_F(ParseMapTest, MapWithMapAndArray) {
   EXPECT_THAT(array->type(), Eq(Type::ARRAY));
   EXPECT_THAT(array->as_array().size(), Eq(3));
   EXPECT_THAT(array->as_array().at(0)->type(),
-              Eq(Type::NUMBER));
+              Eq(Type::FLOAT));
   EXPECT_THAT(array->as_array().at(0)->as_number(),
               FloatEq(1));
   EXPECT_THAT(array->as_array().at(1)->type(),
-              Eq(Type::NUMBER));
+              Eq(Type::FLOAT));
   EXPECT_THAT(array->as_array().at(1)->as_number(),
               FloatEq(2));
   EXPECT_THAT(array->as_array().at(2)->type(),
-              Eq(Type::NUMBER));
+              Eq(Type::FLOAT));
   EXPECT_THAT(array->as_array().at(2)->as_number(),
               FloatEq(3));
   EXPECT_THAT(_cursor, Eq(19));
@@ -384,22 +384,22 @@ TEST_F(ParseMapTest, MapWithMapAndArrayAndMap) {
   EXPECT_THAT(array->type(), Eq(Type::ARRAY));
   EXPECT_THAT(array->as_array().size(), Eq(3));
   EXPECT_THAT(array->as_array().at(0)->type(),
-              Eq(Type::NUMBER));
+              Eq(Type::FLOAT));
   EXPECT_THAT(array->as_array().at(0)->as_number(),
               FloatEq(1));
   EXPECT_THAT(array->as_array().at(1)->type(),
-              Eq(Type::NUMBER));
+              Eq(Type::FLOAT));
   EXPECT_THAT(array->as_array().at(1)->as_number(),
               FloatEq(2));
   EXPECT_THAT(array->as_array().at(2)->type(),
-              Eq(Type::NUMBER));
+              Eq(Type::FLOAT));
   EXPECT_THAT(array->as_array().at(2)->as_number(),
               FloatEq(3));
   auto nestedNestedMap = nestedMap->as_map().at("c");
   EXPECT_THAT(nestedNestedMap->type(), Eq(Type::MAP));
   EXPECT_THAT(nestedNestedMap->as_map().size(), Eq(1));
   EXPECT_THAT(nestedNestedMap->as_map().at("d")->type(),
-              Eq(Type::NUMBER));
+              Eq(Type::FLOAT));
   EXPECT_THAT(
       nestedNestedMap->as_map().at("d")->as_number(),
       FloatEq(4));
@@ -438,7 +438,7 @@ TEST_F(ParseObjectTest,
   EXPECT_THAT(array->type(), Eq(Type::ARRAY));
   EXPECT_THAT(array->as_array().size(), Eq(3));
   EXPECT_THAT(array->as_array().at(0)->type(),
-              Eq(Type::NUMBER));
+              Eq(Type::FLOAT));
   EXPECT_THAT(array->as_array().at(0)->as_number(),
               FloatEq(1.1));
   EXPECT_THAT(array->as_array().at(1)->type(),
@@ -458,11 +458,11 @@ TEST_F(ParseObjectTest, ArrayWithTwoFloats) {
   EXPECT_THAT(array->type(), Eq(Type::ARRAY));
   EXPECT_THAT(array->as_array().size(), Eq(2));
   EXPECT_THAT(array->as_array().at(0)->type(),
-              Eq(Type::NUMBER));
+              Eq(Type::FLOAT));
   EXPECT_THAT(array->as_array().at(0)->as_number(),
               FloatEq(1.1));
   EXPECT_THAT(array->as_array().at(1)->type(),
-              Eq(Type::NUMBER));
+              Eq(Type::FLOAT));
   EXPECT_THAT(array->as_array().at(1)->as_number(),
               FloatEq(2.2));
   EXPECT_THAT(_cursor, Eq(9));
@@ -481,11 +481,11 @@ TEST_F(ParseObjectTest,
   EXPECT_THAT(array->type(), Eq(Type::ARRAY));
   EXPECT_THAT(array->as_array().size(), Eq(2));
   EXPECT_THAT(array->as_array().at(0)->type(),
-              Eq(Type::NUMBER));
+              Eq(Type::FLOAT));
   EXPECT_THAT(array->as_array().at(0)->as_number(),
               FloatEq(1.1));
   EXPECT_THAT(array->as_array().at(1)->type(),
-              Eq(Type::NUMBER));
+              Eq(Type::FLOAT));
   EXPECT_THAT(array->as_array().at(1)->as_number(),
               FloatEq(2.2));
   auto nestedMap = map->as_map().at("b");
@@ -506,7 +506,7 @@ TEST_F(ParseObjectTest, OneFloat) {
   std::string str = "1.1";
   auto result = ParseObject(str, &_cursor);
   ASSERT_THAT(result.ok(), IsTrue()) << result;
-  EXPECT_THAT(result.value()->type(), Eq(Type::NUMBER));
+  EXPECT_THAT(result.value()->type(), Eq(Type::FLOAT));
   EXPECT_THAT(result.value()->as_number(), FloatEq(1.1));
   EXPECT_THAT(_cursor, Eq(str.size()));
 }

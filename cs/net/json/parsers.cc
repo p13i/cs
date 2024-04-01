@@ -328,7 +328,7 @@ ResultOr<Object*> ParseObject(std::string str,
       // Parse float
       ASSIGN_OR_RETURN(object->_number_value,
                        ParseFloat(str, cursor));
-      object->_type = Type::NUMBER;
+      object->_type = Type::FLOAT;
       std::cout << "ParseFloat returned "
                 << object->_number_value << std::endl;
       break;

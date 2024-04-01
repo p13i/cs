@@ -32,7 +32,7 @@ std::ostream& SerializeObject(std::ostream& os,
 enum class Type : uint {
   UNSET = 0,
   BOOLEAN = 1,
-  NUMBER = 2,
+  FLOAT = 2,
   STRING = 3,
   ARRAY = 4,
   MAP = 5,
@@ -50,7 +50,7 @@ class Object {
   Object(bool value)
       : _type(Type::BOOLEAN), _bool_value(value) {}
   Object(float number)
-      : _type(Type::NUMBER), _number_value(number) {}
+      : _type(Type::FLOAT), _number_value(number) {}
   Object(std::string value)
       : _type(Type::STRING), _string_value(value) {}
   Object(std::vector<float> value) : _type(Type::ARRAY) {
@@ -67,7 +67,7 @@ class Object {
   T as(T instance);
 
   float as(float instance) const {
-    if (_type != Type::NUMBER) {
+    if (_type != Type::FLOAT) {
       return NAN;
     }
     return _number_value;
@@ -144,6 +144,17 @@ class Object {
     return _map_value.find(key) != _map_value.end();
   }
 
+  template <typename T>
+  ResultOr<T> get(const std::string& key, T instance) const {
+    if (_type != Type::MAP) {
+      return Error("Object is not a map.");
+    }
+    if (_map_value.find(key) == _map_value.end()) {
+      return Error(format("Key not found: %s", key));
+    }
+    return _map_value.at(key)->as(instance);
+  }
+
   ResultOr<Object*> get(const std::string& key) const {
     if (_type != Type::MAP) {
       return Error("Object is not a map.");
@@ -152,17 +163,6 @@ class Object {
       return Error(format("Key not found: %s", key));
     }
     return _map_value.at(key);
-  }
-
-  template <typename T>
-  ResultOr<T> get_as(const std::string& key, T instance) {
-    if (_type != Type::MAP) {
-      return Error("Object is not a map.");
-    }
-    if (_map_value.find(key) == _map_value.end()) {
-      return Error(format("Key not found: %s", key));
-    }
-    return _map_value.at(key)->as<T>(instance);
   }
 
   ResultOr<Object*> operator[](const std::string& key) {

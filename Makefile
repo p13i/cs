@@ -66,3 +66,6 @@ watch:
 
 watch-probe:
 	watch -n 10 "make probe"
+
+db:
+	bazel run //cs/db:main

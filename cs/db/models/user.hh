@@ -24,54 +24,41 @@ using ::cs::result::ResultOr;
 }  // namespace
 
 struct User {
- private:
-  float id_;
-  std::string email_;
-  std::string full_name_;
+  float id = 0;
+  std::string email = "";
+  std::string full_name = "";
 
- public:
   User() {}
   User(float id, std::string email, std::string full_name)
-      : id_(id), email_(email), full_name_(full_name) {}
-  float id() const { return id_; }
-  std::string email() const { return email_; }
-  std::string full_name() const { return full_name_; }
+      : id(id), email(email), full_name(full_name) {}
 
   friend std::ostream& operator<<(std::ostream& os,
                                   const User& user) {
-    return os << "User{id=" << user.id_
-              << ", email=" << user.email_
-              << ", full_name=" << user.full_name_ << "}";
+    auto object = new Object({
+        {"id", new Object(user.id)},
+        {"email", new Object(user.email)},
+        {"full_name", new Object(user.full_name)},
+    });
+    SerializeObject(os, object);
+    delete object;
+    return os;
   }
 
   friend Result operator>>(std::istream& is, User& user) {
     std::stringstream ss;
     ss << is.rdbuf();
-    return user.Parse(ss.str());
+    return user.JsonParse(ss.str());
   }
 
-  Result Parse(std::string str) {
+  Result JsonParse(std::string str) {
     Object* object;
     ASSIGN_OR_RETURN(object, ParseObject(str));
-    ASSIGN_OR_RETURN(id_, object->get_as("id", float()));
+    ASSIGN_OR_RETURN(id, object->get("id", float()));
+    ASSIGN_OR_RETURN(email,
+                     object->get("email", std::string()));
     ASSIGN_OR_RETURN(
-        email_, object->get_as("email", std::string()));
-    ASSIGN_OR_RETURN(
-        full_name_,
-        object->get_as("full_name", std::string()));
+        full_name, object->get("full_name", std::string()));
     return Ok();
-  }
-
-  std::string Serialize() {
-    std::stringstream ss;
-    auto obj = new Object({
-        {"id", new Object(id_)},
-        {"email", new Object(email_)},
-        {"full_name", new Object(full_name_)},
-    });
-    SerializeObject(ss, obj);
-    delete obj;
-    return ss.str();
   }
 };
 }  // namespace cs::db::models

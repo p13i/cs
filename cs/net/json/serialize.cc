@@ -35,7 +35,7 @@ std::ostream& SerializeObjectPrettyPrintRecurse(
     } else {
       os << "false";
     }
-  } else if (object->_type == Type::NUMBER) {
+  } else if (object->_type == Type::FLOAT) {
     os << object->as_number();
   } else if (object->_type == Type::STRING) {
     os << '"' << object->as_string() << '"';

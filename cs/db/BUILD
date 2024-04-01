@@ -8,6 +8,9 @@ cc_binary(
         "//cs/db:table",
         "//cs/db/models:user",
         "//cs/net/json:serialize",
+        "//cs/net/json:parsers",
+        "//cs/net/json:object",
+        "//cs/result",
     ],
 )
 

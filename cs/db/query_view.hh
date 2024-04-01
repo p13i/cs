@@ -22,7 +22,7 @@ class QueryView {
 
   Ts values() { return _values; }
 
-  QueryView WHERE(std::function<bool(DataType)> lambda) {
+  QueryView where(std::function<bool(DataType)> lambda) {
     Ts matching;
     for (const auto& item : _values) {
       if (lambda(item)) {
@@ -32,14 +32,23 @@ class QueryView {
     return matching;
   }
 
-  QueryView ORDER_BY(
+  QueryView limit(int n) {
+    Ts limited;
+    for (int i = 0; i < n && i < _values.size(); i++) {
+      limited.push_back(_values[i]);
+    }
+    return limited;
+  }
+
+  QueryView order_by(
       std::function<bool(DataType, DataType)> comparator) {
     Ts sorted(_values);
     std::sort(sorted.begin(), sorted.end(), comparator);
     return sorted;
   }
-  DataType FIRST() { return _values[0]; }
-  bool Any() { return _values.size() > 0; }
+
+  DataType first() { return _values[0]; }
+  bool any() { return _values.size() > 0; }
 
  private:
   Ts _values;
