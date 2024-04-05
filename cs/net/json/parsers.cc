@@ -170,11 +170,6 @@ ResultOr<float> ParseFloat(std::string str, uint* cursor) {
     result *= std::pow(10.f, exponent_value);
   }
 
-  // Print cursor.
-  std::cout << "ParseFloat: result=" << result
-            << ", cursor=" << *cursor << ", str=" << str
-            << std::endl;
-
   return result;
 }
 
@@ -289,9 +284,6 @@ ResultOr<Object*> ParseObject(std::string str) {
 
 ResultOr<Object*> ParseObject(std::string str,
                               uint* cursor) {
-  std::cout << "ParseObject: str=" << str
-            << ", cursor=" << *cursor << std::endl;
-
   if (!InBounds(str, *cursor)) {
     return Error(cs::string::format(
         "Cursor out of bounds: str=%s, cursor=%d", str,
@@ -303,25 +295,15 @@ ResultOr<Object*> ParseObject(std::string str,
     char c = str[*cursor];
     if (c == '{') {
       // TODO Parse map
-      std::cout << "Parsing map at cursor=" << *cursor
-                << std::endl;
       ASSIGN_OR_RETURN(object->_map_value,
                        ParseMap(str, cursor));
       object->_type = Type::MAP;
-      std::cout << "ParseMap returned "
-                << object->_map_value.size()
-                << " with cursor=" << *cursor << std::endl;
       break;
     } else if (c == '[') {
       // Parse array
-      std::cout << "Parsing array at cursor=" << *cursor
-                << std::endl;
       ASSIGN_OR_RETURN(object->_array_value,
                        ParseArray(str, cursor));
       object->_type = Type::ARRAY;
-      std::cout << "ParseArray returned "
-                << object->_array_value.size()
-                << " with cursor=" << *cursor << std::endl;
       break;
     } else if (c == '+' || c == '-' || c == '.' ||
                ('0' <= c && c <= '9')) {
@@ -329,8 +311,6 @@ ResultOr<Object*> ParseObject(std::string str,
       ASSIGN_OR_RETURN(object->_number_value,
                        ParseFloat(str, cursor));
       object->_type = Type::FLOAT;
-      std::cout << "ParseFloat returned "
-                << object->_number_value << std::endl;
       break;
     } else if (c == '"') {
       // Parse string
