@@ -145,7 +145,8 @@ class Object {
   }
 
   template <typename T>
-  ResultOr<T> get(const std::string& key, T instance) const {
+  ResultOr<T> get(const std::string& key,
+                  T instance) const {
     if (_type != Type::MAP) {
       return Error("Object is not a map.");
     }
@@ -177,6 +178,11 @@ class Object {
   std::vector<Object*> _array_value;
   std::map<std::string, Object*> _map_value;
 };
+
+template <typename T>
+inline T Object::as(T) {
+  return T();
+}
 
 }  // namespace cs::net::json
 
