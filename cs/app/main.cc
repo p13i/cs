@@ -88,6 +88,8 @@ Response index(Request request) {
   ss << "<ul>";
   ss << "<li><a href=\"/\">Home</a></li>";
   ss << "<li><a href=\"/render/\">Render</a></li>";
+  ss << "<li><a href=\"/render-in-browser/\">Render "
+        "In-Browser</a></li>";
   ss << "<li><a href=\"/json/\">JSON</a></li>";
   ss << "<li><a href=\"/log/\">Log</a></li>";
   ss << "</ul>";
