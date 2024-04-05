@@ -310,11 +310,54 @@ Response CreateLog(Request request) {
   return Response(HTTP_200_OK, kContentTypeTextHtml, "");
 }
 
+Response render_wasm(Request request) {
+  std::stringstream ss;
+  ss << R"html(<!doctype html>
+<html lang="en-us">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>C++ Graphics Simulators in Browser
+  </title>
+</head>
+<body>
+  <h1>Raytracer Demo</h1>
+  <hr/>
+  <div id="spinner">
+  </div>
+  <div id="status">
+    Downloading...</div>
+  <span id="controls">
+    <span><input type="checkbox" id="resize">Resize canvas</span>
+    <span><input type="checkbox" id="pointerLock" checked>Lock/hide mouse
+      pointer &nbsp;&nbsp;&nbsp;</span>
+    <span><input type="button" value="Fullscreen"
+        onclick="Module.requestFullscreen(
+          document.getElementById('pointerLock').checked,
+          document.getElementById('resize').checked)">
+    </span>
+  </span>
+  <progress value="0" max="100" id="progress" hidden=1></progress>
+  <hr/>
+  <canvas id="canvas"
+    oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
+  <hr/>
+  <textarea id="output" rows="40" cols="80"></textarea>
+  <script type="text/javascript" src="https://p13i.io/cs/wasm.js"></script>
+  <script async type="text/javascript" src="https://p13i.io/cs/index.js"></script>
+</body>
+</html>)html";
+  return Response(HTTP_200_OK, kContentTypeTextHtml,
+                  ss.str());
+}
+
 Result RunMyWebApp() {
   WebApp app;
   // Routes.
   OK_OR_RETURN(app.Register("GET", "/", index));
   OK_OR_RETURN(app.Register("GET", "/render/", render));
+  OK_OR_RETURN(
+      app.Register("GET", "/render-in-browser/", render_wasm));
   OK_OR_RETURN(app.Register("GET", "/json/", json));
   OK_OR_RETURN(app.Register("GET", "/log/", GetLogs));
   OK_OR_RETURN(app.Register("POST", "/log/", CreateLog));
