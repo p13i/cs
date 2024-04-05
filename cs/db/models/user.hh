@@ -39,9 +39,13 @@ struct User {
         {"email", new Object(user.email)},
         {"full_name", new Object(user.full_name)},
     });
-    SerializeObject(os, object);
-    delete object;
-    return os;
+    return SerializeObject(os, object);
+  }
+
+  std::string JsonSerialize() const {
+    std::stringstream ss;
+    ss << *this;
+    return ss.str();
   }
 
   friend Result operator>>(std::istream& is, User& user) {
