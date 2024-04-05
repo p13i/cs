@@ -1,18 +1,18 @@
 #ifndef CS_DB_TABLE_HH
 #define CS_DB_TABLE_HH
 
+#include <filesystem>
 #include <fstream>
 #include <functional>
 #include <iostream>
 #include <map>
 #include <string>
 #include <vector>
-#include <filesystem>
 
 #include "cs/db/query_view.hh"
-#include "cs/result/result.hh"
 #include "cs/net/json/object.hh"
 #include "cs/net/json/parsers.hh"
+#include "cs/result/result.hh"
 
 namespace cs::db {
 template <typename DataType>
@@ -23,7 +23,7 @@ class Table {
   Ts _values;
 
  public:
-  Table(std::string filepath) {}
+  Table() {}
   Table(const Ts& values) : _values(values) {}
   QueryView<DataType> query_view() {
     return QueryView<DataType>(_values);
@@ -42,28 +42,27 @@ class Table {
     }
     // Serialize the data.
     for (const DataType& value : _values) {
-      file << value << std::endl;
+      file << value.JsonSerialize() << std::endl;
     }
     file.close();
     return Ok();
   }
 
-  ResultOr<std::vector<cs::net::json::Object*>> load(const std::string& path) {
+  Result load(const std::string& path) {
     std::ifstream file(path);
     if (!file.is_open()) {
       return Error("Failed to open file.");
     }
     std::string line;
-    std::vector<cs::net::json::Object*> objs;
+    std::vector<DataType> data;
     while (std::getline(file, line)) {
-      std::stringstream ss;
-      ss << line;
-      cs::net::json::Object* object;
-      ASSIGN_OR_RETURN(object, cs::net::json::parsers::ParseObject(ss.str()));
-      // OK_OR_RETURN();
-      objs.push_back(object);
+      std::cout << "Reading: " << line << std::endl;
+      DataType datum;
+      OK_OR_RETURN(datum.JsonParse(line));
+      data.push_back(datum);
     }
-    return objs;
+    _values = data;
+    return Ok();
   }
 };
 }  // namespace cs::db
