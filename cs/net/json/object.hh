@@ -145,7 +145,8 @@ class Object {
   }
 
   template <typename T>
-  ResultOr<T> get(const std::string& key, T instance) const {
+  ResultOr<T> get(const std::string& key,
+                  T instance) const {
     if (_type != Type::MAP) {
       return Error("Object is not a map.");
     }

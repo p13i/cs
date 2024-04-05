@@ -356,8 +356,8 @@ Result RunMyWebApp() {
   // Routes.
   OK_OR_RETURN(app.Register("GET", "/", index));
   OK_OR_RETURN(app.Register("GET", "/render/", render));
-  OK_OR_RETURN(
-      app.Register("GET", "/render-in-browser/", render_wasm));
+  OK_OR_RETURN(app.Register("GET", "/render-in-browser/",
+                            render_wasm));
   OK_OR_RETURN(app.Register("GET", "/json/", json));
   OK_OR_RETURN(app.Register("GET", "/log/", GetLogs));
   OK_OR_RETURN(app.Register("POST", "/log/", CreateLog));

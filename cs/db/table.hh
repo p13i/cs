@@ -1,18 +1,18 @@
 #ifndef CS_DB_TABLE_HH
 #define CS_DB_TABLE_HH
 
+#include <filesystem>
 #include <fstream>
 #include <functional>
 #include <iostream>
 #include <map>
 #include <string>
 #include <vector>
-#include <filesystem>
 
 #include "cs/db/query_view.hh"
-#include "cs/result/result.hh"
 #include "cs/net/json/object.hh"
 #include "cs/net/json/parsers.hh"
+#include "cs/result/result.hh"
 
 namespace cs::db {
 template <typename DataType>
@@ -48,7 +48,8 @@ class Table {
     return Ok();
   }
 
-  ResultOr<std::vector<cs::net::json::Object*>> load(const std::string& path) {
+  ResultOr<std::vector<cs::net::json::Object*>> load(
+      const std::string& path) {
     std::ifstream file(path);
     if (!file.is_open()) {
       return Error("Failed to open file.");
@@ -59,7 +60,9 @@ class Table {
       std::stringstream ss;
       ss << line;
       cs::net::json::Object* object;
-      ASSIGN_OR_RETURN(object, cs::net::json::parsers::ParseObject(ss.str()));
+      ASSIGN_OR_RETURN(
+          object,
+          cs::net::json::parsers::ParseObject(ss.str()));
       // OK_OR_RETURN();
       objs.push_back(object);
     }
