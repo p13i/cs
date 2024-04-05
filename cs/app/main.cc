@@ -23,6 +23,7 @@
 #include "cs/result/result.hh"
 
 using ::cs::app::SceneAnimator;
+using ::cs::db::Table;
 using ::cs::net::http::HTTP_200_OK;
 using ::cs::net::http::HTTP_400_BAD_REQUEST;
 using ::cs::net::http::HTTP_404_NOT_FOUND;
@@ -56,8 +57,7 @@ struct LogRecord {
   std::string message;
 };
 
-static cs::db::Table cs_log_table =
-    cs::db::Table<LogRecord>();
+static Table cs_log_table = Table<LogRecord>();
 
 struct AppLogger {
   // Overload << operator for ostream
@@ -67,7 +67,7 @@ struct AppLogger {
     std::cout << t << std::endl;
     std::stringstream ss;
     ss << t << std::endl;
-    cs_log_table.INSERT({NowAsISO8601TimeUTC(), ss.str()});
+    cs_log_table.insert({NowAsISO8601TimeUTC(), ss.str()});
   }
 };
 
@@ -304,7 +304,7 @@ Response CreateLog(Request request) {
   }
 
   // Save to database.
-  cs_log_table.INSERT({now, message});
+  cs_log_table.insert({now, message});
 
   // Write to console.
   std::cout << NowAsISO8601TimeUTC() << " "
@@ -358,8 +358,8 @@ Result RunMyWebApp() {
   // Routes.
   OK_OR_RETURN(app.Register("GET", "/", index));
   OK_OR_RETURN(app.Register("GET", "/render/", render));
-  OK_OR_RETURN(
-      app.Register("GET", "/render-in-browser/", render_wasm));
+  OK_OR_RETURN(app.Register("GET", "/render-in-browser/",
+                            render_wasm));
   OK_OR_RETURN(app.Register("GET", "/json/", json));
   OK_OR_RETURN(app.Register("GET", "/log/", GetLogs));
   OK_OR_RETURN(app.Register("POST", "/log/", CreateLog));

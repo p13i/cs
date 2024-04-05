@@ -7,10 +7,11 @@ cc_binary(
         "//cs/db:query_view",
         "//cs/db:table",
         "//cs/db/models:user",
-        "//cs/net/json:serialize",
-        "//cs/net/json:parsers",
         "//cs/net/json:object",
+        "//cs/net/json:parsers",
+        "//cs/net/json:serialize",
         "//cs/result",
+        "//cs/string:format",
     ],
 )
 
@@ -19,6 +20,7 @@ cc_library(
     hdrs = ["query_view.hh"],
     deps = [
         "//cs/result",
+        "//cs/string:format",
     ],
 )
 
@@ -27,6 +29,8 @@ cc_library(
     hdrs = ["table.hh"],
     deps = [
         "//cs/db:query_view",
+        "//cs/net/json:object",
+        "//cs/net/json:parsers",
         "//cs/result",
     ],
 )

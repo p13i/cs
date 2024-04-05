@@ -1,21 +1,32 @@
 #include <iostream>
+#include <string>
 #include <vector>
 
 #include "cs/db/models/user.hh"
 #include "cs/db/query_view.hh"
 #include "cs/db/table.hh"
 #include "cs/result/result.hh"
+#include "cs/string/format.h"
 
 using ::cs::db::Table;
 using ::cs::db::models::User;
 
-#define DESC(key) \
-  [](const auto& a, const auto& b) { return a.key > b.key; }
+#define LAMBDA(type, predicate) \
+  [](const auto& type) { return predicate; }, #predicate
 
-#define ASC(key) \
-  [](const auto& a, const auto& b) { return a.key < b.key; }
+#define DESCENDING(key)              \
+  [](const auto& a, const auto& b) { \
+    return a.key > b.key;            \
+  },                                 \
+      "DESCENDING(key)"
 
-int main() {
+#define ASCENDING(key)                \
+  ([](const auto& a, const auto& b) { \
+    return a.key < b.key;             \
+  }),                                 \
+      "ASCENDING(key)"
+
+Result RunDatabase() {
   std::vector<User> users{
       {1, "email1@example.com", "Rob B"},
       {2, "email2@example.com", "Tom B"},
@@ -28,28 +39,41 @@ int main() {
 
   std::string filepath =
       "/workspaces/cs/users.json";  // distribute this bitch
-#if 1
-  cs::result::Result result = table.load(filepath);
-  if (!result.ok()) {
-    std::cerr << result << std::endl;
-    return result.code();
+  OK_OR_RETURN(table.load(filepath));
+  for (const auto& user : users) {
+    OK_OR_RETURN(table.insert(user));
   }
-#endif
-
+  // Print all items
+  for (const auto& item : table.query_view().values()) {
+    std::cout << item << std::endl;
+  }
+  // table.load(filepath);
   // Query the table.
+  auto query_view = table.query_view();
   std::vector<User> results =
-      table.query_view()
-          .where(
-              [](User u) { return u.full_name.size() > 1; })
-          .order_by(ASC(id))
+      query_view
+          .where(LAMBDA(user, user.full_name.size() > 1))
+          .order_by(ASCENDING(id))
           .limit(2)
           .values();
 
-  // Write runtime db to filesystem.
-  Result save_result = table.save(filepath);
-  if (!save_result.ok()) {
-    std::cerr << save_result.message() << std::endl;
-    return save_result.code();
+  std::cout << "Results: `" << query_view.query_string()
+            << "`\n";
+  for (const auto& item : results) {
+    std::cout << item << "\n";
   }
-  return 0;
+
+  // Write runtime db to filesystem.
+  OK_OR_RETURN(
+      table.insert({6, "pk@mail.com", "Pramod K"}));
+  OK_OR_RETURN(table.save(filepath));
+  return Ok();
+}
+
+int main() {
+  Result result = RunDatabase();
+  if (!result.ok()) {
+    std::cerr << result.message() << std::endl;
+  }
+  return result.code();
 }

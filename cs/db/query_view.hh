@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "cs/result/result.hh"
+#include "cs/string/format.h"
 
 namespace {
 using ::cs::result::Error;
