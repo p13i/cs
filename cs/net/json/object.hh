@@ -87,7 +87,7 @@ class Object {
     return _string_value;
   }
 
-  std::string as(char* instance) const {
+  std::string as(const char* instance) const {
     if (_type != Type::STRING) {
       return "";
     }
