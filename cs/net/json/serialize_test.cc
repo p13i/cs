@@ -26,15 +26,14 @@ using ::testing::StrEq;
 class SerializeTest : public ::testing::Test {};
 
 TEST_F(SerializeTest, ExampleMap) {
-  Object object =
-      Object(std::map<std::string, Object>{
-          {"key", Object(std::string("value"))},
-          {"key2", Object(std::vector<Object>{
-                       Object(true),
-                       Object(false),
-                       Object(std::string("hello")),
-                       Object(1.4f),
-                   })}});
+  Object object = Object(std::map<std::string, Object>{
+      {"key", Object(std::string("value"))},
+      {"key2", Object(std::vector<Object>{
+                   Object(true),
+                   Object(false),
+                   Object(std::string("hello")),
+                   Object(1.4f),
+               })}});
   std::stringstream ss;
   ss << object;
   std::string actual = ss.str();
@@ -66,15 +65,14 @@ TEST_F(SerializeTest, ExampleMap) {
 }
 
 TEST_F(SerializeTest, WithIndent) {
-  Object object =
-      Object(std::map<std::string, Object>{
-          {"key", Object(std::string("value"))},
-          {"key2", Object(std::vector<Object>{
-                       Object(true),
-                       Object(false),
-                       Object(std::string("hello")),
-                       Object(1.4f),
-                   })}});
+  Object object = Object(std::map<std::string, Object>{
+      {"key", Object(std::string("value"))},
+      {"key2", Object(std::vector<Object>{
+                   Object(true),
+                   Object(false),
+                   Object(std::string("hello")),
+                   Object(1.4f),
+               })}});
   std::stringstream ss;
   cs::net::json::SerializeObjectPrettyPrintRecurse(
       ss, object, 4, 0);

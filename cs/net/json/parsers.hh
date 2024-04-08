@@ -26,8 +26,7 @@ using ::cs::string::format;
 
 Result operator>>(std::string str, Object object);
 
-ResultOr<Object> ParseObject(std::string str,
-                              uint* cursor);
+ResultOr<Object> ParseObject(std::string str, uint* cursor);
 
 ResultOr<Object> ParseObject(std::string str);
 
@@ -44,7 +43,7 @@ ResultOr<float> ParseFloat(std::string str);
 ResultOr<float> ParseFloat(std::string str, uint* cursor);
 
 ResultOr<std::vector<Object>> ParseArray(std::string str,
-                                          uint* cursor);
+                                         uint* cursor);
 
 }  // namespace cs::net::json::parsers
 

@@ -121,9 +121,7 @@ class Object {
     return _array_value;
   }
 
-  KVMap as_map() const {
-    return _map_value;
-  }
+  KVMap as_map() const { return _map_value; }
 
   bool has_key(const std::string& key) {
     if (_type != Type::MAP) {

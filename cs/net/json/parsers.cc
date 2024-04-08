@@ -202,7 +202,7 @@ ResultOr<std::string> ParseString(std::string str,
 }
 
 ResultOr<std::vector<Object>> ParseArray(std::string str,
-                                          uint* cursor) {
+                                         uint* cursor) {
   if (!InBounds(str, *cursor)) {
     return Error(cs::string::format(
         "Cursor out of bounds: str=%s, cursor=%d", str,
