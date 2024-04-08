@@ -34,10 +34,10 @@ struct User {
 
   friend std::ostream& operator<<(std::ostream& os,
                                   const User& user) {
-    auto object = new Object({
-        {"id", new Object(user.id)},
-        {"email", new Object(user.email)},
-        {"full_name", new Object(user.full_name)},
+    auto object = Object({
+        {"id", Object(user.id)},
+        {"email", Object(user.email)},
+        {"full_name", Object(user.full_name)},
     });
     return SerializeObject(os, object);
   }
@@ -55,13 +55,13 @@ struct User {
   }
 
   Result JsonParse(std::string str) {
-    Object* object;
+    Object object;
     ASSIGN_OR_RETURN(object, ParseObject(str));
-    ASSIGN_OR_RETURN(id, object->get("id", float()));
+    ASSIGN_OR_RETURN(id, object.get("id", float()));
     ASSIGN_OR_RETURN(email,
-                     object->get("email", std::string()));
+                     object.get("email", std::string()));
     ASSIGN_OR_RETURN(
-        full_name, object->get("full_name", std::string()));
+        full_name, object.get("full_name", std::string()));
     return Ok();
   }
 };

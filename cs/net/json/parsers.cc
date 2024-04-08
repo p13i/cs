@@ -15,9 +15,9 @@
 
 namespace cs::net::json::parsers {
 
-Result operator>>(std::string str, Object* object) {
+Result operator>>(std::string str, Object object) {
   uint cursor = 0;
-  ASSIGN_OR_RETURN(*object, ParseObject(str, &cursor));
+  ASSIGN_OR_RETURN(object, ParseObject(str, &cursor));
   return Ok();
 }
 
@@ -201,7 +201,7 @@ ResultOr<std::string> ParseString(std::string str,
   return ss.str();
 }
 
-ResultOr<std::vector<Object*>> ParseArray(std::string str,
+ResultOr<std::vector<Object>> ParseArray(std::string str,
                                           uint* cursor) {
   if (!InBounds(str, *cursor)) {
     return Error(cs::string::format(
@@ -214,7 +214,7 @@ ResultOr<std::vector<Object*>> ParseArray(std::string str,
   }
   *cursor += 1;
 
-  std::vector<Object*> array;
+  std::vector<Object> array;
   while (InBounds(str, *cursor)) {
     if (str[*cursor] == ']') {
       break;
@@ -223,7 +223,7 @@ ResultOr<std::vector<Object*>> ParseArray(std::string str,
       *cursor += 1;
       continue;
     }
-    Object* object;
+    Object object;
     ASSIGN_OR_RETURN(object, ParseObject(str, cursor));
     array.push_back(object);
   }
@@ -236,7 +236,7 @@ ResultOr<std::vector<Object*>> ParseArray(std::string str,
   return array;
 }
 
-ResultOr<std::map<std::string, Object*>> ParseMap(
+ResultOr<std::map<std::string, Object>> ParseMap(
     std::string str, uint* cursor) {
   if (!InBounds(str, *cursor)) {
     return Error(cs::string::format(
@@ -249,7 +249,7 @@ ResultOr<std::map<std::string, Object*>> ParseMap(
   }
   *cursor += 1;
 
-  std::map<std::string, Object*> map;
+  std::map<std::string, Object> map;
   while (InBounds(str, *cursor)) {
     if (str[*cursor] == '}') {
       break;
@@ -264,7 +264,7 @@ ResultOr<std::map<std::string, Object*>> ParseMap(
       return Error("Did not find ':' after key in map.");
     }
     *cursor += 1;
-    Object* object;
+    Object object;
     ASSIGN_OR_RETURN(object, ParseObject(str, cursor));
     map[key] = object;
   }
@@ -277,52 +277,52 @@ ResultOr<std::map<std::string, Object*>> ParseMap(
   return map;
 }
 
-ResultOr<Object*> ParseObject(std::string str) {
+ResultOr<Object> ParseObject(std::string str) {
   uint cursor = 0;
   return ParseObject(str, &cursor);
 }
 
-ResultOr<Object*> ParseObject(std::string str,
-                              uint* cursor) {
+ResultOr<Object> ParseObject(std::string str,
+                             uint* cursor) {
   if (!InBounds(str, *cursor)) {
     return Error(cs::string::format(
         "Cursor out of bounds: str=%s, cursor=%d", str,
         *cursor));
   }
 
-  Object* object = new Object();
+  Object object = Object();
   while (InBounds(str, *cursor)) {
     char c = str[*cursor];
     if (c == '{') {
       // TODO Parse map
-      ASSIGN_OR_RETURN(object->_map_value,
+      ASSIGN_OR_RETURN(object._map_value,
                        ParseMap(str, cursor));
-      object->_type = Type::MAP;
+      object._type = Type::MAP;
       break;
     } else if (c == '[') {
       // Parse array
-      ASSIGN_OR_RETURN(object->_array_value,
+      ASSIGN_OR_RETURN(object._array_value,
                        ParseArray(str, cursor));
-      object->_type = Type::ARRAY;
+      object._type = Type::ARRAY;
       break;
     } else if (c == '+' || c == '-' || c == '.' ||
                ('0' <= c && c <= '9')) {
       // Parse float
-      ASSIGN_OR_RETURN(object->_number_value,
+      ASSIGN_OR_RETURN(object._number_value,
                        ParseFloat(str, cursor));
-      object->_type = Type::FLOAT;
+      object._type = Type::FLOAT;
       break;
     } else if (c == '"') {
       // Parse string
-      ASSIGN_OR_RETURN(object->_string_value,
+      ASSIGN_OR_RETURN(object._string_value,
                        ParseString(str, cursor));
-      object->_type = Type::STRING;
+      object._type = Type::STRING;
       break;
     } else if (c == 't' || c == 'f') {
       // Parse bool
-      ASSIGN_OR_RETURN(object->_bool_value,
+      ASSIGN_OR_RETURN(object._bool_value,
                        ParseBoolean(str, cursor));
-      object->_type = Type::BOOLEAN;
+      object._type = Type::BOOLEAN;
       break;
     } else {
       return Error(cs::string::format(

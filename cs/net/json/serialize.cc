@@ -7,7 +7,7 @@
 namespace cs::net::json {
 
 std::ostream& operator<<(std::ostream& os,
-                         const Object* object) {
+                         const Object object) {
   return SerializeObject(os, object);
 }
 
@@ -21,31 +21,31 @@ std::ostream& WriteIndent(std::ostream& os, uint indent) {
 }  // namespace
 
 std::ostream& SerializeObject(std::ostream& os,
-                              const Object* object) {
+                              const Object object) {
   return SerializeObjectPrettyPrintRecurse(os, object, 0,
                                            0);
 }
 
 std::ostream& SerializeObjectPrettyPrintRecurse(
-    std::ostream& os, const Object* object, uint indent,
+    std::ostream& os, const Object object, uint indent,
     uint initial_indent) {
-  if (object->_type == Type::BOOLEAN) {
-    if (object->as_bool()) {
+  if (object._type == Type::BOOLEAN) {
+    if (object.as_bool()) {
       os << "true";
     } else {
       os << "false";
     }
-  } else if (object->_type == Type::FLOAT) {
-    os << object->as_number();
-  } else if (object->_type == Type::STRING) {
-    os << '"' << object->as_string() << '"';
-  } else if (object->_type == Type::ARRAY) {
+  } else if (object._type == Type::FLOAT) {
+    os << object.as_number();
+  } else if (object._type == Type::STRING) {
+    os << '"' << object.as_string() << '"';
+  } else if (object._type == Type::ARRAY) {
     os << "[";
     if (indent > 0) {
       os << std::endl;
     }
     bool first = true;
-    for (const auto& elem : object->as_array()) {
+    for (const auto& elem : object.as_array()) {
       if (!first) {
         os << ",";
         if (indent > 0) {
@@ -63,13 +63,13 @@ std::ostream& SerializeObjectPrettyPrintRecurse(
     }
     WriteIndent(os, initial_indent);
     os << "]";
-  } else if (object->_type == Type::MAP) {
+  } else if (object._type == Type::MAP) {
     os << "{";
     if (indent > 0) {
       os << std::endl;
     }
     bool first = true;
-    for (const auto& kv : object->as_map()) {
+    for (const auto& kv : object.as_map()) {
       if (!first) {
         os << ",";
         if (indent > 0) {

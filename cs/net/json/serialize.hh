@@ -7,13 +7,13 @@
 
 namespace cs::net::json {
 std::ostream& operator<<(std::ostream& os,
-                         const Object* object);
+                         const Object object);
 
 std::ostream& SerializeObject(std::ostream& os,
-                              const Object* object);
+                              const Object object);
 
 std::ostream& SerializeObjectPrettyPrintRecurse(
-    std::ostream& os, const Object* object, uint indent,
+    std::ostream& os, const Object object, uint indent,
     uint initial_indent);
 
 }  // namespace cs::net::json

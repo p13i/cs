@@ -24,14 +24,14 @@ using ::cs::result::ResultOr;
 using ::cs::string::format;
 }  // namespace
 
-Result operator>>(std::string str, Object* object);
+Result operator>>(std::string str, Object object);
 
-ResultOr<Object*> ParseObject(std::string str,
+ResultOr<Object> ParseObject(std::string str,
                               uint* cursor);
 
-ResultOr<Object*> ParseObject(std::string str);
+ResultOr<Object> ParseObject(std::string str);
 
-ResultOr<std::map<std::string, Object*>> ParseMap(
+ResultOr<std::map<std::string, Object>> ParseMap(
     std::string str, uint* cursor);
 
 ResultOr<std::string> ParseString(std::string str,
@@ -43,7 +43,7 @@ ResultOr<float> ParseFloat(std::string str);
 
 ResultOr<float> ParseFloat(std::string str, uint* cursor);
 
-ResultOr<std::vector<Object*>> ParseArray(std::string str,
+ResultOr<std::vector<Object>> ParseArray(std::string str,
                                           uint* cursor);
 
 }  // namespace cs::net::json::parsers
