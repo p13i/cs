@@ -144,12 +144,12 @@ Response render(Request request) {
       });
 
   // Serialize first frame as a JavaScript 2D array.
-  std::vector<Object> frames_json;
+  std::vector<Object*> frames_json;
   for (size_t i = 0; i < frames.size(); i++) {
     const Film film = frames.at(i);
-    std::vector<Object> film_json;
+    std::vector<Object*> film_json;
     for (size_t x = 0; x < film.width; x++) {
-      std::vector<Object> column_json;
+      std::vector<Object*> column_json;
       column_json.reserve(film.height);
       for (size_t y = 0; y < film.height; y++) {
         const Pixel px = film.pixels[x][y];
@@ -158,15 +158,15 @@ Response render(Request request) {
             static_cast<float>(px.g),
             static_cast<float>(px.b),
             static_cast<float>(px.a)};
-        Object pixel_json = Object(rgba);
+        Object* pixel_json = new Object(rgba);
         column_json.push_back(pixel_json);
       }
-      film_json.push_back(Object(column_json));
+      film_json.push_back(new Object(column_json));
     }
-    frames_json.push_back(Object(film_json));
+    frames_json.push_back(new Object(film_json));
   }
 
-  Object root_json = Object(frames_json);
+  Object* root_json = new Object(frames_json);
 
   // clang-format off
   std::stringstream ss;
@@ -240,6 +240,8 @@ Response render(Request request) {
 )html";
   // clang-format on
 
+  delete root_json;
+
   return Response(HTTP_200_OK, kContentTypeTextHtml,
                   ss.str());
 }
@@ -251,17 +253,19 @@ Response json(Request request) {
       ParseFloat(request.get_query_param("indent").value_or(
           std::to_string(0))));
 
-  Object object = Object(std::map<std::string, Object>{
-      {"key", Object(std::string("value"))},
-      {"key2", Object(std::vector<Object>{
-                   Object(true),
-                   Object(false),
-                   Object(std::string("hello")),
-                   Object(1.4f),
-               })}});
+  Object* object =
+      new Object(std::map<std::string, Object*>{
+          {"key", new Object(std::string("value"))},
+          {"key2", new Object(std::vector<Object*>{
+                       new Object(true),
+                       new Object(false),
+                       new Object(std::string("hello")),
+                       new Object(1.4f),
+                   })}});
   std::stringstream ss;
   cs::net::json::SerializeObjectPrettyPrintRecurse(
       ss, object, static_cast<uint>(indent), 0);
+  delete object;
   return Response(HTTP_200_OK, kContentTypeApplicationJson,
                   ss.str());
 }
@@ -288,7 +292,7 @@ Response CreateLog(Request request) {
   std::string message;
   if (request.headers()["content-type"] ==
       kContentTypeApplicationJson) {
-    Object object;
+    Object* object;
     uint cursor = 0;
     ASSIGN_OR_RETURN(object, ParseObject(message, &cursor));
     std::stringstream ss;
