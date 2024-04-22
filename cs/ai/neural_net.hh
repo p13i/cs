@@ -3,8 +3,7 @@
 
 namespace cs::ai {
 
-struct NeuralNet {
-};
+struct NeuralNet {};
 
 }  // namespace cs::ai
 
