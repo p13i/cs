@@ -96,7 +96,7 @@ struct SceneAnimator {
           });
 
       // Draw some text on the film
-      [[maybe_unused]] unsigned int[width, height] =
+      [[maybe_unused]] auto [width, height] =
           film_dimensions_;
       int xStart = 16;
       int yStart = 16;
