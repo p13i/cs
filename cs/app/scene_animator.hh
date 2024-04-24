@@ -96,10 +96,8 @@ struct SceneAnimator {
           });
 
       // Draw some text on the film
-      [[maybe_unused]] unsigned int width =
-          std::get<0>(film_dimensions_);
-      [[maybe_unused]] unsigned int height =
-          std::get<1>(film_dimensions_);
+      [[maybe_unused]] auto [width, height] =
+          film_dimensions_;
       int xStart = 16;
       int yStart = 16;
       DrawString(&film, &xStart, yStart,
