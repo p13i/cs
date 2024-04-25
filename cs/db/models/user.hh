@@ -29,8 +29,6 @@ struct User {
   std::string full_name = "";
 
   User() {}
-  User(float id, std::string email, std::string full_name)
-      : id(id), email(email), full_name(full_name) {}
 
   friend std::ostream& operator<<(std::ostream& os,
                                   const User& user) {
@@ -40,6 +38,17 @@ struct User {
         {"full_name", new Object(user.full_name)},
     });
     return SerializeObject(os, object);
+  }
+
+  Result JsonParse(std::string str) {
+    Object* object;
+    ASSIGN_OR_RETURN(object, ParseObject(str));
+    ASSIGN_OR_RETURN(id, object->get("id", float()));
+    ASSIGN_OR_RETURN(email,
+                     object->get("email", std::string()));
+    ASSIGN_OR_RETURN(
+        full_name, object->get("full_name", std::string()));
+    return Ok();
   }
 
   std::string JsonSerialize() const {
@@ -52,17 +61,6 @@ struct User {
     std::stringstream ss;
     ss << is.rdbuf();
     return user.JsonParse(ss.str());
-  }
-
-  Result JsonParse(std::string str) {
-    Object* object;
-    ASSIGN_OR_RETURN(object, ParseObject(str));
-    ASSIGN_OR_RETURN(id, object->get("id", float()));
-    ASSIGN_OR_RETURN(email,
-                     object->get("email", std::string()));
-    ASSIGN_OR_RETURN(
-        full_name, object->get("full_name", std::string()));
-    return Ok();
   }
 };
 }  // namespace cs::db::models
