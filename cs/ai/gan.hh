@@ -3,4 +3,4 @@
 
 // Your code here
 
-#endif // CS_AI_GAN_HH
+#endif  // CS_AI_GAN_HH
