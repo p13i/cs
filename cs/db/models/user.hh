@@ -30,6 +30,9 @@ struct User {
 
   User() {}
 
+  User(float id, std::string email, std::string full_name)
+      : id(id), email(email), full_name(full_name) {}
+
   friend std::ostream& operator<<(std::ostream& os,
                                   const User& user) {
     auto object = new Object({

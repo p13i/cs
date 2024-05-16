@@ -28,10 +28,12 @@ using ::cs::db::models::User;
 
 Result RunDatabase() {
   std::vector<User> users{
-      {1, "email1@example.com", "Rob B"},
-      {2, "email2@example.com", "Tom B"},
-      {3, "email3@example.com", "Hayden B"},
-      {4, "email3@example.com", "Paris C"},
+      User(1, "email1@example.com", "Rob O"),
+      User(2, "email2@example.com", "Tom B"),
+      User(3, "email3@example.com", "Hayden"),
+      User(4, "email3@example.com", "Scott"),
+      User(4, "email3@example.com", "Jamie"),
+      User(4, "email3@example.com", "Ben"),
   };
 
   // Build a table.
