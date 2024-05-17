@@ -69,3 +69,6 @@ watch-probe:
 
 db:
 	bazel run //cs/db:main
+
+codegen:
+	bazel run //cs/db/models:codegen

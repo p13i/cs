@@ -23,10 +23,18 @@ using ::cs::result::Result;
 using ::cs::result::ResultOr;
 }  // namespace
 
+#define FIELD(Type, Name) Type Name;
+
+#define MODEL(ModelName, ModelFields) \
+  struct ModelName {                  \
+    ModelFields                       \
+    ModelName() {}                    \
+  }
+
 struct User {
-  float id = 0;
-  std::string email = "";
-  std::string full_name = "";
+  float id;
+  std::string email;
+  std::string full_name;
 
   User() {}
 
