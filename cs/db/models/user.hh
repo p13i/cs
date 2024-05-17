@@ -27,8 +27,7 @@ using ::cs::result::ResultOr;
 
 #define MODEL(ModelName, ModelFields) \
   struct ModelName {                  \
-    ModelFields                       \
-    ModelName() {}                    \
+    ModelFields ModelName() {}        \
   }
 
 struct User {
