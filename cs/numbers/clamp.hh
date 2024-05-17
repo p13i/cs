@@ -3,7 +3,7 @@
 
 namespace cs::numbers {
 template <class T>
-T clamp(float value, float min_value, float max_value) {
+T clamp(T value, T min_value, T max_value) {
   if (value < min_value) {
     return min_value;
   }
