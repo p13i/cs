@@ -87,7 +87,8 @@ Response index(Request request) {
   ss << "<h2>Routes</h2>";
   ss << "<ul>";
   ss << "<li><a href=\"/\">Home</a></li>";
-  ss << "<li><a href=\"/render-on-server/\">Render on server</a></li>";
+  ss << "<li><a href=\"/render-on-server/\">Render on "
+        "server</a></li>";
   ss << "<li><a href=\"/render-in-browser/\">Render "
         "In-Browser</a></li>";
   ss << "<li><a href=\"/json/\">JSON</a></li>";
@@ -97,7 +98,7 @@ Response index(Request request) {
                   ss.str());
 }
 
-Response render(Request request) {
+Response render_on_server(Request request) {
   app_log << request;
 
   float width_f;
@@ -312,7 +313,7 @@ Response CreateLog(Request request) {
   return Response(HTTP_200_OK, kContentTypeTextHtml, "");
 }
 
-Response render_wasm(Request request) {
+Response render_in_browser(Request request) {
   std::stringstream ss;
   ss << R"html(<!doctype html>
 <html lang="en-us">
@@ -357,9 +358,10 @@ Result RunMyWebApp() {
   WebApp app;
   // Routes.
   OK_OR_RETURN(app.Register("GET", "/", index));
-  OK_OR_RETURN(app.Register("GET", "/render-on-server/", render));
+  OK_OR_RETURN(app.Register("GET", "/render-on-server/",
+                            render_on_server));
   OK_OR_RETURN(app.Register("GET", "/render-in-browser/",
-                            render_wasm));
+                            render_in_browser));
   OK_OR_RETURN(app.Register("GET", "/json/", json));
   OK_OR_RETURN(app.Register("GET", "/log/", GetLogs));
   OK_OR_RETURN(app.Register("POST", "/log/", CreateLog));
