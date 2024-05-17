@@ -55,6 +55,8 @@ http:
 	fuser -k 8080/tcp || echo "No-op"
 	bazel run //cs/app:main
 
+web-app: http
+
 test-json:
 	bazel test --test_output=errors --test_arg=--gtest_filter=ParseArrayTest.ArrayWithOneElement -- //cs/net/json:parsers_test
 
