@@ -87,7 +87,7 @@ Response index(Request request) {
   ss << "<h2>Routes</h2>";
   ss << "<ul>";
   ss << "<li><a href=\"/\">Home</a></li>";
-  ss << "<li><a href=\"/render/\">Render</a></li>";
+  ss << "<li><a href=\"/render-on-server/\">Render on server</a></li>";
   ss << "<li><a href=\"/render-in-browser/\">Render "
         "In-Browser</a></li>";
   ss << "<li><a href=\"/json/\">JSON</a></li>";
@@ -357,7 +357,7 @@ Result RunMyWebApp() {
   WebApp app;
   // Routes.
   OK_OR_RETURN(app.Register("GET", "/", index));
-  OK_OR_RETURN(app.Register("GET", "/render/", render));
+  OK_OR_RETURN(app.Register("GET", "/render-on-server/", render));
   OK_OR_RETURN(app.Register("GET", "/render-in-browser/",
                             render_wasm));
   OK_OR_RETURN(app.Register("GET", "/json/", json));
