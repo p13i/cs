@@ -354,43 +354,104 @@ Response render_in_browser(Request request) {
                   ss.str());
 }
 
+#define HTML_TAG_AS_STRUCT(name)                      \
+  struct name {                                       \
+    std::string html_;                                \
+    name(std::string html) : html_(html) {}           \
+    friend std::ostream& operator<<(std::ostream& os, \
+                                    const name& s) {  \
+      return os << "<" #name ">" << s.html_           \
+                << "</" #name ">";                    \
+    }                                                 \
+  }
+
+struct small {
+  std::string html_;
+  small(std::string html) : html_(html) {}
+  friend std::ostream& operator<<(std::ostream& os,
+                                  const small& s) {
+    return os << "<small>" << s.html_ << "</small>";
+  }
+};
+
+HTML_TAG_AS_STRUCT(small2);
+
 Response Render(const Request& request) {
+  // clang-format off
   std::stringstream ss;
-  ss << R"html(<!doctype html>
-<html lang="en-us">
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <title>C++ Graphics Simulators in Browser
-  </title>
-</head>
-<body>
-  <h1>Raytracer Demo</h1>
-  <hr/>
-  <div id="spinner">
-  </div>
-  <div id="status">
-    Downloading...</div>
-  <span id="controls">
-    <span><input type="checkbox" id="resize">Resize canvas</span>
-    <span><input type="checkbox" id="pointerLock" checked>Lock/hide mouse
-      pointer &nbsp;&nbsp;&nbsp;</span>
-    <span><input type="button" value="Fullscreen"
-        onclick="Module.requestFullscreen(
-          document.getElementById('pointerLock').checked,
-          document.getElementById('resize').checked)">
-    </span>
-  </span>
-  <progress value="0" max="100" id="progress" hidden=1></progress>
-  <hr/>
-  <canvas id="canvas"
-    oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
-  <hr/>
-  <textarea id="output" rows="40" cols="80"></textarea>
-  <script type="text/javascript" src="https://p13i.io/cs/wasm.js"></script>
-  <script async type="text/javascript" src="https://p13i.io/cs/index.js"></script>
-</body>
-</html>)html";
+  ss << "<h1>Ray-tracer&nbsp;" << small("") << "</h1>";
+#if 0
+  ss << "<p>Ray-tracer rendered " << frames.size() << " frames in "
+    << render_time_ms << " ms at " << width << "x" << height << "px.</p>";
+  ss << R"html(
+<canvas id="canvas" width=")html" << width
+  << R"html(" height=")html" << height 
+  << R"html("></canvas>
+<p id="fps"></p>
+<form action="/render/" method="GET">
+  <label for="width">Width:</label>
+  <input type="number" id="width" name="width" value=")html" << width
+  << R"html(">px
+  <br/>
+  <label for="height">Height:</label>
+  <input type="number" id="height" name="height" value=")html" << height
+  << R"html(">px
+  <br/>
+  <label for="num_frames">Number of frames:</label>
+  <br/>
+  <input type="number" id="num_frames" name="num_frames" value=")html" << num_frames
+  << R"html(">
+  <br/>
+  <input type="submit" value="Render">
+<script type="text/javascript">
+  const IMAGES = )html" << root_json << R"html(;
+  const FPS = )html" << APP_FRAME_RATE_FPS << R"html(;
+  var i = 0;
+  var oneSecondStartMs = 0;
+  var oneSecondEndMs = 0;
+  var drawMs = 0;
+  const canvas = document.getElementById('canvas');
+  var ctx = canvas.getContext('2d');
+  function drawImage() {
+    const startMs = Date.now();
+    if (i % FPS == 0) {
+      oneSecondStartMs = startMs;
+    }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (var y = canvas.height - 1; y >= 0; y--) {
+      for (var x = 0; x < canvas.width; x++) {
+        var [r, g, b, a] = IMAGES[i][x][y];
+        a = 1;
+        ctx.fillStyle = `rgba( ${r} , ${g} , ${b}, ${a} )`;
+        ctx.fillRect(x, y, 1, 1);
+      }
+    }
+    const endMs = Date.now();
+    if (i % FPS == (FPS - 1)) {
+      oneSecondEndMs = endMs;
+      const oneSceneSecondInMs = (oneSecondEndMs - oneSecondStartMs);
+      const fps = (FPS * 1000) / oneSceneSecondInMs;
+      const message = `Drawing at ${fps.toFixed(2)} fps.`;
+      document.getElementById("fps").innerHTML = message;
+    }
+    i = (i + 1) % IMAGES.length;
+    drawMs = endMs - startMs;
+    queueDrawImage();
+  }
+
+  function queueDrawImage() {
+    const delayMs = 1000 / FPS - drawMs;
+    setTimeout(drawImage, delayMs);
+  }
+
+  document.addEventListener("DOMContentLoaded", function() {
+    queueDrawImage();
+  });
+</script>
+)html";
+#endif
+  // clang-format on
+
   return Response(HTTP_200_OK, kContentTypeTextHtml,
                   ss.str());
 }
