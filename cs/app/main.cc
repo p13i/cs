@@ -43,7 +43,7 @@ using ::cs::result::Result;
 
 namespace {
 
-WebApp app;
+static WebApp app;
 
 // https://stackoverflow.com/a/63864750
 std::string NowAsISO8601TimeUTC() {
