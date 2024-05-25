@@ -22,6 +22,8 @@
 #include "cs/renderer/pixel.hh"
 #include "cs/result/result.hh"
 
+namespace {
+
 using ::cs::app::SceneAnimator;
 using ::cs::db::Table;
 using ::cs::net::http::HTTP_200_OK;
@@ -41,7 +43,7 @@ using ::cs::result::Error;
 using ::cs::result::Ok;
 using ::cs::result::Result;
 
-namespace {
+}. // namespace
 
 static WebApp app;
 
@@ -74,8 +76,6 @@ struct AppLogger {
 };
 
 static AppLogger app_log;
-
-}  // namespace
 
 Response index(Request request) {
   app_log << request;
