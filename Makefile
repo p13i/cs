@@ -71,3 +71,6 @@ watch-probe:
 
 db:
 	bazel run //cs/db:main
+
+pull:
+	git pull --rebase --all
