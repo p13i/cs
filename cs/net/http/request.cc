@@ -133,6 +133,7 @@ Result ParsePath(std::string original_path,
 }  // namespace
 
 Result Request::Parse(std::string str) {
+  _str = str;
   uint cursor = 0;
   // Read HTTP method
   OK_OR_RETURN(ReadWord(str, &cursor, &_method, " "));

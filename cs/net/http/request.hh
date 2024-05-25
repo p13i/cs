@@ -45,12 +45,7 @@ class Request {
 
   friend std::ostream& operator<<(std::ostream& os,
                                   const Request& request) {
-    os << "Request(method=" << request._method
-       << ", path=" << request._path
-       << ", query_params=" << request._query_params
-       << ", headers=" << request._headers
-       << ", body=" << request._body << ")";
-    return os;
+    return os << request._str;
   }
 
   friend Result operator>>(char buffer[],
@@ -85,6 +80,7 @@ class Request {
   QueryParams _query_params;
   std::map<std::string, std::string> _headers;
   std::string _body;
+  std::string _str;
 };
 
 }  // namespace cs::net::http
