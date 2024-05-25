@@ -64,7 +64,7 @@ probe:
 	bazel run //cs/app:prober
 
 watch:
-	watch -n0 "make build"
+	watch -n 1 "make build"
 
 watch-probe:
 	watch -n 10 "make probe"
