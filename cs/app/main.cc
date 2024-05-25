@@ -83,7 +83,8 @@ Response index(Request request) {
   std::stringstream ss;
   ss << "<h1>Welcome to my website!</h1>";
   ss << "<p>To code this app, I only used standard library "
-        "methods (like `std::chrono` or `std::vector`) for "
+        "methods (like <code>std::chrono</code> or "
+        "<code>std::vector</code>) for "
         "this web app framework.</p>";
   ss << "<h2>Routes</h2>";
   ss << "<ul>";
