@@ -177,7 +177,7 @@ Response RenderOnServer(Request request) {
   << R"html(" height=")html" << height 
   << R"html("></canvas>
 <p id="fps"></p>
-<form action="/render/" method="GET">
+<form action="/render-on-server/" method="GET">
   <label for="width">Width:</label>
   <input type="number" id="width" name="width" value=")html" << width
   << R"html(">px
