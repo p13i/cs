@@ -357,82 +357,10 @@ Response render_in_browser(Request request) {
 }
 
 Response Render(const Request& request) {
-  // clang-format off
   std::stringstream ss;
   ss << "<h1>Ray-tracer</h1>";
-  
-#if 0
-  ss << "<p>Ray-tracer rendered " << frames.size() << " frames in "
-    << render_time_ms << " ms at " << width << "x" << height << "px.</p>";
-  ss << R"html(
-<canvas id="canvas" width=")html" << width
-  << R"html(" height=")html" << height 
-  << R"html("></canvas>
-<p id="fps"></p>
-<form action="/render/" method="GET">
-  <label for="width">Width:</label>
-  <input type="number" id="width" name="width" value=")html" << width
-  << R"html(">px
-  <br/>
-  <label for="height">Height:</label>
-  <input type="number" id="height" name="height" value=")html" << height
-  << R"html(">px
-  <br/>
-  <label for="num_frames">Number of frames:</label>
-  <br/>
-  <input type="number" id="num_frames" name="num_frames" value=")html" << num_frames
-  << R"html(">
-  <br/>
-  <input type="submit" value="Render">
-<script type="text/javascript">
-  const IMAGES = )html" << root_json << R"html(;
-  const FPS = )html" << APP_FRAME_RATE_FPS << R"html(;
-  var i = 0;
-  var oneSecondStartMs = 0;
-  var oneSecondEndMs = 0;
-  var drawMs = 0;
-  const canvas = document.getElementById('canvas');
-  var ctx = canvas.getContext('2d');
-  function drawImage() {
-    const startMs = Date.now();
-    if (i % FPS == 0) {
-      oneSecondStartMs = startMs;
-    }
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (var y = canvas.height - 1; y >= 0; y--) {
-      for (var x = 0; x < canvas.width; x++) {
-        var [r, g, b, a] = IMAGES[i][x][y];
-        a = 1;
-        ctx.fillStyle = `rgba( ${r} , ${g} , ${b}, ${a} )`;
-        ctx.fillRect(x, y, 1, 1);
-      }
-    }
-    const endMs = Date.now();
-    if (i % FPS == (FPS - 1)) {
-      oneSecondEndMs = endMs;
-      const oneSceneSecondInMs = (oneSecondEndMs - oneSecondStartMs);
-      const fps = (FPS * 1000) / oneSceneSecondInMs;
-      const message = `Drawing at ${fps.toFixed(2)} fps.`;
-      document.getElementById("fps").innerHTML = message;
-    }
-    i = (i + 1) % IMAGES.length;
-    drawMs = endMs - startMs;
-    queueDrawImage();
-  }
-
-  function queueDrawImage() {
-    const delayMs = 1000 / FPS - drawMs;
-    setTimeout(drawImage, delayMs);
-  }
-
-  document.addEventListener("DOMContentLoaded", function() {
-    queueDrawImage();
-  });
-</script>
-)html";
-#endif
-  // clang-format on
-
+  ss << "Form: scene name, height, width, number frames, "
+        "checkboxes for server and browser-side rendering.";
   return Response(HTTP_200_OK, kContentTypeTextHtml,
                   ss.str());
 }
