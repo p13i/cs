@@ -34,7 +34,7 @@ lint:
 
 sync:
 	git add .
-	git commit --allow-empty -m "[make save]"
+	git commit --allow-empty -m "[make sync]"
 	git pull --rebase
 	git push
 
