@@ -2,9 +2,6 @@ on:
   push:
     branches:
       - '**'
-    paths-ignore:
-      # Ignore documentation changes
-      - '**.md'
 jobs:
   test:
     runs-on: ubuntu-latest
