@@ -16,6 +16,7 @@ namespace cs::net::http {
 using ::cs::result::Error;
 using ::cs::result::Ok;
 using ::cs::result::Result;
+using ::cs::result::ResultOr;
 
 typedef std::map<std::string, std::string> QueryParams;
 
