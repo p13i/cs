@@ -17,12 +17,12 @@ using ::cs::result::Error;
 using ::cs::result::Ok;
 using ::cs::result::Result;
 
-typedef std::map<std::string, std::string> QueryParams;
+typedef std::map<std::string, std::string> Response;
 
 namespace {
 std::ostream& operator<<(
     std::ostream& os,
-    const std::map<std::string, std::string>& map) {
+    const Response& map) {
   os << "{";
   bool first = true;
   for (auto it = map.begin(); it != map.end(); it++) {
