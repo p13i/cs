@@ -96,8 +96,7 @@ class ResultOr : public Result {
     }
   }
   Result result() const { return _result; }
-  template <typename T>
-  ResultOr<T> value_or(T default_value) const {
+  Data value_or(Data default_value) const {
     if (ok()) {
       return _data;
     }
