@@ -43,7 +43,7 @@ using ::cs::result::Error;
 using ::cs::result::Ok;
 using ::cs::result::Result;
 
-}. // namespace
+}  // namespace
 
 static WebApp app;
 
