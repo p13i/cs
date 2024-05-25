@@ -43,9 +43,10 @@ using ::cs::result::Error;
 using ::cs::result::Ok;
 using ::cs::result::Result;
 
-}. // namespace
+}  // namespace
+.  // namespace
 
-static WebApp app;
+    static WebApp app;
 
 // https://stackoverflow.com/a/63864750
 std::string NowAsISO8601TimeUTC() {
