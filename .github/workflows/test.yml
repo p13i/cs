@@ -6,14 +6,14 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Setup repo
+      - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Setup dev environment
+      - name: Setup
         run: make setup
 
-      - name: Build the whole repo
+      - name: Build
         run: make build
 
-      - name: Run tests
+      - name: Test
         run: make test
