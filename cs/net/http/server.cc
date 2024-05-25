@@ -110,7 +110,7 @@ Result Server::startListening(
         });
 
     if (result.ok()) {
-#define APPEND_SERVER_STATS false
+#define APPEND_SERVER_STATS true
 #if APPEND_SERVER_STATS
       std::stringstream ss;
       ss << response.body() << std::endl
