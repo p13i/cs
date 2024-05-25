@@ -21,9 +21,8 @@ using ::cs::result::ResultOr;
 typedef std::map<std::string, std::string> QueryParams;
 
 namespace {
-std::ostream& operator<<(
-    std::ostream& os,
-    const QueryParams& map) {
+std::ostream& operator<<(std::ostream& os,
+                         const QueryParams& map) {
   os << "{";
   bool first = true;
   for (auto it = map.begin(); it != map.end(); it++) {
@@ -69,11 +68,11 @@ class Request {
     return found->second;
   }
 
-  ResultOr<std::string> GetQueryParam(
-      std::string name) {
+  ResultOr<std::string> GetQueryParam(std::string name) {
     auto found = _query_params.find(name);
     if (found == _query_params.end()) {
-      return Error("no query param with name " + name + " found.");
+      return Error("no query param with name " + name +
+                   " found.");
     }
     return found->second;
   }
