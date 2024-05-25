@@ -85,16 +85,12 @@ Response index(Request request) {
   ss << "<p>To code this app, I only used standard library "
         "methods (like `std::chrono` or `std::vector`) for "
         "this web app framework.</p>";
-  // Print sitemap of routes available.
   ss << "<h2>Routes</h2>";
   ss << "<ul>";
-
-  // Print site map.
   for (const auto& [method, path] : app.Routes()) {
     ss << "<li><code>" << method << " <a href=\"" << path
        << "\">" << path << "</a></code></li>";
   }
-
   ss << "</ul>";
   return Response(HTTP_200_OK, kContentTypeTextHtml,
                   ss.str());
