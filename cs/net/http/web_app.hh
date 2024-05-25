@@ -28,18 +28,13 @@ std::string NowAsISO8601TimeUTC() {
   return ss.str();
 }
 
-bool PathMatches(std::string app_path,
-                 std::string user_path) {
-  return app_path == user_path;
-}
-
 }  // namespace
 
 class WebApp {
  public:
   Result Register(std::string method, std::string path,
                   RequestHandler handler) {
-    _handlers.push_back(
+    handlers_.push_back(
         std::make_tuple(method, path, handler));
     return Ok();
   }
@@ -53,16 +48,28 @@ class WebApp {
     return Ok();
   }
 
+  // Return routes
+  std::vector<std::tuple<std::string, std::string>>
+  Routes() {
+    std::vector<std::tuple<std::string, std::string>>
+        routes;
+    for (auto path_info : handlers_) {
+      const auto [method, path, handler] = path_info;
+      routes.push_back(std::make_tuple(method, path));
+    }
+    return routes;
+  }
+
  private:
   Response main_handler(Request request) {
     std::cout << ">>> [" << NowAsISO8601TimeUTC() << "] "
               << request.method() << " " << request.path()
               << std::endl;
     Response response(HTTP_404_NOT_FOUND);
-    for (auto path_info : _handlers) {
+    for (auto path_info : handlers_) {
       const auto [method, path, handler] = path_info;
       if (request.method() == method &&
-          PathMatches(request.path(), path)) {
+          request.path() == path) {
         response = handler(request);
         break;
       }
@@ -74,7 +81,7 @@ class WebApp {
 
   std::vector<
       std::tuple<std::string, std::string, RequestHandler>>
-      _handlers;
+      handlers_;
 };
 }  // namespace cs::net::http
 

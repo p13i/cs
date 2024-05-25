@@ -31,6 +31,9 @@ class Response {
       : Response(status, kContentTypeTextPlain,
                  status.str()) {}
   Response(Status status, std::string content_type,
+           std::stringstream ss)
+      : Response(status, content_type, ss.str()) {}
+  Response(Status status, std::string content_type,
            std::string body)
       : _status(status),
         _content_type(content_type),

@@ -43,6 +43,8 @@ using ::cs::result::Result;
 
 namespace {
 
+WebApp app;
+
 // https://stackoverflow.com/a/63864750
 std::string NowAsISO8601TimeUTC() {
   auto now = std::chrono::system_clock::now();
@@ -86,19 +88,19 @@ Response index(Request request) {
   // Print sitemap of routes available.
   ss << "<h2>Routes</h2>";
   ss << "<ul>";
-  ss << "<li><a href=\"/\">Home</a></li>";
-  ss << "<li><a href=\"/render-on-server/\">Render on "
-        "server</a></li>";
-  ss << "<li><a href=\"/render-in-browser/\">Render "
-        "In-Browser</a></li>";
-  ss << "<li><a href=\"/json/\">JSON</a></li>";
-  ss << "<li><a href=\"/log/\">Log</a></li>";
+
+  // Print site map.
+  for (const auto& [method, path] : app.Routes()) {
+    ss << "<li><code>" << method << " <a href=\"" << path
+       << "\">" << path << "</a></code></li>";
+  }
+
   ss << "</ul>";
   return Response(HTTP_200_OK, kContentTypeTextHtml,
                   ss.str());
 }
 
-Response render_on_server(Request request) {
+Response RenderOnServer(Request request) {
   app_log << request;
 
   float width_f;
@@ -354,32 +356,11 @@ Response render_in_browser(Request request) {
                   ss.str());
 }
 
-#define HTML_TAG_AS_STRUCT(name)                      \
-  struct name {                                       \
-    std::string html_;                                \
-    name(std::string html) : html_(html) {}           \
-    friend std::ostream& operator<<(std::ostream& os, \
-                                    const name& s) {  \
-      return os << "<" #name ">" << s.html_           \
-                << "</" #name ">";                    \
-    }                                                 \
-  }
-
-struct small {
-  std::string html_;
-  small(std::string html) : html_(html) {}
-  friend std::ostream& operator<<(std::ostream& os,
-                                  const small& s) {
-    return os << "<small>" << s.html_ << "</small>";
-  }
-};
-
-HTML_TAG_AS_STRUCT(small2);
-
 Response Render(const Request& request) {
   // clang-format off
   std::stringstream ss;
-  ss << "<h1>Ray-tracer&nbsp;" << small("") << "</h1>";
+  ss << "<h1>Ray-tracer</h1>";
+  
 #if 0
   ss << "<p>Ray-tracer rendered " << frames.size() << " frames in "
     << render_time_ms << " ms at " << width << "x" << height << "px.</p>";
@@ -457,12 +438,11 @@ Response Render(const Request& request) {
 }
 
 Result RunMyWebApp() {
-  WebApp app;
   // Routes.
   OK_OR_RETURN(app.Register("GET", "/", index));
   OK_OR_RETURN(app.Register("GET", "/render/", Render));
   OK_OR_RETURN(app.Register("GET", "/render-on-server/",
-                            render_on_server));
+                            RenderOnServer));
   OK_OR_RETURN(app.Register("GET", "/render-in-browser/",
                             render_in_browser));
   OK_OR_RETURN(app.Register("GET", "/json/", json));
