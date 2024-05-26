@@ -52,9 +52,12 @@ class Response {
 
   friend std::ostream& operator<<(
       std::ostream& os, const Response& response) {
-    return os << "Response(status=" << response._status
-              << ", body=" << response._body.substr(0, 128)
-              << ")";
+    return os << "HTTP/1.1 " << response._status << "\n"
+              << "Content-Type: " << response._content_type
+              << "\n"
+              << "Content-Length: " << response._body.size()
+              << "\n"
+              << response._body;
   }
 
   std::string body() { return _body; }
@@ -63,11 +66,7 @@ class Response {
 
   std::string to_string() {
     std::stringstream ss;
-    ss << "HTTP/1.1 " << _status << std::endl
-       << "Content-Type: " << _content_type << std::endl
-       << "Content-Length: " << _body.size() << std::endl
-       << std::endl
-       << _body << std::endl;
+    ss << *this;
     return ss.str();
   }
 
