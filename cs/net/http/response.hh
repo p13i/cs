@@ -56,7 +56,7 @@ class Response {
               << "Content-Type: " << response._content_type
               << "\n"
               << "Content-Length: " << response._body.size()
-              << "\n"
+              << "\n\n"
               << response._body;
   }
 
