@@ -263,13 +263,13 @@ Response json(Request request) {
                        new Object(1.4f),
                    })}});
   std::stringstream ss;
-  ss<< R"html(
-    <style>
-    code {
-  display: block;
-  white-space: pre-wrap   
+  ss << R"html(
+<style>
+code {
+display: block;
+white-space: pre-wrap;
 }
-    </style>
+</style>
   )html";
   ss << "<p>Some json with indent=" << indent << "</p>";
   ss << "<code>";
