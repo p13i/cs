@@ -263,7 +263,7 @@ Response json(Request request) {
                        new Object(1.4f),
                    })}});
   std::stringstream ss;
-  ss<< R"html(
+  ss << R"html(
     <style>
     code {
   display: block;
