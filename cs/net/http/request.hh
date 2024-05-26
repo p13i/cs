@@ -60,7 +60,7 @@ class Request {
   std::string method() { return _method; }
 
   std::optional<std::string> get_query_param(
-      std::string name) {
+      std::string name) const {
     auto found = _query_params.find(name);
     if (found == _query_params.end()) {
       return std::nullopt;

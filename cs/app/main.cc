@@ -263,8 +263,19 @@ Response json(Request request) {
                        new Object(1.4f),
                    })}});
   std::stringstream ss;
+  ss<< R"html(
+    <style>
+    code {
+  display: block;
+  white-space: pre-wrap   
+}
+    </style>
+  )html";
+  ss << "<p>Some json with indent=" << indent << "</p>";
+  ss << "<code>";
   cs::net::json::SerializeObjectPrettyPrintRecurse(
       ss, object, static_cast<uint>(indent), 0);
+  ss << "</code>";
   delete object;
   return Response(HTTP_200_OK, kContentTypeApplicationJson,
                   ss.str());
@@ -354,10 +365,63 @@ Response render_in_browser(Request request) {
 }
 
 Response Render(const Request& request) {
+  float width_f;
+  ASSIGN_OR_RETURN(
+      width_f,
+      ParseFloat(request.get_query_param("width").value_or(
+          std::to_string(APP_SCREEN_WIDTH))));
+
+  uint width = static_cast<uint>(width_f);
+  if (width < 2) {
+    return Error("Width must be at least 2 pixels.");
+  }
+
+  float height_f;
+  ASSIGN_OR_RETURN(
+      height_f,
+      ParseFloat(request.get_query_param("height").value_or(
+          std::to_string(APP_SCREEN_HEIGHT))));
+
+  uint height = static_cast<uint>(height_f);
+  if (height < 2) {
+    return Error("Height must be at least 2 pixels.");
+  }
+
+  float num_frames_f;
+  ASSIGN_OR_RETURN(
+      num_frames_f,
+      ParseFloat(request.get_query_param("num_frames")
+                     .value_or(std::to_string(1))));
+
+  uint num_frames = static_cast<uint>(num_frames_f);
+  if (num_frames < 1) {
+    return Error("Number of frames must be at least 1.");
+  }
+
   std::stringstream ss;
-  ss << "<h1>Ray-tracer</h1>";
-  ss << "Form: scene name, height, width, number frames, "
-        "checkboxes for server and browser-side rendering.";
+  ss << R"html(<h1>Ray-tracer</h1>";
+<p>Form: scene name, height, width, number frames
+checkboxes for server and browser-side rendering.</p>
+<canvas id="canvas" width=")html"
+     << width << R"html(" height=")html" << height
+     << R"html("></canvas>
+<p id="fps"></p>
+<form action="/render-on-server/" method="GET">
+<label for="width">Width:</label>
+<input type="number" id="width" name="width" value=")html"
+     << width << R"html(">px
+<br/>
+<label for="height">Height:</label>
+<input type="number" id="height" name="height" value=")html"
+     << height << R"html(">px
+<br/>
+<label for="num_frames">Number of frames:</label>
+<br/>
+<input type="number" id="num_frames" name="num_frames" value=")html"
+     << num_frames << R"html(">
+<br/>
+<input type="submit" value="Render">
+<form>)html";
   return Response(HTTP_200_OK, kContentTypeTextHtml,
                   ss.str());
 }
