@@ -8,11 +8,11 @@
 
 #define ASSIGN_OR_RETURN(var, result_or) \
   {                                      \
-    const auto eval = result_or;         \
-    if (eval.result().ok()) {            \
-      var = eval.data();                 \
+    const auto eval__ = result_or;       \
+    if (eval__.result().ok()) {          \
+      var = eval__.data();               \
     } else {                             \
-      return eval.result();              \
+      return eval__.result();            \
     }                                    \
   }
 
@@ -61,6 +61,7 @@ class Result {
 class Ok : public Result {
  public:
   Ok() : Result(true, "") {}
+  Ok(std::string message) : Result(true, message) {}
 };
 
 class Error : public Result {
