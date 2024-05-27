@@ -42,14 +42,14 @@ std::ostream& SerializeObjectPrettyPrintRecurse(
   } else if (object->_type == Type::ARRAY) {
     os << "[";
     if (indent > 0) {
-      os << std::endl;
+      os << "\n";
     }
     bool first = true;
     for (const auto& elem : object->as_array()) {
       if (!first) {
         os << ",";
         if (indent > 0) {
-          os << std::endl;
+          os << "\n";
         }
       } else {
         first = false;
@@ -59,21 +59,21 @@ std::ostream& SerializeObjectPrettyPrintRecurse(
           os, elem, indent, initial_indent + indent);
     }
     if (indent > 0) {
-      os << std::endl;
+      os << "\n";
     }
     WriteIndent(os, initial_indent);
     os << "]";
   } else if (object->_type == Type::MAP) {
     os << "{";
     if (indent > 0) {
-      os << std::endl;
+      os << "\n";
     }
     bool first = true;
     for (const auto& kv : object->as_map()) {
       if (!first) {
         os << ",";
         if (indent > 0) {
-          os << std::endl;
+          os << "\n";
         }
       } else {
         first = false;
@@ -88,7 +88,7 @@ std::ostream& SerializeObjectPrettyPrintRecurse(
           os, kv.second, indent, initial_indent + indent);
     }
     if (indent > 0) {
-      os << std::endl;
+      os << "\n";
     }
     WriteIndent(os, initial_indent);
     os << "}";

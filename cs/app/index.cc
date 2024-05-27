@@ -50,7 +50,7 @@ int main(int argc, char** argv) {
             << " frames with resolution <"
             << std::get<0>(film_dimensions) << ", "
             << std::get<1>(film_dimensions) << ">... "
-            << std::endl;
+            << "\n";
 
 #ifdef __EMSCRIPTEN__
   emscripten_sleep(0);
@@ -65,7 +65,7 @@ int main(int argc, char** argv) {
               std::cout << "Rendered frame " << frame_num
                         << " of " << num_frames << " in "
                         << render_time_ms << " ms."
-                        << std::endl;
+                        << "\n";
 #ifdef __EMSCRIPTEN__
               emscripten_sleep(0);
 #endif  // __EMSCRIPTEN__
@@ -73,7 +73,7 @@ int main(int argc, char** argv) {
       });
 
   std::cout << "done in " << render_time_ms << " ms!"
-            << std::endl;
+            << "\n";
 
   size_t frame_i = 0;
   while (true) {

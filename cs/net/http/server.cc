@@ -14,7 +14,7 @@
 namespace {
 
 const unsigned int BUFFER_SIZE = 2 << 16;
-#define VERBOSE_LOG true
+#define VERBOSE_LOG false
 
 using ::cs::result::Error;
 using ::cs::result::Ok;
@@ -64,7 +64,7 @@ Result Server::startListening(
 
   std::cout << "Listening on "
             << inet_ntoa(_socket_address.sin_addr) << ":"
-            << ntohs(_socket_address.sin_port) << std::endl;
+            << ntohs(_socket_address.sin_port) << "\n";
 
   while (true) {
     _response_socket =
@@ -99,10 +99,10 @@ Result Server::startListening(
 
 #if VERBOSE_LOG
           std::cout << "<<< NEW REQUEST <<<<<<<<<<<<<<<<"
-                    << std::endl
-                    << request << std::endl
+                    << "\n"
+                    << request << "\n"
                     << "================================"
-                    << std::endl;
+                    << "\n";
 #endif  // VERBOSE_LOG
 
           response = request_handler(request);
@@ -113,7 +113,7 @@ Result Server::startListening(
 #define APPEND_SERVER_STATS true
 #if APPEND_SERVER_STATS
       std::stringstream ss;
-      ss << response.body() << std::endl
+      ss << response.body() << "\n"
          << "<hr/>Processed in " << processing_time_ms
          << " ms.";
       response = Response(response.status(),
@@ -127,15 +127,16 @@ Result Server::startListening(
 
 #if VERBOSE_LOG
       std::cout << ">>> SENDING RESPONSE >>>>>>>>>>>"
-                << std::endl
-                << response << std::endl
+                << "\n"
+                << response << "\n"
                 << "================================"
-                << std::endl;
+                << "\n";
 #endif  // VERBOSE_LOG
 
       if (bytesSent != response_str.size()) {
         std ::cerr << "Failed to send out " << bytesSent
-                   << "." << std::endl;
+                   << "."
+                   << "\n";
       }
     }
 

@@ -22,7 +22,7 @@
     if (!eval__.ok()) {                                  \
       std::cerr << "OK_OR_RETURN failed at " << __FILE__ \
                 << ":" << __LINE__ << ". " << #result    \
-                << ": " << eval__ << std::endl;          \
+                << ": " << eval__ << "\n";               \
       return eval__;                                     \
     }                                                    \
   }

@@ -21,6 +21,7 @@ using ::cs::result::ResultOr;
 typedef std::map<std::string, std::string> QueryParams;
 
 namespace {
+#if 0
 std::ostream& operator<<(std::ostream& os,
                          const QueryParams& map) {
   os << "{";
@@ -37,6 +38,7 @@ std::ostream& operator<<(std::ostream& os,
   os << "}";
   return os;
 }
+#endif
 }  // namespace
 
 class Request {

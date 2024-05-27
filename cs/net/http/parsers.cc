@@ -98,7 +98,7 @@ Result ParsePath(
 #if 0
   std::cout << "original_path=" << original_path
             << ", cursor=" << cursor
-            << ", just_path=" << *just_path << std::endl;
+            << ", just_path=" << *just_path << "\n";
 #endif
   if (cursor >= original_path.size()) {
     return Ok();

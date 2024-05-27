@@ -42,7 +42,7 @@ class Table {
     }
     // Serialize the data.
     for (const DataType& value : _values) {
-      file << value.JsonSerialize() << std::endl;
+      file << value.JsonSerialize() << "\n";
     }
     file.close();
     return Ok();
@@ -56,7 +56,7 @@ class Table {
     std::string line;
     std::vector<DataType> data;
     while (std::getline(file, line)) {
-      std::cout << "Reading: " << line << std::endl;
+      std::cout << "Reading: " << line << "\n";
       DataType datum;
       OK_OR_RETURN(datum.JsonParse(line));
       data.push_back(datum);

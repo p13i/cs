@@ -64,7 +64,7 @@ class WebApp {
   Response main_handler(Request request) {
     std::cout << ">>> [" << NowAsISO8601TimeUTC() << "] "
               << request.method() << " " << request.path()
-              << std::endl;
+              << "\n";
     Response response(HTTP_404_NOT_FOUND);
     for (auto path_info : handlers_) {
       const auto [method, path, handler] = path_info;
@@ -75,7 +75,7 @@ class WebApp {
       }
     }
     std::cout << "<<< [" << NowAsISO8601TimeUTC() << "] "
-              << response.status() << std::endl;
+              << response.status() << "\n";
     return response;
   };
 

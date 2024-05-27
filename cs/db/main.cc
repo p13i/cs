@@ -47,7 +47,7 @@ Result RunDatabase() {
   }
   // Print all items
   for (const auto& item : table.query_view().values()) {
-    std::cout << item << std::endl;
+    std::cout << item << "\n";
   }
   // table.load(filepath);
   // Query the table.
@@ -75,7 +75,7 @@ Result RunDatabase() {
 int main() {
   Result result = RunDatabase();
   if (!result.ok()) {
-    std::cerr << result.message() << std::endl;
+    std::cerr << result.message() << "\n";
   }
   return result.code();
 }

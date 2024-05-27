@@ -65,14 +65,12 @@ bool TryConsumeString(std::string str, std::string target,
 
 ResultOr<bool> ParseBoolean(std::string str, uint* cursor) {
   if (TryConsumeString(str, "true", cursor)) {
-    std::cerr << "Found true at cursor=" << *cursor
-              << std::endl;
+    std::cerr << "Found true at cursor=" << *cursor << "\n";
     return true;
   }
 
   if (TryConsumeString(str, "false", cursor)) {
-    std::cerr << "Found true at cursor=" << *cursor
-              << std::endl;
+    std::cerr << "Found true at cursor=" << *cursor << "\n";
     return false;
   }
 

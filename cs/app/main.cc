@@ -1,10 +1,17 @@
+#include <arpa/inet.h>
+#include <netdb.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <sys/socket.h>
+#include <unistd.h>
 
 #include <functional>
+#include <iostream>
 #include <optional>
 #include <sstream>
+#include <string>
 #include <tuple>
+#include <unordered_map>
 #include <vector>
 
 #include "cs/app/scene1.hh"
@@ -68,9 +75,9 @@ struct AppLogger {
   template <typename T>
   void operator<<(const T& t) {
     // Write to console and the logs table.
-    std::cout << t << std::endl;
+    std::cout << t << "\n";
     std::stringstream ss;
-    ss << t << std::endl;
+    ss << t << "\n";
     cs_log_table.insert({NowAsISO8601TimeUTC(), ss.str()});
   }
 };
@@ -95,6 +102,168 @@ Response index(Request request) {
   ss << "</ul>";
   return Response(HTTP_200_OK, kContentTypeTextHtml,
                   ss.str());
+}
+
+std::string replaceHref(const std::string& input,
+                        std::string scheme,
+                        std::string host,
+                        std::string tag_property) {
+  const std::string toReplace = tag_property + "=\"/";
+  const std::string replacement =
+      tag_property + "=\"" + scheme + "://" + host + "/";
+
+  std::string output;
+  output.reserve(input.size());
+
+  size_t pos = 0;
+  size_t foundPos;
+
+  while ((foundPos = input.find(toReplace, pos)) !=
+         std::string::npos) {
+    // Append part before the match
+    output.append(input, pos, foundPos - pos);
+    // Append the replacement
+    output.append(replacement);
+    // Move past the match
+    pos = foundPos + toReplace.length();
+  }
+  // Append the rest of the string
+  output.append(input, pos, std::string::npos);
+
+  return output;
+}
+std::string escapeHtml(const std::string& input) {
+  // Mapping of special characters to their HTML escape
+  // codes
+  std::unordered_map<char, std::string> htmlEscapes = {
+      {'&', "&amp;"},
+      {'<', "&lt;"},
+      {'>', "&gt;"},
+      {'"', "&quot;"},
+      {'\'', "&#39;"}};
+
+  std::string output;
+  output.reserve(input.size());
+
+  for (char c : input) {
+    auto it = htmlEscapes.find(c);
+    if (it != htmlEscapes.end()) {
+      // Replace special character with its HTML escape code
+      output.append(it->second);
+    } else {
+      // Append regular character
+      output.push_back(c);
+    }
+  }
+  std::cerr << output << "\n";
+  return output;
+}
+
+ResultOr<std::string> Http(std::string method,
+                           std::string scheme,
+                           std::string host,
+                           std::string port,
+                           std::string path = "/",
+                           std::string body = "") {
+  // Get address info
+  struct addrinfo hints {
+  }, *res;
+  hints.ai_family = AF_UNSPEC;
+  hints.ai_socktype = SOCK_STREAM;
+
+  if (getaddrinfo(host.c_str(), port.c_str(), &hints,
+                  &res) != 0) {
+    return Error("Failed to resolve hostname.");
+  }
+
+  // Create socket
+  int sock = socket(res->ai_family, res->ai_socktype,
+                    res->ai_protocol);
+  if (sock == -1) {
+    freeaddrinfo(res);
+    return Error("Failed to create socket.");
+  }
+
+  // Connect to server
+  if (connect(sock, res->ai_addr, res->ai_addrlen) == -1) {
+    close(sock);
+    freeaddrinfo(res);
+    return Error("Failed to connect to server.");
+  }
+
+  freeaddrinfo(res);
+
+  // Send request
+  std::stringstream ss;
+  ss << "GET " << path
+     << " HTTP/1.1\r\nAccept: text/html\r\nHost: " << host
+     << ":" << port
+     << "\r\nx-p13i: LOL\r\nConnection: close\r\n\r\n"
+     << body;
+  if (send(sock, ss.str().c_str(), ss.str().length(), 0) ==
+      -1) {
+    close(sock);
+    return Error("Failed to send request.");
+  }
+
+  // Receive response
+  char buffer[8];
+  ssize_t bytes_received;
+  ssize_t total_bytes_received;
+  std::stringstream response_ss;
+  do {
+    bytes_received = recv(sock, buffer, 7, 0);
+    if (bytes_received <= 0) {
+      break;
+    }
+    total_bytes_received += bytes_received;
+    buffer[bytes_received] = '\0';
+    response_ss << buffer;
+  } while (true);
+
+  if (bytes_received == -1) {
+    close(sock);
+    return Error("Error receiving response.");
+  }
+
+  if (total_bytes_received == 0) {
+    close(sock);
+    return Error("No response received from " + host);
+  }
+
+  close(sock);
+
+  Response response;
+  OK_OR_RETURN(response.Parse(response_ss.str()));
+
+#if 0
+(replaceHref((replaceHref(response.body(), scheme,
+                                   host, "href")),
+                      scheme, host, "src"))
+#endif
+
+  std::stringstream body_ss;
+  body_ss
+      << "<style>code {</style><h1>Request:</h1><code "
+         "style=\"white-space: pre-line\">"
+      << ss.str()
+      << "</code><hr/><h1>Response:</h1><code "
+         "style=\"white-space: "
+         "pre-line\">"
+      << escapeHtml(response_ss.str())
+      << "</code><hr/><iframe width=\"800\" height=\"500\" "
+         "srcdoc=\""
+      << response.body() << "\">"
+      << "</iframe>";
+
+  return body_ss.str();
+}
+
+Response Paxos(Request request) {
+  std::string str;
+  ASSIGN_OR_RETURN(str, Http("GET", "https", "cs.p13i.io",
+                             "80", "/render-in-browser/"));
+  return Response(HTTP_200_OK, kContentTypeTextHtml, str);
 }
 
 Response RenderOnServer(Request request) {
@@ -319,7 +488,7 @@ Response CreateLog(Request request) {
 
   // Write to console.
   std::cout << NowAsISO8601TimeUTC() << " "
-            << request.body() << std::endl;
+            << request.body() << "\n";
   return Response(HTTP_200_OK, kContentTypeTextHtml, "");
 }
 
@@ -437,6 +606,7 @@ Result RunMyWebApp() {
   OK_OR_RETURN(app.Register("GET", "/json/", json));
   OK_OR_RETURN(app.Register("GET", "/log/", GetLogs));
   OK_OR_RETURN(app.Register("POST", "/log/", CreateLog));
+  OK_OR_RETURN(app.Register("GET", "/paxos/", Paxos));
   // Run web app on host at port 8080.
   return app.RunServer("0.0.0.0", 8080);
 }
@@ -444,7 +614,7 @@ Result RunMyWebApp() {
 int main() {
   Result result = RunMyWebApp();
   if (!result.ok()) {
-    std::cerr << result << std::endl;
+    std::cerr << result << "\n";
   }
   return result.code();
 }
