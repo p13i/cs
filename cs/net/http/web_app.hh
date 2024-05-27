@@ -48,7 +48,7 @@ class WebApp {
     return Ok();
   }
 
-  // Return routes
+  // Return routes of (HTTP method, path)
   std::vector<std::tuple<std::string, std::string>>
   Routes() {
     std::vector<std::tuple<std::string, std::string>>
