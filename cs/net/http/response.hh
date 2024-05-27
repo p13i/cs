@@ -66,18 +66,22 @@ class Response {
   }
 
   Result Parse(std::string str) {
-    if (str.size() == 0) {
-      _status = HTTP_200_OK;
-      return Ok();
-    }
     _str = str;
     uint cursor = 0;
-    // Read HTTP/1.1 tag
     std::string http_tag = "";
+    // Read any leading whitespace
     while (str[cursor] == ' ' || str[cursor] == '\n' ||
            str[cursor] == '\r') {
       OK_OR_RETURN(IncrementCursor(str, &cursor));
     }
+    if (cursor == str.size()) {
+      _status = HTTP_500_INTERNAL_SERVER_ERROR;
+      return Error(
+          "Unable to finding anything but whitespace while "
+          "parsing str=`" +
+          str + "`");
+    }
+    // Read HTTP/1.1 tag
     OK_OR_RETURN(ReadWord(str, &cursor, &http_tag, " \n"));
     if (http_tag != "HTTP/1.1") {
       return Error(
