@@ -13,10 +13,20 @@ cc_library(
 )
 
 cc_library(
+    name = "parsers",
+    srcs = ["parsers.cc"],
+    hdrs = ["parsers.hh"],
+    deps = [
+        "//cs/result",
+    ],
+)
+
+cc_library(
     name = "request",
     srcs = ["request.cc"],
     hdrs = ["request.hh"],
     deps = [
+        "//cs/net/http:parsers",
         "//cs/result",
     ],
 )
@@ -27,6 +37,7 @@ cc_library(
     hdrs = ["response.hh"],
     deps = [
         ":status",
+        "//cs/net/http:parsers",
         "//cs/result",
         "//cs/string:format",
     ],
