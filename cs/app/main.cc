@@ -195,10 +195,10 @@ ResultOr<std::string> Http(std::string method,
 
   // Send request
   std::stringstream ss;
-  ss << "GET " << path
+  ss << method << " " << path
      << " HTTP/1.1\r\nAccept: text/html\r\nHost: " << host
      << ":" << port
-     << "\r\nx-p13i: LOL\r\nConnection: close\r\n\r\n"
+     << "\r\nx-pk: LOL\r\nConnection: close\r\n\r\n"
      << body;
   if (send(sock, ss.str().c_str(), ss.str().length(), 0) ==
       -1) {
@@ -262,7 +262,7 @@ ResultOr<std::string> Http(std::string method,
 Response Paxos(Request request) {
   std::string str;
   ASSIGN_OR_RETURN(str, Http("GET", "https", "cs.p13i.io",
-                             "80", "/render-in-browser/"));
+                             "443", "/render-in-browser/"));
   return Response(HTTP_200_OK, kContentTypeTextHtml, str);
 }
 
