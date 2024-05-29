@@ -74,9 +74,7 @@ class Response {
     }
     _str = str;
     uint cursor = 0;
-    // Read all whitespace
-    std::string http_tag = "";
-    // Read any leading whitespace
+    // Read any leading whitespace.
     while (str[cursor] == ' ' || str[cursor] == '\n' ||
            str[cursor] == '\r') {
       OK_OR_RETURN(IncrementCursor(str, &cursor));
