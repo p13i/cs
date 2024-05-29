@@ -33,6 +33,7 @@ class Server {
   int _response_socket;
   struct sockaddr_in _socket_address;
   unsigned int _socket_address_length;
+  std::string uuid_;
 };
 
 }  // namespace cs::net::http

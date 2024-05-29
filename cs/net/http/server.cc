@@ -8,6 +8,7 @@
 
 #include "cs/net/http/request.hh"
 #include "cs/profiling/time_it.hh"
+#include "cs/random/uuid.hh"
 #include "cs/result/result.hh"
 
 // Based on: https://github.com/OsasAzamegbe/http-server
@@ -27,7 +28,8 @@ namespace cs::net::http {
 Server::Server(std::string ip_address, int port)
     : _ip_address(ip_address),
       _port(port),
-      _socket_address_length(sizeof(_socket_address)) {
+      _socket_address_length(sizeof(_socket_address)),
+      uuid_(cs::random::uuid::generate_uuid_v4()) {
   _socket_address.sin_family = AF_INET;
   _socket_address.sin_port = htons(_port);
   _socket_address.sin_addr.s_addr =
@@ -115,7 +117,7 @@ Result Server::startListening(
       std::stringstream ss;
       ss << response.body() << "\n"
          << "<hr/>Processed in " << processing_time_ms
-         << " ms.";
+         << " ms. Server id: <code>" << uuid_ << "</code>.";
       response = Response(response.status(),
                           kContentTypeTextHtml, ss.str());
 #endif

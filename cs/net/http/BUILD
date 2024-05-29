@@ -8,6 +8,7 @@ cc_library(
         ":request",
         ":response",
         "//cs/profiling:time_it",
+        "//cs/random:uuid",
         "//cs/result",
     ],
 )
