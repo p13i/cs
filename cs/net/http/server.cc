@@ -14,7 +14,7 @@
 namespace {
 
 const unsigned int BUFFER_SIZE = 2 << 16;
-#define VERBOSE_LOG false
+#define VERBOSE_LOG true
 
 using ::cs::result::Error;
 using ::cs::result::Ok;

@@ -67,13 +67,22 @@ class Response {
 
   Result Parse(std::string str) {
     _str = str;
+    if (str.size() == 0) {
+      _status = HTTP_400_BAD_REQUEST;
+      return Error(
+          "Unable to parse Response from empty string.");
+    }
+    _str = str;
     uint cursor = 0;
+    // Read all whitespace
     std::string http_tag = "";
     // Read any leading whitespace
     while (str[cursor] == ' ' || str[cursor] == '\n' ||
            str[cursor] == '\r') {
       OK_OR_RETURN(IncrementCursor(str, &cursor));
     }
+    // Read HTTP/1.1 tag
+    std::string http_tag = "";
     if (cursor == str.size()) {
       _status = HTTP_500_INTERNAL_SERVER_ERROR;
       return Error(
@@ -97,7 +106,7 @@ class Response {
       _status = cs::net::http::HTTP_400_BAD_REQUEST;
     } else if (status_str == "200") {
       _status = cs::net::http::HTTP_200_OK;
-    } else if (status_str == "400") {
+    } else if (status_str == "500") {
       _status =
           cs::net::http::HTTP_500_INTERNAL_SERVER_ERROR;
     }

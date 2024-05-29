@@ -155,7 +155,7 @@ std::string escapeHtml(const std::string& input) {
       output.push_back(c);
     }
   }
-  std::cerr << output << "\n";
+
   return output;
 }
 
@@ -195,10 +195,10 @@ ResultOr<std::string> Http(std::string method,
 
   // Send request
   std::stringstream ss;
-  ss << method << " " << path
+  ss << "GET " << path
      << " HTTP/1.1\r\nAccept: text/html\r\nHost: " << host
      << ":" << port
-     << "\r\nx-pk: LOL\r\nConnection: close\r\n\r\n"
+     << "\r\nx-p13i: LOL\r\nConnection: close\r\n\r\n"
      << body;
   if (send(sock, ss.str().c_str(), ss.str().length(), 0) ==
       -1) {
@@ -207,19 +207,20 @@ ResultOr<std::string> Http(std::string method,
   }
 
   // Receive response
-  char buffer[8];
-  ssize_t bytes_received;
-  ssize_t total_bytes_received;
+  ssize_t buffer_size = 128;
+  char buffer[buffer_size];
+  ssize_t bytes_received = 0;
+  ssize_t total_bytes_received = 0;
   std::stringstream response_ss;
-  do {
-    bytes_received = recv(sock, buffer, 7, 0);
+  while (true) {
+    bytes_received = recv(sock, buffer, buffer_size - 1, 0);
     if (bytes_received <= 0) {
       break;
     }
     total_bytes_received += bytes_received;
     buffer[bytes_received] = '\0';
     response_ss << buffer;
-  } while (true);
+  };
 
   if (bytes_received == -1) {
     close(sock);
@@ -236,10 +237,11 @@ ResultOr<std::string> Http(std::string method,
   Response response;
   OK_OR_RETURN(response.Parse(response_ss.str()));
 
-#if 0
-(replaceHref((replaceHref(response.body(), scheme,
-                                   host, "href")),
-                      scheme, host, "src"))
+  auto srcdoc = response.body();
+#if 1
+  srcdoc = replaceHref(srcdoc, scheme, host, "href");
+  srcdoc = replaceHref(srcdoc, scheme, host, "src");
+  srcdoc = escapeHtml(srcdoc);
 #endif
 
   std::stringstream body_ss;
@@ -253,7 +255,7 @@ ResultOr<std::string> Http(std::string method,
       << escapeHtml(response_ss.str())
       << "</code><hr/><iframe width=\"800\" height=\"500\" "
          "srcdoc=\""
-      << response.body() << "\">"
+      << srcdoc << "\">"
       << "</iframe>";
 
   return body_ss.str();
@@ -261,8 +263,16 @@ ResultOr<std::string> Http(std::string method,
 
 Response Paxos(Request request) {
   std::string str;
-  ASSIGN_OR_RETURN(str, Http("GET", "https", "cs.p13i.io",
-                             "443", "/render-in-browser/"));
+  // `www.google.com` works.
+  // ASSIGN_OR_RETURN(str, Http("GET", "http",
+  //                            "www.google.com", "80",
+  //                            "/"));
+  ASSIGN_OR_RETURN(str, Http("GET", "https",
+                             "www.apple.com", "443", "/"));
+  // ASSIGN_OR_RETURN(str, Http("GET", "https",
+  // "cs.p13i.io",
+  //                            "443",
+  //                            "/render-in-browser/"));
   return Response(HTTP_200_OK, kContentTypeTextHtml, str);
 }
 
