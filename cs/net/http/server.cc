@@ -117,7 +117,7 @@ Result Server::startListening(
       std::stringstream ss;
       ss << response.body() << "\n"
          << "<hr/>Processed in " << processing_time_ms
-         << " ms. Server id: <code>" << uuid_ << "</code>.";
+         << " ms. Server <code>" << uuid_ << "</code>.";
       response = Response(response.status(),
                           kContentTypeTextHtml, ss.str());
 #endif
