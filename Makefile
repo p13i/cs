@@ -74,3 +74,6 @@ db:
 
 pull:
 	git pull --rebase --all
+
+http-main:
+	bazel run //cs/net/http:main
