@@ -33,6 +33,7 @@ namespace {
 
 using ::cs::app::SceneAnimator;
 using ::cs::db::Table;
+using ::cs::net::http::Http301MovedPermanently;
 using ::cs::net::http::HTTP_200_OK;
 using ::cs::net::http::HTTP_400_BAD_REQUEST;
 using ::cs::net::http::HTTP_404_NOT_FOUND;
@@ -49,7 +50,6 @@ using ::cs::renderer::Pixel;
 using ::cs::result::Error;
 using ::cs::result::Ok;
 using ::cs::result::Result;
-using ::cs::net::http::Http301MovedPermanently;
 
 }  // namespace
 
@@ -278,7 +278,8 @@ Response Paxos(Request request) {
 }
 
 Response Go(Request request) {
-  return Response(Http301MovedPermanently, kContentTypeTextHtml,
+  return Response(Http301MovedPermanently,
+                  kContentTypeTextHtml,
                   "<h1>Redirecting...</h1>");
 }
 
