@@ -30,6 +30,8 @@ struct Status {
 };
 
 static const Status HTTP_200_OK(200, "OK");
+static const Status Http301MovedPermanently(
+    301, "MOVED PERMANENTLY");
 static const Status HTTP_400_BAD_REQUEST(400,
                                          "BAD REQUEST");
 static const Status HTTP_404_NOT_FOUND(404, "NOT FOUND");

@@ -49,6 +49,7 @@ using ::cs::renderer::Pixel;
 using ::cs::result::Error;
 using ::cs::result::Ok;
 using ::cs::result::Result;
+using ::cs::net::http::Http301MovedPermanently;
 
 }  // namespace
 
@@ -274,6 +275,11 @@ Response Paxos(Request request) {
   //                            "443",
   //                            "/render-in-browser/"));
   return Response(HTTP_200_OK, kContentTypeTextHtml, str);
+}
+
+Response Go(Request request) {
+  return Response(Http301MovedPermanently, kContentTypeTextHtml,
+                  "<h1>Redirecting...</h1>");
 }
 
 Response RenderOnServer(Request request) {
@@ -617,6 +623,7 @@ Result RunMyWebApp() {
   OK_OR_RETURN(app.Register("GET", "/log/", GetLogs));
   OK_OR_RETURN(app.Register("POST", "/log/", CreateLog));
   OK_OR_RETURN(app.Register("GET", "/paxos/", Paxos));
+  OK_OR_RETURN(app.Register("GET", "/go/", Go));
   return app.RunServer("0.0.0.0", 8080);
 }
 
