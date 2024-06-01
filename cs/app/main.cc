@@ -617,7 +617,6 @@ Result RunMyWebApp() {
   OK_OR_RETURN(app.Register("GET", "/log/", GetLogs));
   OK_OR_RETURN(app.Register("POST", "/log/", CreateLog));
   OK_OR_RETURN(app.Register("GET", "/paxos/", Paxos));
-  // Run web app on host at port 8080.
   return app.RunServer("0.0.0.0", 8080);
 }
 
