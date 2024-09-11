@@ -295,32 +295,32 @@ ResultOr<Object*> ParseObject(std::string str,
       // TODO Parse map
       ASSIGN_OR_RETURN(object->_map_value,
                        ParseMap(str, cursor));
-      object->_type = Type::MAP;
+      object->_type = Type::kMap;
       break;
     } else if (c == '[') {
       // Parse array
       ASSIGN_OR_RETURN(object->_array_value,
                        ParseArray(str, cursor));
-      object->_type = Type::ARRAY;
+      object->_type = Type::kArray;
       break;
     } else if (c == '+' || c == '-' || c == '.' ||
                ('0' <= c && c <= '9')) {
       // Parse float
       ASSIGN_OR_RETURN(object->_number_value,
                        ParseFloat(str, cursor));
-      object->_type = Type::FLOAT;
+      object->_type = Type::kFloat;
       break;
     } else if (c == '"') {
       // Parse string
       ASSIGN_OR_RETURN(object->_string_value,
                        ParseString(str, cursor));
-      object->_type = Type::STRING;
+      object->_type = Type::kString;
       break;
     } else if (c == 't' || c == 'f') {
       // Parse bool
       ASSIGN_OR_RETURN(object->_bool_value,
                        ParseBoolean(str, cursor));
-      object->_type = Type::BOOLEAN;
+      object->_type = Type::kBoolean;
       break;
     } else {
       return Error(cs::string::format(

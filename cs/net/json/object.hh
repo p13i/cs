@@ -30,12 +30,12 @@ std::ostream& SerializeObject(std::ostream& os,
                               const Object* object);
 
 enum class Type : uint {
-  UNSET = 0,
-  BOOLEAN = 1,
-  FLOAT = 2,
-  STRING = 3,
-  ARRAY = 4,
-  MAP = 5,
+  kUnset = 0,
+  kBoolean = 1,
+  kFloat = 2,
+  kString = 3,
+  kArray = 4,
+  kMap = 5,
 };
 
 /**
@@ -46,67 +46,67 @@ enum class Type : uint {
 class Object {
  public:
   typedef std::map<std::string, Object*> KVMap;
-  Object() : _type(Type::UNSET) {}
+  Object() : _type(Type::kUnset) {}
   Object(bool value)
-      : _type(Type::BOOLEAN), _bool_value(value) {}
+      : _type(Type::kBoolean), _bool_value(value) {}
   Object(float number)
-      : _type(Type::FLOAT), _number_value(number) {}
+      : _type(Type::kFloat), _number_value(number) {}
   Object(std::string value)
-      : _type(Type::STRING), _string_value(value) {}
-  Object(std::vector<float> value) : _type(Type::ARRAY) {
+      : _type(Type::kString), _string_value(value) {}
+  Object(std::vector<float> value) : _type(Type::kArray) {
     for (auto number : value) {
       _array_value.push_back(new Object(number));
     }
   }
   Object(std::vector<Object*> value)
-      : _type(Type::ARRAY), _array_value(value) {}
+      : _type(Type::kArray), _array_value(value) {}
   Object(KVMap value)
-      : _type(Type::MAP), _map_value(value) {}
+      : _type(Type::kMap), _map_value(value) {}
 
   template <typename T>
   T as(T instance);
 
   float as(float instance) const {
-    if (_type != Type::FLOAT) {
+    if (_type != Type::kFloat) {
       return NAN;
     }
     return _number_value;
   }
 
   bool as(bool instance) const {
-    if (_type != Type::BOOLEAN) {
+    if (_type != Type::kBoolean) {
       return false;
     }
     return _bool_value;
   }
 
   std::string as(std::string instance) const {
-    if (_type != Type::STRING) {
+    if (_type != Type::kString) {
       return "";
     }
     return _string_value;
   }
 
   std::string as(const char* instance) const {
-    if (_type != Type::STRING) {
+    if (_type != Type::kString) {
       return "";
     }
     return _string_value;
   }
 
   KVMap as(KVMap instance) const {
-    if (_type != Type::MAP) {
+    if (_type != Type::kMap) {
       return {};
     }
     return _map_value;
   }
 
   ~Object() {
-    if (_type == Type::ARRAY) {
+    if (_type == Type::kArray) {
       for (auto* obj : _array_value) {
         delete obj;
       }
-    } else if (_type == Type::MAP) {
+    } else if (_type == Type::kMap) {
       for (auto& [key, obj] : _map_value) {
         delete obj;
       }
@@ -138,7 +138,7 @@ class Object {
   }
 
   bool has_key(const std::string& key) {
-    if (_type != Type::MAP) {
+    if (_type != Type::kMap) {
       return false;
     }
     return _map_value.find(key) != _map_value.end();
@@ -147,7 +147,7 @@ class Object {
   template <typename T>
   ResultOr<T> get(const std::string& key,
                   T instance) const {
-    if (_type != Type::MAP) {
+    if (_type != Type::kMap) {
       return Error("Object is not a map.");
     }
     if (_map_value.find(key) == _map_value.end()) {
@@ -157,7 +157,7 @@ class Object {
   }
 
   ResultOr<Object*> get(const std::string& key) const {
-    if (_type != Type::MAP) {
+    if (_type != Type::kMap) {
       return Error("Object is not a map.");
     }
     if (_map_value.find(key) == _map_value.end()) {

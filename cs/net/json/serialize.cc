@@ -30,17 +30,17 @@ std::ostream& SerializeObject(std::ostream& os,
 std::ostream& SerializeObjectPrettyPrintRecurse(
     std::ostream& os, const Object* object, uint indent,
     uint initial_indent) {
-  if (object->_type == Type::BOOLEAN) {
+  if (object->_type == Type::kBoolean) {
     if (object->as_bool()) {
       os << "true";
     } else {
       os << "false";
     }
-  } else if (object->_type == Type::FLOAT) {
+  } else if (object->_type == Type::kFloat) {
     os << object->as_number();
-  } else if (object->_type == Type::STRING) {
+  } else if (object->_type == Type::kString) {
     os << '"' << object->as_string() << '"';
-  } else if (object->_type == Type::ARRAY) {
+  } else if (object->_type == Type::kArray) {
     os << "[";
     if (indent > 0) {
       os << "\n";
@@ -64,7 +64,7 @@ std::ostream& SerializeObjectPrettyPrintRecurse(
     }
     WriteIndent(os, initial_indent);
     os << "]";
-  } else if (object->_type == Type::MAP) {
+  } else if (object->_type == Type::kMap) {
     os << "{";
     if (indent > 0) {
       os << "\n";

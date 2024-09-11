@@ -49,20 +49,20 @@ TEST_F(SerializeTest, ExampleMap) {
   ASSERT_THAT(result.ok(), IsTrue());
   ASSERT_THAT(cursor, Eq(actual.length()));
   Object* parsed_object = result.value();
-  ASSERT_THAT(parsed_object->type(), Eq(Type::MAP))
+  ASSERT_THAT(parsed_object->type(), Eq(Type::kMap))
       << parsed_object;
   auto map = parsed_object->as_map();
   ASSERT_THAT(map.size(), Eq(2));
-  ASSERT_THAT(map["key"]->type(), Eq(Type::STRING));
+  ASSERT_THAT(map["key"]->type(), Eq(Type::kString));
   ASSERT_THAT(map["key"]->as_string(), StrEq("value"));
-  ASSERT_THAT(map["key2"]->type(), Eq(Type::ARRAY));
+  ASSERT_THAT(map["key2"]->type(), Eq(Type::kArray));
   auto array = map["key2"]->as_array();
   ASSERT_THAT(array.size(), Eq(4));
-  ASSERT_THAT(array[0]->type(), Eq(Type::BOOLEAN));
+  ASSERT_THAT(array[0]->type(), Eq(Type::kBoolean));
   ASSERT_THAT(array[0]->as_bool(), IsTrue());
-  ASSERT_THAT(array[1]->type(), Eq(Type::BOOLEAN));
+  ASSERT_THAT(array[1]->type(), Eq(Type::kBoolean));
   ASSERT_THAT(array[1]->as_bool(), IsFalse());
-  ASSERT_THAT(array[2]->type(), Eq(Type::STRING));
+  ASSERT_THAT(array[2]->type(), Eq(Type::kString));
 }
 
 TEST_F(SerializeTest, WithIndent) {
