@@ -39,6 +39,7 @@ using ::cs::net::http::HTTP_400_BAD_REQUEST;
 using ::cs::net::http::HTTP_404_NOT_FOUND;
 using ::cs::net::http::kContentTypeApplicationJson;
 using ::cs::net::http::kContentTypeTextHtml;
+using ::cs::net::http::kContentTypeTextPlain;
 using ::cs::net::http::Request;
 using ::cs::net::http::Response;
 using ::cs::net::http::WebApp;
@@ -612,6 +613,47 @@ checkboxes for server and browser-side rendering.</p>
                   ss.str());
 }
 
+// A basic key-value set method.
+
+static std::unordered_map<std::string, std::string> kv_map;
+
+Response SetValue(Request request) {
+  app_log << request;
+
+  std::string key =
+      request.get_query_param("key").value_or("");
+  if (key.empty()) {
+    return Error("Key must be provided.");
+  }
+
+  std::string value = request.body();
+
+  kv_map.insert_or_assign(key, value);
+
+  return Response(HTTP_200_OK, kContentTypeTextPlain,
+                  value);
+}
+
+Response GetValue(Request request) {
+  app_log << request;
+
+  std::string key =
+      request.get_query_param("key").value_or("");
+  if (key.empty()) {
+    return Error("Key must be provided.");
+  }
+
+  auto value = kv_map.find(key);
+  if (value == kv_map.end()) {
+    return Error("Key not found.");
+  }
+
+  std::stringstream ss;
+  ss << value->second;
+  return Response(HTTP_200_OK, kContentTypeTextPlain,
+                  ss.str());
+}
+
 Result RunMyWebApp() {
   // Routes.
   OK_OR_RETURN(app.Register("GET", "/", index));
@@ -625,6 +667,8 @@ Result RunMyWebApp() {
   OK_OR_RETURN(app.Register("POST", "/log/", CreateLog));
   OK_OR_RETURN(app.Register("GET", "/paxos/", Paxos));
   OK_OR_RETURN(app.Register("GET", "/go/", Go));
+  OK_OR_RETURN(app.Register("POST", "/kv/", SetValue));
+  OK_OR_RETURN(app.Register("GET", "/kv/", GetValue));
   return app.RunServer("0.0.0.0", 8080);
 }
 
