@@ -39,9 +39,8 @@ enum class Type : uint {
 };
 
 /**
- * There are five fundamental types to JSON. They are
- * boolean, float, string, array, and the kev-value
- * mapping.
+ * There are five fundamental types to JSON: boolean, float,
+ * string, array, and the key-value mapping.
  */
 class Object {
  public:
