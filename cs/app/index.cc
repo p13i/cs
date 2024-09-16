@@ -14,6 +14,7 @@
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
+#include <emscripten/html5.h>
 #endif
 
 #include "cs/app/scene1.hh"
@@ -26,7 +27,26 @@ using ::cs::app::SceneAnimator;
 using ::cs::renderer::Film;
 using ::cs::renderer::Pixel;
 
+#ifdef __EMSCRIPTEN__
+// Callback function to handle keydown events
+EM_BOOL key_callback(int eventType,
+                     const EmscriptenKeyboardEvent* e,
+                     void* userData) {
+  printf("Key pressed: %s\n",
+         e->key);  // Print the key pressed
+  return EM_TRUE;  // Return EM_TRUE to prevent the default
+                   // browser behavior
+}
+#endif  // __EMSCRIPTEN__
+
 int main(int argc, char** argv) {
+#ifdef __EMSCRIPTEN__
+  // Set up the keydown event listener
+  emscripten_set_keydown_callback(
+      EMSCRIPTEN_EVENT_TARGET_DOCUMENT, nullptr, EM_TRUE,
+      key_callback);
+#endif  // __EMSCRIPTEN__
+
   SDL_Init(SDL_INIT_VIDEO);
   SDL_Surface* screen =
       SDL_SetVideoMode(APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT,
@@ -108,6 +128,11 @@ int main(int argc, char** argv) {
   }
 
   SDL_Quit();
+
+#ifdef __EMSCRIPTEN__
+  // Keep the program running
+  emscripten_exit_with_live_runtime();
+#endif  // __EMSCRIPTEN__
 
   return 0;
 }

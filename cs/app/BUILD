@@ -45,6 +45,7 @@ cc_binary(
     linkopts = [
         "-sASYNCIFY=1",
         "-sALLOW_MEMORY_GROWTH",
+        "-sEXPORTED_RUNTIME_METHODS='[\"ccall\", \"cwrap\"]'",
     ],
     # Exclude this library from the main build since the wasm_cc_binary
     # below will compile the index.cc file with the emscripten SDK.
