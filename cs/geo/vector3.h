@@ -28,6 +28,10 @@ class Vector3 {
     return FloatsNear(magnitude(), 1.f);
   }
 
+  Point3 point() {
+    return {x, y, z};
+  }
+
   Vector3 normalized() const { return *this / magnitude(); }
 
   Vector3 unit() const { return *this / magnitude(); }
