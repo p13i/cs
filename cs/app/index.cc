@@ -46,10 +46,12 @@ EM_BOOL key_callback(int eventType,
     new_pos.y += 1;
   } else if (e->keyCode == DOM_VK_DOWN) {
     new_pos.y -= 1;
-  } else if (e->keyCode == DOM_VK_EQUALS || e->keyCode == 187) {
+  } else if (e->keyCode == DOM_VK_EQUALS ||
+             e->keyCode == 187) {
     // move towards look
     new_pos = (pos - look) * 0.8;
-  } else if (e->keyCode == DOM_VK_HYPHEN_MINUS || e->keyCode == 189) {
+  } else if (e->keyCode == DOM_VK_HYPHEN_MINUS ||
+             e->keyCode == 189) {
     // move away from look
     new_pos = (pos - look) * 1.2;
   }
