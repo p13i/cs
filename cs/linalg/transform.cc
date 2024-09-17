@@ -83,6 +83,36 @@ Transform RotateZ(float theta_rad) {
   return Transform(m, m.T());
 }
 
+Transform Rotate(float theta_rad, const v3 &axis) {
+  v3 a = axis.normalized();
+  float sinTheta = std::sin(theta_rad);
+  float cosTheta = std::cos(theta_rad);
+  Matrix4x4 m;
+  // Compute rotation of first basis vector
+  m.data_[0][0] = a.x * a.x + (1 - a.x * a.x) * cosTheta;
+  m.data_[0][1] =
+      a.x * a.y * (1 - cosTheta) - a.z * sinTheta;
+  m.data_[0][2] =
+      a.x * a.z * (1 - cosTheta) + a.y * sinTheta;
+  m.data_[0][3] = 0;
+
+  // Compute rotations of second and third basis vectors
+  m.data_[1][0] =
+      a.x * a.y * (1 - cosTheta) + a.z * sinTheta;
+  m.data_[1][1] = a.y * a.y + (1 - a.y * a.y) * cosTheta;
+  m.data_[1][2] =
+      a.y * a.z * (1 - cosTheta) - a.x * sinTheta;
+  m.data_[1][3] = 0;
+
+  m.data_[2][0] =
+      a.x * a.z * (1 - cosTheta) - a.y * sinTheta;
+  m.data_[2][1] =
+      a.y * a.z * (1 - cosTheta) + a.x * sinTheta;
+  m.data_[2][2] = a.z * a.z + (1 - a.z * a.z) * cosTheta;
+  m.data_[2][3] = 0;
+  return Transform(m, m.T());
+}
+
 Transform LookAt(p3 pos, p3 look, v3 up) {
   m4x4 cameraToWorld;
   // <<Initialize fourth column of viewing matrix>>

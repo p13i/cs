@@ -57,6 +57,10 @@ Transform RotateY(float theta_rad);
 
 Transform RotateZ(float theta_rad);
 
+// Rotation around arbitrary axis. See:
+// https://github.com/mmp/pbrt-v3/blob/13d871faae88233b327d04cda24022b8bb0093ee/src/core/transform.cpp#L179-L201
+Transform Rotate(float theta_rad, const v3& axis);
+
 Transform LookAt(p3 pos, p3 look, v3 up);
 
 }  // namespace transforms
