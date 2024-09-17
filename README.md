@@ -39,9 +39,6 @@ games
 * uno
 * chess
 
-controls: 
-* pid 
-
 net:
 * p2p
 * tcp
