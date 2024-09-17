@@ -37,40 +37,31 @@ static p3 up(0, 1, 0);
 EM_BOOL key_callback(int eventType,
                      const EmscriptenKeyboardEvent* e,
                      void* userData) {
-#if 0
+#if 1
   std::cout << std::hex << e->keyCode << std::endl;
 #endif
-  p3 new_pos = pos;
-  p3 new_look = look;
+  p3 delta;
   if (e->keyCode == DOM_VK_LEFT) {
     v3 cross = cs::geo::cross(pos - look, up);
-    new_pos = pos - cross.unit().point();
-    new_look = look - cross.unit().point();
+    delta = -1 * cross.unit().point();
   } else if (e->keyCode == DOM_VK_RIGHT) {
     v3 cross = cs::geo::cross(pos - look, up);
-    new_pos = pos + cross.unit().point();
-    new_look = look + cross.unit().point();
+    delta = +1 * cross.unit().point();
   } else if (e->keyCode == DOM_VK_UP) {
-    new_pos = pos + up.unit();
-    new_look = look + up.unit();
+    delta = +1 * up.unit();
   } else if (e->keyCode == DOM_VK_DOWN) {
-    new_pos = pos - up.unit();
-    new_look = look - up.unit();
+    delta = -1 * up.unit();
   } else if (e->keyCode == DOM_VK_EQUALS ||
              e->keyCode == 187) {
     // move towards look
-    new_pos = (pos - look) * 0.8;
+    delta = -1 * (pos - look).unit();
   } else if (e->keyCode == DOM_VK_HYPHEN_MINUS ||
              e->keyCode == 189) {
     // move away from look
-    new_pos = (pos - look) * 1.2;
+    delta = +1 * (pos - look).unit();
   }
-#if 0
-  std::cout << "pos=" << pos << " -> new_pos=" << new_pos << std::endl;
-  std::cout << "look=" << look << " -> new_look=" << new_look << std::endl;
-#endif
-  pos = new_pos;
-  look = new_look;
+  pos += delta;
+  look += delta;
   // Prevent default browser behavior.
   return EM_TRUE;
 }

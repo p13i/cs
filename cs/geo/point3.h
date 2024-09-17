@@ -29,6 +29,10 @@ class Point3 {
     return Point3(x + other.x, y + other.y, z + other.z);
   }
 
+  void operator+=(const Point3& other) {
+    *this = *this + other;
+  }
+
   bool operator==(const Point3& other) const {
     return FloatsNear(x, other.x) &&
            FloatsNear(y, other.y) && FloatsNear(z, other.z);
@@ -40,6 +44,15 @@ class Point3 {
 
   Point3 operator*(float scalar) const {
     return {x * scalar, y * scalar, z * scalar};
+  }
+
+  Point3 operator*(int scalar) const {
+    return {x * scalar, y * scalar, z * scalar};
+  }
+
+  friend Point3 operator*(int scalar, const Point3& point) {
+    return {point.x * scalar, point.y * scalar,
+            point.z * scalar};
   }
 
   Point3 operator*(Point3 other) const {
