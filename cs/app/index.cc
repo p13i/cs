@@ -25,9 +25,14 @@
 #include "cs/renderer/pixel.hh"
 
 using ::cs::app::SceneAnimator;
+using ::cs::linalg::Transform;
+using ::cs::linalg::transforms::Rotate;
+using ::cs::linalg::transforms::RotateY;
 using ::cs::renderer::Film;
 using ::cs::renderer::Pixel;
 
+static bool scene_changed = true;
+static const float focal_length = 5;
 static p3 pos(-25, 0, -10);
 static p3 look(0, 0, 0);
 static p3 up(0, 1, 0);
@@ -44,21 +49,45 @@ EM_BOOL key_callback(int eventType,
   if (e->keyCode == DOM_VK_LEFT) {
     v3 cross = cs::geo::cross(pos - look, up);
     delta = -1 * cross.unit().point();
+    scene_changed = true;
   } else if (e->keyCode == DOM_VK_RIGHT) {
     v3 cross = cs::geo::cross(pos - look, up);
     delta = +1 * cross.unit().point();
+    scene_changed = true;
   } else if (e->keyCode == DOM_VK_UP) {
     delta = +1 * up.unit();
+    scene_changed = true;
   } else if (e->keyCode == DOM_VK_DOWN) {
     delta = -1 * up.unit();
+    scene_changed = true;
   } else if (e->keyCode == DOM_VK_EQUALS ||
              e->keyCode == 187) {
     // move towards look
     delta = -1 * (pos - look).unit();
+    scene_changed = true;
   } else if (e->keyCode == DOM_VK_HYPHEN_MINUS ||
              e->keyCode == 189) {
     // move away from look
     delta = +1 * (pos - look).unit();
+    scene_changed = true;
+  } else if (e->keyCode == DOM_VK_OPEN_BRACKET) {
+    // Rotate viewer to left.
+    auto d = v3(look - pos).normalized().point();
+    auto d_prime = RotateY(-1 * 5.f * PIf / 180.f)(d);
+    if (d_prime.ok()) {
+      look = pos +
+             v3(look - pos).magnitude() * d_prime.value();
+      scene_changed = true;
+    }
+  } else if (e->keyCode == DOM_VK_CLOSE_BRACKET) {
+    // Rotate viewer to left.
+    auto d = v3(look - pos).normalized().point();
+    auto d_prime = RotateY(+1 * 5.f * PIf / 180.f)(d);
+    if (d_prime.ok()) {
+      look = pos +
+             v3(look - pos).magnitude() * d_prime.value();
+      scene_changed = true;
+    }
   }
   pos += delta;
   look += delta;
@@ -114,18 +143,21 @@ int main(int argc, char** argv) {
                std::get<1>(film_dimensions)) /
       2;
 
-#ifdef __EMSCRIPTEN__
-  emscripten_sleep(0);
-#endif  // __EMSCRIPTEN__
-
   while (true) {
+    while (!scene_changed) {
+#ifdef __EMSCRIPTEN__
+      // Release main thread
+      emscripten_sleep(0);
+#endif  // __EMSCRIPTEN__
+    }
+    scene_changed = false;
+
     if (SDL_MUSTLOCK(screen)) {
       SDL_LockSurface(screen);
     }
 
     // Copy each pixel from the current animation frame
     Transform w2c = LookAt(pos, look, up);
-    float focal_length = 5;
     Camera camera(w2c, pixels_per_unit, focal_length,
                   Film(film_dimensions));
 
@@ -148,9 +180,11 @@ int main(int argc, char** argv) {
     // Display the screen
     SDL_Flip(screen);
 
+#if 0
 #ifdef __EMSCRIPTEN__
     emscripten_sleep(1000 / APP_FRAME_RATE_FPS);
 #endif  // __EMSCRIPTEN__
+#endif  // 0
   }
 
   SDL_Quit();
