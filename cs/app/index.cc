@@ -15,6 +15,7 @@
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
 #include <emscripten/html5.h>
+#include <emscripten/key_codes.h>
 #endif
 
 #include "cs/app/scene1.hh"
@@ -38,18 +39,18 @@ EM_BOOL key_callback(int eventType,
   printf("Key pressed: %s\n",
          e->key);  // Print the key pressed
   p3 new_pos = pos;
-  if (strcmp(e->key, "ArrowLeft") == 0) {
+  if (e->keyCode == DOM_VK_LEFT) {
     new_pos.x -= 1;
-  } else if (strcmp(e->key, "ArrowRight") == 0) {
+  } else if (e->keyCode == DOM_VK_RIGHT) {
     new_pos.x += 1;
-  } else if (strcmp(e->key, "ArrowUp") == 0) {
+  } else if (e->keyCode == DOM_VK_UP) {
     new_pos.y += 1;
-  } else if (strcmp(e->key, "ArrowDown") == 0) {
+  } else if (e->keyCode == DOM_VK_DOWN) {
     new_pos.y -= 1;
-  } else if (strcmp(e->key, "=") == 0) {
+  } else if (e->keyCode == DOM_VK_EQUALS) {
     // move towards look
     new_pos = (pos - look) * 0.8;
-  } else if (strcmp(e->key, "-") == 0) {
+  } else if (e->keyCode == DOM_VK_HYPHEN_MINUS) {
     // move away from look
     new_pos = (pos - look) * 1.2;
   }
