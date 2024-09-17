@@ -36,8 +36,7 @@ static p3 look(0, 0, 0);
 EM_BOOL key_callback(int eventType,
                      const EmscriptenKeyboardEvent* e,
                      void* userData) {
-  printf("Key pressed: %s\n",
-         e->key);  // Print the key pressed
+  printf("keyCode=%lu\n", e->keyCode);
   p3 new_pos = pos;
   if (e->keyCode == DOM_VK_LEFT) {
     new_pos.x -= 1;
@@ -47,16 +46,16 @@ EM_BOOL key_callback(int eventType,
     new_pos.y += 1;
   } else if (e->keyCode == DOM_VK_DOWN) {
     new_pos.y -= 1;
-  } else if (e->keyCode == DOM_VK_EQUALS) {
+  } else if (e->keyCode == DOM_VK_EQUALS || e->keyCode == 187) {
     // move towards look
     new_pos = (pos - look) * 0.8;
-  } else if (e->keyCode == DOM_VK_HYPHEN_MINUS) {
+  } else if (e->keyCode == DOM_VK_HYPHEN_MINUS || e->keyCode == 189) {
     // move away from look
     new_pos = (pos - look) * 1.2;
   }
   pos = new_pos;
-  return EM_TRUE;  // Return EM_TRUE to prevent the default
-                   // browser behavior
+  // Prevent default browser behavior.
+  return EM_TRUE;
 }
 #endif  // __EMSCRIPTEN__
 
