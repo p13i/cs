@@ -30,22 +30,32 @@ using ::cs::renderer::Pixel;
 
 static p3 pos(-25, 0, -10);
 static p3 look(0, 0, 0);
+static p3 up(0, 1, 0);
 
 #ifdef __EMSCRIPTEN__
 // Callback function to handle keydown events
 EM_BOOL key_callback(int eventType,
                      const EmscriptenKeyboardEvent* e,
                      void* userData) {
-  printf("keyCode=%lu\n", e->keyCode);
+#if 0
+  std::cout << std::hex << e->keyCode << std::endl;
+#endif
   p3 new_pos = pos;
+  p3 new_look = look;
   if (e->keyCode == DOM_VK_LEFT) {
-    new_pos.x -= 1;
+    v3 cross = cs::geo::cross(pos - look, up);
+    new_pos = pos - cross.unit().point();
+    new_look = look - cross.unit().point();
   } else if (e->keyCode == DOM_VK_RIGHT) {
-    new_pos.x += 1;
+    v3 cross = cs::geo::cross(pos - look, up);
+    new_pos = pos + cross.unit().point();
+    new_look = look + cross.unit().point();
   } else if (e->keyCode == DOM_VK_UP) {
-    new_pos.y += 1;
+    new_pos = pos + up.unit();
+    new_look = look + up.unit();
   } else if (e->keyCode == DOM_VK_DOWN) {
-    new_pos.y -= 1;
+    new_pos = pos - up.unit();
+    new_look = look - up.unit();
   } else if (e->keyCode == DOM_VK_EQUALS ||
              e->keyCode == 187) {
     // move towards look
@@ -55,7 +65,12 @@ EM_BOOL key_callback(int eventType,
     // move away from look
     new_pos = (pos - look) * 1.2;
   }
+#if 0
+  std::cout << "pos=" << pos << " -> new_pos=" << new_pos << std::endl;
+  std::cout << "look=" << look << " -> new_look=" << new_look << std::endl;
+#endif
   pos = new_pos;
+  look = new_look;
   // Prevent default browser behavior.
   return EM_TRUE;
 }
@@ -108,12 +123,6 @@ int main(int argc, char** argv) {
                std::get<1>(film_dimensions)) /
       2;
 
-  std::cout << "Rendering " << APP_ANIMATION_NUM_FRAMES
-            << " frames with resolution <"
-            << std::get<0>(film_dimensions) << ", "
-            << std::get<1>(film_dimensions) << ">... "
-            << "\n";
-
 #ifdef __EMSCRIPTEN__
   emscripten_sleep(0);
 #endif  // __EMSCRIPTEN__
@@ -124,7 +133,6 @@ int main(int argc, char** argv) {
     }
 
     // Copy each pixel from the current animation frame
-    p3 up(0, 1, 0);
     Transform w2c = LookAt(pos, look, up);
     float focal_length = 5;
     Camera camera(w2c, pixels_per_unit, focal_length,
