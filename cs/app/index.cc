@@ -42,33 +42,41 @@ static p3 up(0, 1, 0);
 EM_BOOL key_callback(int eventType,
                      const EmscriptenKeyboardEvent* e,
                      void* userData) {
-#if 1
-  std::cout << std::hex << e->keyCode << std::endl;
-#endif
-  p3 delta;
   if (e->keyCode == DOM_VK_LEFT) {
     v3 cross = cs::geo::cross(pos - look, up);
-    delta = -1 * cross.unit().point();
+    p3 delta = -1 * cross.unit().point();
+    pos += delta;
+    look += delta;
     scene_changed = true;
   } else if (e->keyCode == DOM_VK_RIGHT) {
     v3 cross = cs::geo::cross(pos - look, up);
-    delta = +1 * cross.unit().point();
+    p3 delta = +1 * cross.unit().point();
+    pos += delta;
+    look += delta;
     scene_changed = true;
   } else if (e->keyCode == DOM_VK_UP) {
-    delta = +1 * up.unit();
+    p3 delta = +1 * up.unit();
+    pos += delta;
+    look += delta;
     scene_changed = true;
   } else if (e->keyCode == DOM_VK_DOWN) {
-    delta = -1 * up.unit();
+    p3 delta = -1 * up.unit();
+    pos += delta;
+    look += delta;
     scene_changed = true;
   } else if (e->keyCode == DOM_VK_EQUALS ||
              e->keyCode == 187) {
     // move towards look
-    delta = -1 * (pos - look).unit();
+    p3 delta = -1 * (pos - look).unit();
+    pos += delta;
+    look += delta;
     scene_changed = true;
   } else if (e->keyCode == DOM_VK_HYPHEN_MINUS ||
              e->keyCode == 189) {
     // move away from look
-    delta = +1 * (pos - look).unit();
+    p3 delta = +1 * (pos - look).unit();
+    pos += delta;
+    look += delta;
     scene_changed = true;
   } else if (e->keyCode == DOM_VK_OPEN_BRACKET) {
     // Rotate viewer to left.
@@ -89,10 +97,8 @@ EM_BOOL key_callback(int eventType,
       scene_changed = true;
     }
   }
-  pos += delta;
-  look += delta;
-  // Prevent default browser behavior.
-  return EM_TRUE;
+  // Prevent default browser behavior if the scene changed.
+  return scene_changed ? EM_TRUE : EM_FALSE;
 }
 #endif  // __EMSCRIPTEN__
 
@@ -116,8 +122,8 @@ int main(int argc, char** argv) {
       "SDL.defaults.opaqueFrontBuffer = false;");
 #endif
 
-  std::tuple<unsigned int, unsigned int> film_dimensions(
-      APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT);
+  std::tuple<uint, uint> film_dimensions(APP_SCREEN_WIDTH,
+                                         APP_SCREEN_HEIGHT);
 
   // Setup scene
   std::vector<Shape*> shapes{
@@ -146,7 +152,7 @@ int main(int argc, char** argv) {
   while (true) {
     while (!scene_changed) {
 #ifdef __EMSCRIPTEN__
-      // Release main thread
+      // Release main thread for keyboard interrupts.
       emscripten_sleep(0);
 #endif  // __EMSCRIPTEN__
     }
@@ -180,11 +186,9 @@ int main(int argc, char** argv) {
     // Display the screen
     SDL_Flip(screen);
 
-#if 0
 #ifdef __EMSCRIPTEN__
     emscripten_sleep(1000 / APP_FRAME_RATE_FPS);
 #endif  // __EMSCRIPTEN__
-#endif  // 0
   }
 
   SDL_Quit();
