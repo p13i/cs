@@ -11,21 +11,6 @@
 using ::cs::db::Table;
 using ::cs::db::models::User;
 
-#define LAMBDA(type, predicate) \
-  [](const auto& type) { return predicate; }, #predicate
-
-#define DESCENDING(key)              \
-  [](const auto& a, const auto& b) { \
-    return a.key > b.key;            \
-  },                                 \
-      "DESCENDING(key)"
-
-#define ASCENDING(key)                \
-  ([](const auto& a, const auto& b) { \
-    return a.key < b.key;             \
-  }),                                 \
-      "ASCENDING(key)"
-
 Result RunDatabase() {
   std::vector<User> users{
       User(1, "email1@example.com", "Rob O"),

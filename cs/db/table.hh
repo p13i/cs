@@ -14,6 +14,21 @@
 #include "cs/net/json/parsers.hh"
 #include "cs/result/result.hh"
 
+#define LAMBDA(type, predicate) \
+  [](const auto& type) { return predicate; }, #predicate
+
+#define DESCENDING(key)              \
+  [](const auto& a, const auto& b) { \
+    return a.key > b.key;            \
+  },                                 \
+      "DESCENDING(key)"
+
+#define ASCENDING(key)                \
+  ([](const auto& a, const auto& b) { \
+    return a.key < b.key;             \
+  }),                                 \
+      "ASCENDING(key)"
+
 namespace cs::db {
 template <typename DataType>
 class Table {
