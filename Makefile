@@ -27,10 +27,16 @@ setup:
 	sudo apt install clang-format -y
 	# Install GDB
 	sudo apt-get install libc6-dbg gdb valgrind -y
+	# Install NPM
+	curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+	sudo apt-get install -y nodejs
+	node -v
+	npm -v
 
 lint:
 	go run github.com/bazelbuild/buildtools/buildifier@latest -r .
 	find . -iname *.h -o -iname *.hh -o -iname *.cc | xargs clang-format -i
+	npx prettier --write --print-width 60 --trailing-comma=none --prose-wrap always '**/*.{md,html,yml,yaml}'
 
 sync:
 	git add .
