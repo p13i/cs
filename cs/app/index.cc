@@ -16,7 +16,7 @@
 #include <emscripten.h>
 #include <emscripten/html5.h>
 #include <emscripten/key_codes.h>
-#endif
+#endif  // __EMSCRIPTEN__
 
 #include "cs/app/scene1.hh"
 #include "cs/app/scene_animator.hh"
