@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - '**'
+      - "**"
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -16,7 +16,9 @@ jobs:
         run: make lint
 
       - name: Make sure there are no diffs
-        run: git diff && exit $(git status --porcelain=v1 2>/dev/null | wc -l)
+        run:
+          git diff && exit $(git status --porcelain=v1
+          2>/dev/null | wc -l)
 
       - name: Create pull request
         id: cpr
@@ -24,13 +26,20 @@ jobs:
         if: ${{ failure() }}
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: Apply lint tools to ${{ github.ref_name }}
+          commit-message:
+            Apply lint tools to ${{ github.ref_name }}
           title: Apply lint tools to ${{ github.ref_name }}
           branch: lint-${{ github.run_number }}
-          body: This pull request applies Blaze Buildifier and clang-format formatting changes to the codebase at ${{ github.sha }}.
+          body:
+            This pull request applies Blaze Buildifier and
+            clang-format formatting changes to the codebase
+            at ${{ github.sha }}.
           labels: auto-generated
           reviewers: ${{ github.actor }}
 
       - name: Store pull request number
         if: ${{ failure() }}
-        run: echo "PR_NUMBER=${{ steps.cpr.outputs.pull-request-number }}" >> $GITHUB_ENV
+        run:
+          echo "PR_NUMBER=${{
+          steps.cpr.outputs.pull-request-number }}" >>
+          $GITHUB_ENV
