@@ -207,12 +207,14 @@ int main(int argc, char** argv) {
     // Draw message.
     int xStart = 10;
     int yStart = 10;
-    DrawString(&film, &xStart, yStart, message, /*scale=*/2);
+    DrawString(&film, &xStart, yStart, message,
+               /*scale=*/2);
 
     // Draw alphabet near bottom
     xStart = 10;
     yStart = APP_SCREEN_HEIGHT - 10 * 2;
-    DrawString(&film, &xStart, yStart, "ABCDEFGHIJKLMNOPQRSTUVWXYZ", /*scale=*/2);
+    DrawString(&film, &xStart, yStart,
+               "ABCDEFGHIJKLMNOPQRSTUVWXYZ", /*scale=*/2);
 
     for (uint32_t i = 0; i < film.width; i++) {
       for (uint32_t j = 0; j < film.height; j++) {
