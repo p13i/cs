@@ -83,3 +83,6 @@ pull:
 
 http-main:
 	bazel run //cs/net/http:main
+
+font-demo:
+	bazel run //cs/app/text:draw_to_console
