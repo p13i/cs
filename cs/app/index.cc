@@ -33,9 +33,23 @@ using ::cs::renderer::Pixel;
 
 static bool scene_changed = true;
 static const float focal_length = 5;
-static p3 pos(-25, 0, -10);
+static p3 pos(0, 0, -10);
 static p3 look(0, 0, 0);
 static p3 up(0, 1, 0);
+static Scene scene({
+    // Unit sphere at the origin.
+    new Sphere(p3(0, 0, 0), 1),
+    // Walls on left and right.
+    new Plane(p3(+1, 0, 0).unit(), 10),
+    new Plane(p3(-1, 0, 0).unit(), 10),
+    // Walls on ceiling and floor.
+    new Plane(p3(0, +1, 0).unit(), 5),
+    new Plane(p3(0, -1, 0).unit(), 5),
+    // Walls in front.
+    new Plane(p3(0, 0, 1).unit(), -30),
+    // new Plane(p3(+1, 0, 0).unit(), +5),
+});
+static std::string message = "GAME START";
 
 #ifdef __EMSCRIPTEN__
 // Callback function to handle keydown events
@@ -48,22 +62,26 @@ EM_BOOL key_callback(int eventType,
     pos += delta;
     look += delta;
     scene_changed = true;
+    message = "MOVED LEFT";
   } else if (e->keyCode == DOM_VK_RIGHT) {
     v3 cross = cs::geo::cross(pos - look, up);
     p3 delta = +1 * cross.unit().point();
     pos += delta;
     look += delta;
     scene_changed = true;
+    message = "MOVED RIGHT";
   } else if (e->keyCode == DOM_VK_UP) {
     p3 delta = +1 * up.unit();
     pos += delta;
     look += delta;
     scene_changed = true;
+    message = "MOVED UP";
   } else if (e->keyCode == DOM_VK_DOWN) {
     p3 delta = -1 * up.unit();
     pos += delta;
     look += delta;
     scene_changed = true;
+    message = "MOVED DOWN";
   } else if (e->keyCode == DOM_VK_EQUALS ||
              e->keyCode == 187) {
     // move towards look
@@ -71,6 +89,7 @@ EM_BOOL key_callback(int eventType,
     pos += delta;
     look += delta;
     scene_changed = true;
+    message = "MOVED FORWARD";
   } else if (e->keyCode == DOM_VK_HYPHEN_MINUS ||
              e->keyCode == 189) {
     // move away from look
@@ -78,6 +97,7 @@ EM_BOOL key_callback(int eventType,
     pos += delta;
     look += delta;
     scene_changed = true;
+    message = "MOVED BACK";
   } else if (e->keyCode == DOM_VK_OPEN_BRACKET) {
     // Rotate viewer to left.
     auto d = v3(look - pos).normalized().point();
@@ -87,8 +107,9 @@ EM_BOOL key_callback(int eventType,
              v3(look - pos).magnitude() * d_prime.value();
       scene_changed = true;
     }
+    message = "ROTATE LEFT";
   } else if (e->keyCode == DOM_VK_CLOSE_BRACKET) {
-    // Rotate viewer to left.
+    // Rotate viewer to right.
     auto d = v3(look - pos).normalized().point();
     auto d_prime = RotateY(+1 * 5.f * PIf / 180.f)(d);
     if (d_prime.ok()) {
@@ -96,11 +117,39 @@ EM_BOOL key_callback(int eventType,
              v3(look - pos).magnitude() * d_prime.value();
       scene_changed = true;
     }
+    message = "ROTATE RIGHT";
   }
   // Prevent default browser behavior if the scene changed.
   return scene_changed ? EM_TRUE : EM_FALSE;
 }
 #endif  // __EMSCRIPTEN__
+
+void DrawString(Film* film, int* xStart, const int yStart,
+                std::string str, int scale = 1,
+                int margin = 1) {
+  for (char ch : str) {
+    *xStart += margin;
+    for (uint x = 0; x < 8; x++) {
+      for (uint y = 0; y < 8; y++) {
+        bool value =
+            cs::app::text::fonts::SampleCharacterPixel(
+                ch, x, y);
+        char rgba = value ? 255 : 0;
+        uint film_x = *xStart + x;
+        uint film_y = yStart + margin + y;
+        if (film_x < 0 || film_x >= film->width ||
+            film_y < 0 || film_y >= film->height ||
+            rgba == 0) {
+          continue;
+        }
+        film->pixels[film_x][film_y] =
+            cs::renderer::Pixel(rgba, rgba, rgba, rgba);
+      }
+    }
+    // Move the x start position
+    *xStart += margin + 8;
+  }
+}
 
 int main(int argc, char** argv) {
 #ifdef __EMSCRIPTEN__
@@ -122,32 +171,15 @@ int main(int argc, char** argv) {
       "SDL.defaults.opaqueFrontBuffer = false;");
 #endif
 
-  std::tuple<uint, uint> film_dimensions(APP_SCREEN_WIDTH,
-                                         APP_SCREEN_HEIGHT);
-
-  // Setup scene
-  std::vector<Shape*> shapes{
-      // Unit sphere at the origin
-      new Sphere(p3(0, 0, 0), 0.5),
-      // One smaller sphere at x=-1
-      new Sphere(p3(-1, 0, 0), 0.25),
-      // One even smaller sphere at y=1
-      new Sphere(p3(0, 1, 0), 0.125),
-      // One even smaller sphere at z=-1
-      new Sphere(p3(0, 0, -1), 0.0625),
-      // new Sphere(p3(2, 0, 0), 0.5),
-      // new Sphere(p3(0, 2, 0), 0.25),
-      // new Sphere(p3(0, -1, 0), 0.25),
-      // new Plane(p3(1, 1, 1).unit(), -5),
-  };
-
-  Scene scene(shapes);
-
   // Setup camera
-  unsigned int pixels_per_unit =
-      std::min(std::get<0>(film_dimensions),
-               std::get<1>(film_dimensions)) /
+#if 0
+  uint pixels_per_unit =
+      std::min(APP_SCREEN_WIDTH,
+               APP_SCREEN_HEIGHT) /
       2;
+#else
+  uint pixels_per_unit = 10;
+#endif
 
   while (true) {
     while (!scene_changed) {
@@ -164,12 +196,24 @@ int main(int argc, char** argv) {
 
     // Copy each pixel from the current animation frame
     Transform w2c = LookAt(pos, look, up);
-    Camera camera(w2c, pixels_per_unit, focal_length,
-                  Film(film_dimensions));
+    Camera camera(
+        w2c, pixels_per_unit, focal_length,
+        Film(APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT));
 
     // Setup renderer
     SceneRenderer renderer(camera, scene);
     Film film = renderer.render();
+
+    // Draw message.
+    int xStart = 10;
+    int yStart = 10;
+    DrawString(&film, &xStart, yStart, message, /*scale=*/2);
+
+    // Draw alphabet near bottom
+    xStart = 10;
+    yStart = APP_SCREEN_HEIGHT - 10 * 2;
+    DrawString(&film, &xStart, yStart, "ABCDEFGHIJKLMNOPQRSTUVWXYZ", /*scale=*/2);
+
     for (uint32_t i = 0; i < film.width; i++) {
       for (uint32_t j = 0; j < film.height; j++) {
         Pixel pixel = film.pixels[i][j];
@@ -187,7 +231,11 @@ int main(int argc, char** argv) {
     SDL_Flip(screen);
 
 #ifdef __EMSCRIPTEN__
+#if 1
     emscripten_sleep(1000 / APP_FRAME_RATE_FPS);
+#else
+    emscripten_sleep(0);
+#endif
 #endif  // __EMSCRIPTEN__
   }
 
