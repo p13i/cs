@@ -191,6 +191,8 @@ Minus (`-`/`_`): move backwards
 Plus (`=`/`+`): move forwards
 )";
 
+  Film film(APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT);
+
   while (true) {
     while (!scene_changed) {
 #ifdef __EMSCRIPTEN__
@@ -206,13 +208,11 @@ Plus (`=`/`+`): move forwards
 
     // Copy each pixel from the current animation frame
     Transform w2c = LookAt(pos, look, up);
-    Camera camera(
-        w2c, pixels_per_unit, focal_length,
-        Film(APP_SCREEN_WIDTH, APP_SCREEN_HEIGHT));
+    Camera camera(w2c, pixels_per_unit, focal_length, film);
 
     // Setup renderer
     SceneRenderer renderer(camera, scene);
-    Film film = renderer.render();
+    renderer.render();
 
     // Draw message.
     int xStart = 10;
