@@ -125,8 +125,7 @@ EM_BOOL key_callback(int eventType,
 #endif  // __EMSCRIPTEN__
 
 void DrawString(Film* film, int* xStart, const int yStart,
-                std::string str, int scale = 1,
-                int margin = 1) {
+                std::string str, int margin = 1) {
   for (char ch : str) {
     *xStart += margin;
     for (uint x = 0; x < 8; x++) {
@@ -207,14 +206,13 @@ int main(int argc, char** argv) {
     // Draw message.
     int xStart = 10;
     int yStart = 10;
-    DrawString(&film, &xStart, yStart, message,
-               /*scale=*/2);
+    DrawString(&film, &xStart, yStart, message);
 
     // Draw alphabet near bottom
     xStart = 10;
     yStart = APP_SCREEN_HEIGHT - 10 * 2;
     DrawString(&film, &xStart, yStart,
-               "ABCDEFGHIJKLMNOPQRSTUVWXYZ", /*scale=*/2);
+               "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
     for (uint32_t i = 0; i < film.width; i++) {
       for (uint32_t j = 0; j < film.height; j++) {
