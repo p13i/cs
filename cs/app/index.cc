@@ -25,6 +25,7 @@
 #include "cs/renderer/pixel.hh"
 
 using ::cs::app::SceneAnimator;
+using ::cs::app::text::fonts::SampleCharacterPixel;
 using ::cs::linalg::Transform;
 using ::cs::linalg::transforms::Rotate;
 using ::cs::linalg::transforms::RotateY;
@@ -130,9 +131,7 @@ void DrawString(Film* film, int* xStart, const int yStart,
     *xStart += margin;
     for (uint x = 0; x < 8; x++) {
       for (uint y = 0; y < 8; y++) {
-        bool value =
-            cs::app::text::fonts::SampleCharacterPixel(
-                ch, x, y);
+        bool value = SampleCharacterPixel(ch, x, y);
         char rgba = value ? 255 : 0;
         uint film_x = *xStart + x;
         uint film_y = yStart + margin + y;
