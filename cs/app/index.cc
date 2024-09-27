@@ -179,6 +179,18 @@ int main(int argc, char** argv) {
   uint pixels_per_unit = 10;
 #endif
 
+  std::cout << R"(Controls:
+Arrow keys:
+- up: move up
+- down: move down
+- left: move left
+- right: move right
+Open bracket (`[`): rotate left
+Close bracket (`]`): rotate right
+Minus (`-`/`_`): move backwards
+Plus (`=`/`+`): move forwards
+)";
+
   while (true) {
     while (!scene_changed) {
 #ifdef __EMSCRIPTEN__
