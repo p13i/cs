@@ -107,8 +107,8 @@ EM_BOOL key_callback(int eventType,
       look = pos +
              v3(look - pos).magnitude() * d_prime.value();
       scene_changed = true;
+      message = "ROTATE LEFT";
     }
-    message = "ROTATE LEFT";
   } else if (e->keyCode == DOM_VK_CLOSE_BRACKET) {
     // Rotate viewer to right.
     auto d = v3(look - pos).normalized().point();
@@ -117,8 +117,8 @@ EM_BOOL key_callback(int eventType,
       look = pos +
              v3(look - pos).magnitude() * d_prime.value();
       scene_changed = true;
+      message = "ROTATE RIGHT";
     }
-    message = "ROTATE RIGHT";
   }
   // Prevent default browser behavior if the scene changed.
   return scene_changed ? EM_TRUE : EM_FALSE;
