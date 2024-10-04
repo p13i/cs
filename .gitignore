@@ -32,3 +32,5 @@ user.bazelrc
 /buildtools/
 # Generated website
 /site/
+# npm
+/node_modules/

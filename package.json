@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "ngrok": "^5.0.0-beta.2",
+    "prettier-plugin-rust": "^0.1.9"
+  }
+}
