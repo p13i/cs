@@ -36,7 +36,7 @@ setup:
 lint:
 	go run github.com/bazelbuild/buildtools/buildifier@latest -r .
 	find . -iname *.h -o -iname *.hh -o -iname *.cc | xargs clang-format -i
-	npx prettier --write --print-width 60 --trailing-comma=none --prose-wrap always '**/*.{md,html,yml,yaml}'
+	npx prettier --write --print-width 60 --trailing-comma=none --prose-wrap always '**/*.{md,html,yml,yaml,rs}'
 
 sync:
 	git add .
