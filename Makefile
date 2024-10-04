@@ -34,9 +34,15 @@ setup:
 	npm -v
 
 lint:
+	# Bazel
 	go run github.com/bazelbuild/buildtools/buildifier@latest -r .
+	# C++
 	find . -iname *.h -o -iname *.hh -o -iname *.cc | xargs clang-format -i
-	npx prettier --write --print-width 60 --trailing-comma=none --prose-wrap always '**/*.{md,html,yml,yaml,rs}'
+	# Markdown, HTML, and YAML
+	npx prettier --write --print-width 60 --trailing-comma=none --prose-wrap always '**/*.{md,html,yml,yaml}'
+	# Rust
+	npm install prettier-plugin-rust
+	npx prettier --write **/*.rs
 
 sync:
 	git add .
