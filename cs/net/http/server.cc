@@ -137,8 +137,7 @@ Result Server::startListening(
 
       if (bytesSent != response_str.size()) {
         std ::cerr << "Failed to send out " << bytesSent
-                   << "."
-                   << "\n";
+                   << "." << "\n";
       }
     }
 
