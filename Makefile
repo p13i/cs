@@ -1,6 +1,6 @@
 SHELL=/usr/bin/bash
 # Always run the site rule regardless of whether make thinks the action can be skipped
-.PHONY: site
+.PHONY: site build
 
 default: build test site serve
 
