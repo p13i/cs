@@ -64,8 +64,7 @@ int main(int argc, char** argv) {
                unsigned int num_frames) {
               std::cout << "Rendered frame " << frame_num
                         << " of " << num_frames << " in "
-                        << render_time_ms << " ms."
-                        << "\n";
+                        << render_time_ms << " ms." << "\n";
 #ifdef __EMSCRIPTEN__
               emscripten_sleep(0);
 #endif  // __EMSCRIPTEN__

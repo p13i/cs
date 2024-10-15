@@ -256,8 +256,7 @@ ResultOr<std::string> Http(std::string method,
       << escapeHtml(response_ss.str())
       << "</code><hr/><iframe width=\"800\" height=\"500\" "
          "srcdoc=\""
-      << srcdoc << "\">"
-      << "</iframe>";
+      << srcdoc << "\">" << "</iframe>";
 
   return body_ss.str();
 }

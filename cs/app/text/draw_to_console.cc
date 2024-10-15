@@ -8,8 +8,8 @@ int main() {
   // Print each character and it's associated mono font
   // drawn from an array
   for (int i = 0; i < 2; i++) {
-    std::cout << (char)(i + 'A') << " (index=" << i << "):"
-              << "\n";
+    std::cout << (char)(i + 'A') << " (index=" << i
+              << "):" << "\n";
     for (int y = 0; y < 8; y++) {
       for (int x = 0; x < 8; x++) {
         int flag = mono[i][y][x];
