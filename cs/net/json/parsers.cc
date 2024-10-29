@@ -34,9 +34,9 @@ bool InBounds(std::string str, uint cursor) {
 
 Result IncrementCursor(std::string str, uint* cursor) {
   if (!InBounds(str, *cursor)) {
-    return Error(format(
-        "Cursor out of bounds: str=%s, cursor=%d", str,
-        *cursor));
+    return Error(
+        format("Cursor out of bounds: str=%s, cursor=%d",
+               str, *cursor));
   }
   *cursor += 1;
   return Ok();
